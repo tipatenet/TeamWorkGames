@@ -1,0 +1,1 @@
+Il y a 2 Préfab, une pour la caméra du joueur et une pour l'objet du joueur. Il faut bien penser à initialiser les variables quand on utilise ces préfab

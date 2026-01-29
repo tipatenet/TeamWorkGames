@@ -70,22 +70,22 @@ public class PlayerController : MonoBehaviour
         MovePlayer();
     }
 
+    //Fonction pour gérer les Input et récup les valeurs des vecteurs
     private void MyInput()
     {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
+        Vector2 input = PlayerInputHandler.Instance.MoveInput;
+        horizontalInput = input.x;
+        verticalInput = input.y;
 
-        //jump
-        if (Input.GetKey(jumpKey) && readyToJump && Grounded)
+        if (PlayerInputHandler.Instance.JumpPressed && readyToJump && Grounded)
         {
             readyToJump = false;
-
             Jump();
-
             Invoke(nameof(resetJump), jumpCooldown);
         }
     }
 
+    //Fonction pour gérer les movement 
     private void MovePlayer()
     {
         //Movement Direction :
@@ -117,6 +117,8 @@ public class PlayerController : MonoBehaviour
         rb.useGravity = !OnSlope();
     }
 
+    //Fonction pour éviter que la vitesse max soit dépasser
+
     private void SpeedControl()
     {
         //limit speed on slopes
@@ -143,6 +145,8 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    //Fonction pour gerer le saut
+
     private void Jump()
     {
         exitingSlope = true;
@@ -160,6 +164,8 @@ public class PlayerController : MonoBehaviour
         exitingSlope = false;
     }
 
+
+    //Fonction pour gerer les mouvements sur les ramps
     private bool OnSlope()
     {
         if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
