@@ -50,6 +50,8 @@ public class GameManager : MonoBehaviour
         CreateJigsawPieces(jigsawTexture);
         //shuffle pieces
         Scatter();
+        //update border
+        UpdateBorder();
     }
 
 
@@ -132,5 +134,27 @@ public class GameManager : MonoBehaviour
             float y = Random.Range(-orthoHeight, orthoHeight);
             piece.position = new Vector3(x, y, -1);
         }
+    }
+
+
+
+    private void UpdateBorder()
+    {
+        LineRenderer lineRenderer = gameHolder.GetComponent<LineRenderer>();
+        //calculate half sizes
+        float halfWidth = (width * dimensions.x) / 2;
+        float halfHeight = (height * dimensions.y) / 2;
+        //border behind points
+        float borderZ = 0f;
+        //set border
+        lineRenderer.SetPosition(0, new Vector3(-halfWidth, halfHeight, borderZ));
+        lineRenderer.SetPosition(1, new Vector3(halfWidth, halfHeight, borderZ));
+        lineRenderer.SetPosition(2, new Vector3(halfWidth, -halfHeight, borderZ));
+        lineRenderer.SetPosition(3, new Vector3(-halfWidth, -halfHeight, borderZ));
+        //set the thickness
+        lineRenderer.startWidth = 0.1f;
+        lineRenderer.endWidth = 0.1f;
+        //show the border
+        lineRenderer.enabled = true;
     }
 }
