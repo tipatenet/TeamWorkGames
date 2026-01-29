@@ -48,6 +48,8 @@ public class GameManager : MonoBehaviour
         dimensions = GetDimensions(jigsawTexture, difficulty);
         //create pieces
         CreateJigsawPieces(jigsawTexture);
+        //shuffle pieces
+        Scatter();
     }
 
 
@@ -106,6 +108,29 @@ public class GameManager : MonoBehaviour
                 //set piece correct position
                 piece.GetComponent<MeshRenderer>().material.SetTexture("_MainTex", jigsawTexture);
             }
+        }
+    }
+
+
+
+    private void Scatter()
+    {
+        //calculate screen bounds
+        float orthoHeight = Camera.main.orthographicSize;
+        float screenAspect = (float)Screen.width / Screen.height;
+        float orthoWidth = (screenAspect * orthoHeight);
+        //ensure pieces are away from the edges
+        float pieceWidth = width * gameHolder.localScale.x;
+        float pieceHeight = height * gameHolder.localScale.y;
+
+        orthoHeight -= pieceHeight;
+        orthoWidth -= pieceWidth;
+        //scatter pieces randomly within screen bounds
+        foreach (Transform piece in pieces)
+        {
+            float x = Random.Range(-orthoWidth, orthoWidth);
+            float y = Random.Range(-orthoHeight, orthoHeight);
+            piece.position = new Vector3(x, y, -1);
         }
     }
 }
