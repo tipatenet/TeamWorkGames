@@ -22,8 +22,8 @@ public class PlayerController : MonoBehaviour
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask Ground;
-    [SerializeField]
-    bool Grounded;
+
+    public bool Grounded;
 
     [Header("Slope Handling")]
     public float maxSlopAngle;
@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
 
     Vector3 moveDirection;
 
-    Rigidbody rb;
+    public Rigidbody rb;
 
     private void Start()
     {
