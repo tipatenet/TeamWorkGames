@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 
 public class GameManager : MonoBehaviour
@@ -23,6 +26,8 @@ public class GameManager : MonoBehaviour
     private Vector2Int dimensions;
     private float width;
     private float height;
+
+    private Transform draggingPiece = null;
 
     void Start()
     {
@@ -156,5 +161,59 @@ public class GameManager : MonoBehaviour
         lineRenderer.endWidth = 0.1f;
         //show the border
         lineRenderer.enabled = true;
+    }
+
+
+
+    private void Update()
+    {
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+        var mouse = Mouse.current;
+        if (mouse == null) return;
+
+        Vector2 mousePos = mouse.position.ReadValue();
+        Vector2 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 0f));
+
+        if (mouse.leftButton.wasPressedThisFrame)
+        {
+            Collider2D col = Physics2D.OverlapPoint(worldPoint);
+            if (col)
+            {
+                draggingPiece = col.transform;
+            }
+        }
+
+        if (draggingPiece != null && mouse.leftButton.wasReleasedThisFrame)
+        {
+            draggingPiece = null;
+        }
+
+        if (draggingPiece != null)
+        {
+            Vector3 newPosition = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 0f));
+            newPosition.z = draggingPiece.position.z;
+            draggingPiece.position = newPosition;
+        }
+#else
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Collider2D col = Physics2D.OverlapPoint(worldPoint);
+            if (col)
+            {
+                draggingPiece = col.transform;
+            }
+        }
+        if (draggingPiece && Input.GetMouseButtonUp(0))
+        {
+            draggingPiece = null;
+        }
+        if (draggingPiece)
+        {
+            Vector3 newPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            newPosition.z = draggingPiece.position.z;
+            draggingPiece.position = newPosition;
+        }
+#endif
     }
 }
