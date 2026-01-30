@@ -1,0 +1,1 @@
+Attention : Il faut récupérer à la main le scriptableObject ItemVide est le placer sur le script interact dans la variable objet vide

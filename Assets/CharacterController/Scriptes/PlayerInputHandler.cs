@@ -14,6 +14,9 @@ public class PlayerInputHandler : MonoBehaviour
     //Stock dans une bool :
     public bool JumpPressed { get; private set; }
 
+    //Stock la touche interact :
+    public bool InteractPressed { get; private set; }
+
     private PlayerInputActions inputActions;
 
     private void Awake()
@@ -38,6 +41,9 @@ public class PlayerInputHandler : MonoBehaviour
 
         inputActions.Player.Jump.performed += ctx => JumpPressed = true;
         inputActions.Player.Jump.canceled += ctx => JumpPressed = false;
+
+        inputActions.Player.Interact.performed += ctx => InteractPressed = true;
+        inputActions.Player.Interact.canceled += ctx => InteractPressed = false;
 
 
     }

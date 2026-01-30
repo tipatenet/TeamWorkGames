@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 486967e4c6c5ad443befd8020457cec3, type: 3}
-  m_Name: SphereTest
+  m_Name: ItemVide
   m_EditorClassIdentifier: Assembly-CSharp::Item_ScriptableObject
-  item_Name: Sphere
-  item_Object: {fileID: 8942597928326112320, guid: 16f92ec0d59a1f1408929f231a12c26c, type: 3}
+  item_Name: 
+  item_Object: {fileID: 0}

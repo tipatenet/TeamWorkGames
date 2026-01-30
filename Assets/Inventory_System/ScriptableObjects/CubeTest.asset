@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: CubeTest
   m_EditorClassIdentifier: Assembly-CSharp::Item_ScriptableObject
   item_Name: Cube
-  item_Object: {fileID: 0}
+  item_Object: {fileID: 5077975275141813387, guid: 9646e281c714dae48936db0ea93e9373, type: 3}

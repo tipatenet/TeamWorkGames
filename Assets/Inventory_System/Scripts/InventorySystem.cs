@@ -2,15 +2,26 @@ using UnityEngine;
 
 public class InventorySystem : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public Interact interaction;
+    public PlayerInputHandler keySystem;
+    private Item_ScriptableObject itemPickUp;
+
+    private void Start()
     {
-        
+        interaction = GetComponent<Interact>();
+        keySystem = GetComponent<PlayerInputHandler>();
+    }
+    private void Update()
+    {
+        PickUpItem();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void PickUpItem()
     {
-        
+        if (keySystem.InteractPressed)
+        {
+            itemPickUp = interaction.InteractionTrace();
+            print(itemPickUp.name);
+        }
     }
 }
