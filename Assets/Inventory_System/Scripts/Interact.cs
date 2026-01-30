@@ -2,22 +2,26 @@ using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-public class Interact : MonoBehaviour
+public class Interact : MonoBehaviour //Sera placer sur l'item
 {
     public Transform cameTransfrom;
     public float maxDistanceInteract = 3f;
+    public float sphereDetectionRadius;
+    public LayerMask playerLay;
     private Vector3 cameraRotation;
     private Vector3 cameraPosition;
+    private Vector3 itemPositon;
 
     private void Start()
     {
         cameTransfrom = Camera.main.transform;
+        itemPositon = transform.position;
     }
     private void Update()
     {
         cameraPosition = cameTransfrom.position;
         cameraRotation = cameTransfrom.forward;
-        InteractionTrace();
+        DetectPlayer();
     }
 
     //Fonction qui permet au personnage d'interagir avec les items
@@ -31,6 +35,22 @@ public class Interact : MonoBehaviour
             {
                 print("C'est un item");
             }
+        }
+    }
+
+    //Fonction qui permet de dessiner la sphere de détection
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(itemPositon, sphereDetectionRadius);
+    }
+
+    void DetectPlayer()
+    {
+        Collider[] hits = Physics.OverlapSphere(itemPositon, sphereDetectionRadius, playerLay);
+        if(hits.Length > 0) //Vérifie si le player est dans la sphere
+        {
+            InteractionTrace();
         }
     }
 }
