@@ -21,7 +21,7 @@ public class InventorySystem : MonoBehaviour
         if (keySystem.InteractPressed)
         {
             itemPickUp = interaction.InteractionTrace();
-            print(itemPickUp.name);
+            print(itemPickUp.item_Name);
         }
     }
 }
