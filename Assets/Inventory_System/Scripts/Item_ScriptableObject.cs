@@ -8,4 +8,5 @@ public class Item_ScriptableObject : ScriptableObject
     public GameObject overParticle;
     public float particlePositionY;
     public Vector3 particleScale;
+    public Sprite icon;
 }

@@ -1,3 +1,4 @@
+using Microsoft.Unity.VisualStudio.Editor;
 using System.Collections.Generic;
 using UnityEngine;
 using static UnityEditor.Progress;
@@ -9,12 +10,13 @@ public class InventorySystem : MonoBehaviour
     public PlayerInputHandler keySystem;
     private Item_ScriptableObject itemPickUp;
     public float scroolValue = 0f;
-    public int inventorySize = 10;
-    public List<Item_ScriptableObject> inventory = new List<Item_ScriptableObject>(10);
+    public int inventoryMaxSize = 10;
+    public List<Item_ScriptableObject> inventory;
     public RectTransform item_Container;
     public int selectedIndex = 0;
     private float targetX;
     public float scrollSpeed;
+    public int currentInventorySize = 0;
 
     private void Start()
     {
@@ -24,7 +26,7 @@ public class InventorySystem : MonoBehaviour
     private void Update()
     {
         PickUpItem();
-        scroolValue = Input.mouseScrollDelta.y;
+        scroolValue = keySystem.ScrollInventory.y;
         ScroolInventory();
     }
 
@@ -41,9 +43,9 @@ public class InventorySystem : MonoBehaviour
     {
         if (scroolValue > 0)
             selectedIndex--;
-        else if (scroolValue < 0 && selectedIndex != 9)
+        else if (scroolValue < 0 && selectedIndex != inventoryMaxSize-1)
             selectedIndex++;
-        selectedIndex = Mathf.Clamp(selectedIndex, 0,inventorySize);
+        selectedIndex = Mathf.Clamp(selectedIndex, 0,inventoryMaxSize);
 
         float itemWidth = 100f + 10;
         targetX = -selectedIndex * itemWidth;
@@ -51,5 +53,14 @@ public class InventorySystem : MonoBehaviour
         currentPos.x = Mathf.Lerp(currentPos.x, targetX, Time.deltaTime * scrollSpeed);
         item_Container.anchoredPosition = currentPos;
 
+    }
+
+    private void AddToInventory(Item_ScriptableObject itemtoAdd)
+    {
+        if(inventory.Count < 10) //Vérifie qu'il y a de la place dans l'inventaire
+        {
+            Image iconSlot = item_Container.GetChild(selectedIndex).GetComponent<Image>();
+
+        }
     }
 }

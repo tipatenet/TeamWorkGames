@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.InputSystem;
 
 public class PlayerInputHandler : MonoBehaviour
@@ -16,6 +17,8 @@ public class PlayerInputHandler : MonoBehaviour
 
     //Stock la touche interact :
     public bool InteractPressed { get; private set; }
+
+    public Vector2 ScrollInventory { get; private set; }
 
     private PlayerInputActions inputActions;
 
@@ -37,6 +40,9 @@ public class PlayerInputHandler : MonoBehaviour
         inputActions.Player.Look.performed += ctx => LookInput = ctx.ReadValue<Vector2>();
         inputActions.Player.Look.canceled += ctx => LookInput = Vector2.zero;
 
+        inputActions.Player.Scroll.performed += ctx => ScrollInventory = ctx.ReadValue<Vector2>();
+        inputActions.Player.Scroll.canceled += ctx => ScrollInventory = Vector2.zero;
+
         //Définie les valeurs des bool (Pour savoir si la touche est appuyer)
 
         inputActions.Player.Jump.performed += ctx => JumpPressed = true;
@@ -44,6 +50,8 @@ public class PlayerInputHandler : MonoBehaviour
 
         inputActions.Player.Interact.performed += ctx => InteractPressed = true;
         inputActions.Player.Interact.canceled += ctx => InteractPressed = false;
+
+        //Définis Axis
 
 
     }
