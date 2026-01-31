@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using static UnityEngine.ParticleSystem;
 
 public class Interact : MonoBehaviour //Sera placer sur l'item
 {
@@ -14,6 +15,16 @@ public class Interact : MonoBehaviour //Sera placer sur l'item
     private Vector3 itemPositon;
     private Item itemTouch;
 
+    //Variable pour over
+    Renderer lastRenderer = null;
+    Material lastMaterial = null;
+    GameObject particle = null;
+    public Material materialOver;
+    public Item overParticle;
+    Vector3 particlePositon;
+    Vector3 particleScale;
+
+
     private void Start()
     {
         cameTransfrom = Camera.main.transform;
@@ -23,6 +34,7 @@ public class Interact : MonoBehaviour //Sera placer sur l'item
     {
         cameraPosition = cameTransfrom.position;
         cameraRotation = cameTransfrom.forward;
+        OverItem();
     }
 
     //Fonction qui permet au personnage d'interagir avec les items
@@ -43,4 +55,44 @@ public class Interact : MonoBehaviour //Sera placer sur l'item
         }
         return itemHit;
     }
+
+    //Fonction qui permet de faire le over de l'objet
+    public void OverItem()
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(cameraPosition, cameraRotation, out hit, maxDistanceInteract) && hit.collider.CompareTag("item"))
+        {
+            Renderer rend = hit.collider.GetComponent<Renderer>();
+
+            if (rend != lastRenderer)
+            {
+                if (lastRenderer != null)
+                {
+                    lastRenderer.material = lastMaterial;
+                    Destroy(particle);
+                }
+                lastRenderer = rend;
+                lastMaterial = rend.material;
+                rend.material = materialOver;
+                overParticle = hit.collider.GetComponent<Item>();
+                particle = Instantiate(overParticle.info.overParticle);
+                particlePositon = hit.collider.gameObject.transform.position;
+                particlePositon.y = overParticle.info.particlePositionY;
+                particleScale = overParticle.info.particleScale;
+                particle.transform.position = particlePositon;
+                particle.transform.localScale = particleScale;
+            }
+        }
+        else
+        {
+            if (lastRenderer != null)
+            {
+                lastRenderer.material = lastMaterial;
+                lastRenderer = null;
+                Destroy(particle);
+            }
+        }
+    }
+
 }

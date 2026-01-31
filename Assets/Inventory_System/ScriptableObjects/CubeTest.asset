@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Item_ScriptableObject
   item_Name: Cube
   item_Object: {fileID: 5077975275141813387, guid: 9646e281c714dae48936db0ea93e9373, type: 3}
+  overParticle: {fileID: 1269317910098620064, guid: a5d5d1532ca91ff42a8826b0b1d083c8, type: 3}
+  particlePositionY: 0
+  particleScale: {x: 0, y: 0, z: 0}
