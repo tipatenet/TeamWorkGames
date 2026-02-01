@@ -11,6 +11,7 @@ public class PlayerInputHandler : MonoBehaviour
     //Stock les valeurs dans des vecteur 2 :
     public Vector2 MoveInput { get; private set; }
     public Vector2 LookInput { get; private set; }
+    public Vector2 ScrollInventory { get; private set; }
 
     //Stock dans une bool :
     public bool JumpPressed { get; private set; }
@@ -18,7 +19,9 @@ public class PlayerInputHandler : MonoBehaviour
     //Stock la touche interact :
     public bool InteractPressed { get; private set; }
 
-    public Vector2 ScrollInventory { get; private set; }
+    //Drop Item touche :
+    public bool DropItemPressed { get; private set; }
+
 
     private PlayerInputActions inputActions;
 
@@ -50,6 +53,11 @@ public class PlayerInputHandler : MonoBehaviour
 
         inputActions.Player.Interact.performed += ctx => InteractPressed = true;
         inputActions.Player.Interact.canceled += ctx => InteractPressed = false;
+
+        inputActions.Player.DropItem.performed += ctx => DropItemPressed = true;
+        inputActions.Player.DropItem.canceled += ctx => DropItemPressed = false;
+
+
 
         //Définis Axis
 

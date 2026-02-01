@@ -9,4 +9,5 @@ public class Item_ScriptableObject : ScriptableObject
     public float particlePositionY;
     public Vector3 particleScale;
     public Sprite icon;
+    public GameObject goItem;
 }

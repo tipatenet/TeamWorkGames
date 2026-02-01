@@ -16,7 +16,7 @@ public class Interact : MonoBehaviour //Sera placer sur le joueur
     Vector3 particlePositon;
     Vector3 particleScale;
     private Vector3 cameraRotation;
-    private Vector3 cameraPosition;
+    public Vector3 cameraPosition;
     private Vector3 itemPositon;
     private Item overParticle;
 
