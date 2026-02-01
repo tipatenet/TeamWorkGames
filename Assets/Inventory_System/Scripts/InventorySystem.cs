@@ -21,6 +21,7 @@ public class InventorySystem : MonoBehaviour
     public int currentInventorySize = 0;
     private float cooldownTime = 1f;
     private bool canInteract = true;
+    private UnityEngine.UI.Image currentIcon;
 
     private void Start()
     {
@@ -63,7 +64,9 @@ public class InventorySystem : MonoBehaviour
 
                     inventory.Add(itemHit);
                     currentInventorySize++;
-                    item_Container.GetChild(selectedIndex).GetComponent<UnityEngine.UI.Image>().sprite = itemHit.icon;
+                    currentIcon = item_Container.GetChild(selectedIndex).GetComponent<UnityEngine.UI.Image>();
+                    currentIcon.sprite = itemHit.icon;
+                    currentIcon.enabled = true;
                     Destroy(hit.collider.gameObject);
 
                 }
