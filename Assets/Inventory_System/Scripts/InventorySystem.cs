@@ -47,7 +47,7 @@ public class InventorySystem : MonoBehaviour
 
         if (keySystem.InteractPressed && canInteract)
         {
-            if (hit.collider.tag == "item") // Vérifie si l'objet toucher à le tag item
+            if (hit.collider != null && hit.collider.tag == "item") // Vérifie si l'objet toucher à le tag item
             {
                 Item itemTouch = hit.collider.GetComponent<Item>();
 
