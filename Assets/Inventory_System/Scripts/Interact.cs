@@ -1,7 +1,6 @@
 using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using static UnityEngine.ParticleSystem;
 
 public class Interact : MonoBehaviour //Sera placer sur le joueur
 {
