@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Player Cam
   - item
+  - interactive
   layers:
   - Default
   - TransparentFX

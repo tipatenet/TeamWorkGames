@@ -3,26 +3,21 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using static UnityEngine.ParticleSystem;
 
-public class Interact : MonoBehaviour //Sera placer sur l'item
+public class Interact : MonoBehaviour //Sera placer sur le joueur
 {
     public Transform cameTransfrom;
     public float maxDistanceInteract = 3f;
-    public float sphereDetectionRadius = 3f;
-    public Item_ScriptableObject itemVide;
-    public LayerMask playerLay;
-    private Vector3 cameraRotation;
-    private Vector3 cameraPosition;
-    private Vector3 itemPositon;
-    private Item itemTouch;
+    public Material materialOver;
 
-    //Variable pour over
     Renderer lastRenderer = null;
     Material lastMaterial = null;
     GameObject particle = null;
-    public Material materialOver;
-    public Item overParticle;
     Vector3 particlePositon;
     Vector3 particleScale;
+    private Vector3 cameraRotation;
+    private Vector3 cameraPosition;
+    private Vector3 itemPositon;
+    private Item overParticle;
 
 
     private void Start()
@@ -34,30 +29,19 @@ public class Interact : MonoBehaviour //Sera placer sur l'item
     {
         cameraPosition = cameTransfrom.position;
         cameraRotation = cameTransfrom.forward;
-        OverItem();
     }
 
-    //Fonction qui permet au personnage d'interagir avec les items
-    public Item_ScriptableObject InteractionTrace()
+    //Fonction pour les interactions en globalité
+    public RaycastHit IsInteractive()
     {
         Debug.DrawLine(cameraPosition, cameraPosition + cameraRotation * maxDistanceInteract, Color.red);
         RaycastHit hit;
-        Item_ScriptableObject itemHit = itemVide;
-        if (Physics.Raycast(cameraPosition, cameraRotation, out hit, maxDistanceInteract))
-        {
-            if(hit.collider.tag == "item") // Vérifie si l'objet toucher à le tag item
-            {
-                itemTouch = hit.collider.GetComponent<Item>();
-                itemHit = itemTouch.info;
-                Destroy(hit.collider.gameObject);
-                return itemHit;
-            }
-        }
-        return itemHit;
+        Physics.Raycast(cameraPosition, cameraRotation, out hit, maxDistanceInteract);
+        return hit;
     }
 
     //Fonction qui permet de faire le over de l'objet
-    public void OverItem()
+    public void OverInteractive()
     {
         RaycastHit hit;
 

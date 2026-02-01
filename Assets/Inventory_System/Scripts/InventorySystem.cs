@@ -1,6 +1,8 @@
 using Microsoft.Unity.VisualStudio.Editor;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using static UnityEditor.Progress;
 using static UnityEngine.GraphicsBuffer;
 
@@ -17,6 +19,8 @@ public class InventorySystem : MonoBehaviour
     private float targetX;
     public float scrollSpeed;
     public int currentInventorySize = 0;
+    private float cooldownTime = 1f;
+    private bool canInteract = true;
 
     private void Start()
     {
@@ -28,22 +32,59 @@ public class InventorySystem : MonoBehaviour
         PickUpItem();
         scroolValue = keySystem.ScrollInventory.y;
         ScroolInventory();
+
+        if (keySystem.InteractPressed && canInteract)
+        {
+            StartCoroutine(InteractCooldown());
+        }
     }
 
-    private void PickUpItem()
+    //Fonction qui permet au joueur de ramasser un item
+    public void PickUpItem()
     {
-        if (keySystem.InteractPressed)
+
+        RaycastHit hit = interaction.IsInteractive();
+
+        if (keySystem.InteractPressed && canInteract)
         {
-            itemPickUp = interaction.InteractionTrace();
-            print(itemPickUp.item_Name);
+            if (hit.collider.tag == "item") // Vérifie si l'objet toucher à le tag item
+            {
+                Item itemTouch = hit.collider.GetComponent<Item>();
+
+                Item_ScriptableObject itemHit = itemTouch.info;
+
+                if (!inventoryFull()) //Vérifie qu'il y a de la place dans l'inventaire
+                {
+                    if (currentInventorySize != 0)
+                    {
+                        selectedIndex++;
+                        ScroolInventory();
+                    }
+
+                    inventory.Add(itemHit);
+                    currentInventorySize++;
+                    item_Container.GetChild(selectedIndex).GetComponent<UnityEngine.UI.Image>().sprite = itemHit.icon;
+                    Destroy(hit.collider.gameObject);
+
+                }
+            }
         }
+    }
+
+    private bool inventoryFull()
+    {
+        if (inventory.Count == inventoryMaxSize)
+        {
+            return true;
+        }
+        return false;
     }
 
     private void ScroolInventory()
     {
         if (scroolValue > 0)
             selectedIndex--;
-        else if (scroolValue < 0 && selectedIndex != inventoryMaxSize-1)
+        else if (scroolValue < 0 && selectedIndex+1 < currentInventorySize)
             selectedIndex++;
         selectedIndex = Mathf.Clamp(selectedIndex, 0,inventoryMaxSize);
 
@@ -55,12 +96,10 @@ public class InventorySystem : MonoBehaviour
 
     }
 
-    private void AddToInventory(Item_ScriptableObject itemtoAdd)
+    IEnumerator InteractCooldown()
     {
-        if(inventory.Count < 10) //Vérifie qu'il y a de la place dans l'inventaire
-        {
-            Image iconSlot = item_Container.GetChild(selectedIndex).GetComponent<Image>();
-
-        }
+        canInteract = false;
+        yield return new WaitForSeconds(cooldownTime);
+        canInteract = true;
     }
 }
