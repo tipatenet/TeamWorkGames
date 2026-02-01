@@ -216,6 +216,27 @@ public class GameManager : MonoBehaviour
             draggingPiece.localPosition = targetPosition;
             draggingPiece.GetComponent<BoxCollider2D>().enabled = false;
             piecesCorrect++;
+            if (piecesCorrect == pieces.Count)
+            {
+                playAgainButton.SetActive(true);
+            }
         }
+    }
+
+
+
+    public void RestartGame()
+    {
+        //destroy all pieces
+        foreach (Transform piece in pieces)
+        {
+            Destroy(piece.gameObject);
+        }
+        pieces.Clear();
+        //hide the outline
+        gameHolder.GetComponent<LineRenderer>().enabled = false;
+        //show the UI
+        playAgainButton.SetActive(false);
+        levelSelectPanel.gameObject.SetActive(true);
     }
 }
