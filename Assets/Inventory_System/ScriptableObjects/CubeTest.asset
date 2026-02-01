@@ -15,7 +15,7 @@ MonoBehaviour:
   item_Name: Cube
   item_Object: {fileID: 5077975275141813387, guid: 9646e281c714dae48936db0ea93e9373, type: 3}
   overParticle: {fileID: 1269317910098620064, guid: a5d5d1532ca91ff42a8826b0b1d083c8, type: 3}
-  particlePositionY: 0.75
-  particleScale: {x: 1, y: 1, z: 1}
+  particlePositionY: 0.2
+  particleScale: {x: 0.2, y: 0.2, z: 0.2}
   icon: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
   goItem: {fileID: 5077975275141813387, guid: 7e071faaa30fd534e9ba4b56ad250157, type: 3}

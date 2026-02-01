@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 using static UnityEditor.Progress;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 using static UnityEngine.GraphicsBuffer;
 
 public class InventorySystem : MonoBehaviour
@@ -24,6 +26,9 @@ public class InventorySystem : MonoBehaviour
     private bool canInteract = true;
     private UnityEngine.UI.Image currentIcon;
     private bool canDropItem = true;
+    private Transform cameraTransform;
+    private float dropDistance = 0.5f;
+
 
     private void Start()
     {
@@ -85,17 +90,18 @@ public class InventorySystem : MonoBehaviour
         {
             if(currentInventorySize != 0)
             {
-                print("Drop item");
                 Item_ScriptableObject itemToDrop = inventory[selectedIndex];
                 inventory.RemoveAt(selectedIndex);
                 currentInventorySize--;
                 selectedIndex--;
                 ScroolInventory();
                 UpdateUI();
-                Vector3 dropPosition = interaction.cameraPosition;
-                dropPosition.y += 20;
-                itemToDrop.goItem.AddComponent<Rigidbody>();
-                Instantiate(itemToDrop.goItem, dropPosition, Quaternion.identity);
+                interaction.IsInteractive();
+                Vector3 dropPosition = Camera.main.transform.position + Camera.main.transform.forward * dropDistance;
+
+                GameObject droppedObj = Instantiate(itemToDrop.goItem, dropPosition, Quaternion.identity);
+
+                itemToDrop.goItem.GetComponent<Rigidbody>().constraints &= ~RigidbodyConstraints.FreezePositionY;
             }
         }
     }
@@ -132,7 +138,6 @@ public class InventorySystem : MonoBehaviour
         Vector2 currentPos = item_Container.anchoredPosition;
         currentPos.x = Mathf.Lerp(currentPos.x, targetX, Time.deltaTime * scrollSpeed);
         item_Container.anchoredPosition = currentPos;
-
     }
 
     IEnumerator InteractCooldown()
