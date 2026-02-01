@@ -28,6 +28,7 @@ public class InventorySystem : MonoBehaviour
     private bool canDropItem = true;
     private Transform cameraTransform;
     private float dropDistance = 1f;
+    private float distanceHitWall = 1f;
 
 
     private void Start()
@@ -98,7 +99,10 @@ public class InventorySystem : MonoBehaviour
                 UpdateUI();
                 interaction.IsInteractive();
                 Vector3 dropPosition;
-                if (interaction.hitInteract.collider)
+                RaycastHit hitWall;
+
+                Physics.Raycast(interaction.cameraPosition,interaction.cameraRotation, out hitWall, distanceHitWall);
+                if (hitWall.collider)
                 {
                     dropPosition = Camera.main.transform.position + Camera.main.transform.forward * 0.45f;
                 }
