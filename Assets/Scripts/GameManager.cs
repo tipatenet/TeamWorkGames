@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
-#endif
 
 
 public class GameManager : MonoBehaviour
@@ -21,6 +19,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<Texture2D> imageTextures;
     [SerializeField] private Transform levelSelectPanel;
     [SerializeField] private Image levelSelectPrefab;
+    [SerializeField] private GameObject playAgainButton;
 
     private List<Transform> pieces;
     private Vector2Int dimensions;
@@ -28,6 +27,9 @@ public class GameManager : MonoBehaviour
     private float height;
 
     private Transform draggingPiece = null;
+    private Vector3 offset;
+
+    private int piecesCorrect;
 
     void Start()
     {
@@ -57,6 +59,8 @@ public class GameManager : MonoBehaviour
         Scatter();
         //update border
         UpdateBorder();
+
+        piecesCorrect = 0;
     }
 
 
@@ -167,12 +171,11 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
         var mouse = Mouse.current;
         if (mouse == null) return;
 
         Vector2 mousePos = mouse.position.ReadValue();
-        Vector2 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 0f));
+        Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 0f));
 
         if (mouse.leftButton.wasPressedThisFrame)
         {
@@ -185,6 +188,7 @@ public class GameManager : MonoBehaviour
 
         if (draggingPiece != null && mouse.leftButton.wasReleasedThisFrame)
         {
+            SnapAndDisableIfCorrect();
             draggingPiece = null;
         }
 
@@ -194,26 +198,24 @@ public class GameManager : MonoBehaviour
             newPosition.z = draggingPiece.position.z;
             draggingPiece.position = newPosition;
         }
-#else
-        if (Input.GetMouseButtonDown(0))
+    }
+
+
+
+    private void SnapAndDisableIfCorrect()
+    {
+        int pieceIndex = pieces.IndexOf(draggingPiece);
+        int col = pieceIndex % dimensions.x;
+        int row = pieceIndex / dimensions.x;
+
+        Vector2 targetPosition = new((-width * dimensions.x / 2) + (width * col) + (width / 2),
+                                     (-height * dimensions.y / 2) + (height * row) + (height / 2));
+
+        if (Vector2.Distance(draggingPiece.localPosition, targetPosition) < (width / 2))
         {
-            Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Collider2D col = Physics2D.OverlapPoint(worldPoint);
-            if (col)
-            {
-                draggingPiece = col.transform;
-            }
+            draggingPiece.localPosition = targetPosition;
+            draggingPiece.GetComponent<BoxCollider2D>().enabled = false;
+            piecesCorrect++;
         }
-        if (draggingPiece && Input.GetMouseButtonUp(0))
-        {
-            draggingPiece = null;
-        }
-        if (draggingPiece)
-        {
-            Vector3 newPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            newPosition.z = draggingPiece.position.z;
-            draggingPiece.position = newPosition;
-        }
-#endif
     }
 }
