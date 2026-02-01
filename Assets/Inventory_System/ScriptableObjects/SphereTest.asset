@@ -15,6 +15,6 @@ MonoBehaviour:
   item_Name: Sphere
   item_Object: {fileID: 8942597928326112320, guid: 16f92ec0d59a1f1408929f231a12c26c, type: 3}
   overParticle: {fileID: 1269317910098620064, guid: a5d5d1532ca91ff42a8826b0b1d083c8, type: 3}
-  particlePositionY: 1
+  particlePositionY: 0.75
   particleScale: {x: 1, y: 1, z: 1}
   icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}

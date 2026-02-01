@@ -8,6 +8,7 @@ public class Interact : MonoBehaviour //Sera placer sur le joueur
     public Transform cameTransfrom;
     public float maxDistanceInteract = 3f;
     public Material materialOver;
+    public RaycastHit hitInteract;
 
     Renderer lastRenderer = null;
     Material lastMaterial = null;
@@ -29,6 +30,8 @@ public class Interact : MonoBehaviour //Sera placer sur le joueur
     {
         cameraPosition = cameTransfrom.position;
         cameraRotation = cameTransfrom.forward;
+        hitInteract = IsInteractive();
+        OverInteractive();
     }
 
     //Fonction pour les interactions en globalité
@@ -41,42 +44,57 @@ public class Interact : MonoBehaviour //Sera placer sur le joueur
     }
 
     //Fonction qui permet de faire le over de l'objet
+
     public void OverInteractive()
     {
-        RaycastHit hit;
-
-        if (Physics.Raycast(cameraPosition, cameraRotation, out hit, maxDistanceInteract) && hit.collider.CompareTag("item"))
+        if (hitInteract.collider != null && hitInteract.collider.CompareTag("item"))
         {
-            Renderer rend = hit.collider.GetComponent<Renderer>();
+            Renderer rend = hitInteract.collider.GetComponent<Renderer>();
 
             if (rend != lastRenderer)
             {
-                if (lastRenderer != null)
-                {
-                    lastRenderer.material = lastMaterial;
-                    Destroy(particle);
-                }
+                ResetLast();
+
                 lastRenderer = rend;
-                lastMaterial = rend.material;
-                rend.material = materialOver;
-                overParticle = hit.collider.GetComponent<Item>();
-                particle = Instantiate(overParticle.info.overParticle);
-                particlePositon = hit.collider.gameObject.transform.position;
-                particlePositon.y = overParticle.info.particlePositionY;
-                particleScale = overParticle.info.particleScale;
-                particle.transform.position = particlePositon;
-                particle.transform.localScale = particleScale;
+
+                lastRenderer.material.EnableKeyword("_EMISSION");
+                lastRenderer.material.SetColor("_EmissionColor", Color.yellow * 2f);
+
+                overParticle = hitInteract.collider.GetComponent<Item>();
+
+                if (particle == null)
+                {
+                    particle = Instantiate(overParticle.info.overParticle);
+
+                    Vector3 pos = hitInteract.collider.transform.position;
+                    pos.y += overParticle.info.particlePositionY;
+
+                    particle.transform.position = pos;
+                    particle.transform.localScale = overParticle.info.particleScale;
+                }
             }
         }
         else
         {
-            if (lastRenderer != null)
-            {
-                lastRenderer.material = lastMaterial;
-                lastRenderer = null;
-                Destroy(particle);
-            }
+            ResetLast();
         }
     }
+
+    void ResetLast()
+    {
+        if (lastRenderer != null)
+        {
+            lastRenderer.material.DisableKeyword("_EMISSION");
+            lastRenderer = null;
+        }
+
+        if (particle != null)
+        {
+            Destroy(particle);
+            particle = null;
+        }
+    }
+
+
 
 }

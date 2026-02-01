@@ -43,8 +43,7 @@ public class InventorySystem : MonoBehaviour
     //Fonction qui permet au joueur de ramasser un item
     public void PickUpItem()
     {
-
-        RaycastHit hit = interaction.IsInteractive();
+        RaycastHit hit = interaction.hitInteract;
 
         if (keySystem.InteractPressed && canInteract)
         {
