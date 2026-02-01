@@ -27,7 +27,7 @@ public class InventorySystem : MonoBehaviour
     private UnityEngine.UI.Image currentIcon;
     private bool canDropItem = true;
     private Transform cameraTransform;
-    private float dropDistance = 0.5f;
+    private float dropDistance = 1f;
 
 
     private void Start()
@@ -97,7 +97,15 @@ public class InventorySystem : MonoBehaviour
                 ScroolInventory();
                 UpdateUI();
                 interaction.IsInteractive();
-                Vector3 dropPosition = Camera.main.transform.position + Camera.main.transform.forward * dropDistance;
+                Vector3 dropPosition;
+                if (interaction.hitInteract.collider)
+                {
+                    dropPosition = Camera.main.transform.position + Camera.main.transform.forward * 0.45f;
+                }
+                else
+                {
+                    dropPosition = Camera.main.transform.position + Camera.main.transform.forward * dropDistance;
+                }
 
                 GameObject droppedObj = Instantiate(itemToDrop.goItem, dropPosition, Quaternion.identity);
 
@@ -113,6 +121,14 @@ public class InventorySystem : MonoBehaviour
             currentIcon = item_Container.GetChild(i).GetComponent<UnityEngine.UI.Image>();
             currentIcon.sprite = inventory[i].icon;
             currentIcon.enabled = true;
+        }
+        if(currentInventorySize == 0)
+        {
+            item_Container.GetChild(0).GetComponent<UnityEngine.UI.Image>().enabled = false;
+        }
+        else
+        {
+            item_Container.GetChild(0).GetComponent<UnityEngine.UI.Image>().enabled = true;
         }
     }
 

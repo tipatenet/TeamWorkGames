@@ -22,8 +22,8 @@ public class PlayerCam : MonoBehaviour
         //Mouse Input 
         Vector2 look = PlayerInputHandler.Instance.LookInput;
 
-        float mouseX = look.x * Time.deltaTime * sensX;
-        float mouseY = look.y * Time.deltaTime * sensY;
+        float mouseX = look.x * sensX;
+        float mouseY = look.y * sensY;
 
         yRotation += mouseX;
 
