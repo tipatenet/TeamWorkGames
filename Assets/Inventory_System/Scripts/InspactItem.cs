@@ -57,11 +57,13 @@ public class InspactItem : MonoBehaviour
             {
                 InstantiateItem();
                 isInspact = true;
+                keySystem.LockGameplayInputs(true);
             }
             else
             {
                 Destroy(go);
                 isInspact = false;
+                keySystem.LockGameplayInputs(false);
             }
         }
     }

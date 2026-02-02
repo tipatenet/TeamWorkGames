@@ -74,4 +74,27 @@ public class PlayerInputHandler : MonoBehaviour
     {
         inputActions.Disable();
     }
+
+    //Attention à compléter à chaque fois que on rajoute un input
+    public void LockGameplayInputs(bool locked)
+    {
+        if (locked)
+        {
+            inputActions.Player.Move.Disable();
+            inputActions.Player.Look.Disable();
+            inputActions.Player.Jump.Disable();
+            inputActions.Player.Scroll.Disable();
+            inputActions.Player.Interact.Disable();
+            inputActions.Player.DropItem.Disable();
+        }
+        else
+        {
+            inputActions.Player.Move.Enable();
+            inputActions.Player.Look.Enable();
+            inputActions.Player.Jump.Enable();
+            inputActions.Player.Scroll.Enable();
+            inputActions.Player.Interact.Enable();
+            inputActions.Player.DropItem.Enable();
+        }
+    }
 }
