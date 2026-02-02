@@ -22,6 +22,9 @@ public class PlayerInputHandler : MonoBehaviour
     //Drop Item touche :
     public bool DropItemPressed { get; private set; }
 
+    //Inspact item touch :
+    public bool InspactItem { get; private set; }
+
 
     private PlayerInputActions inputActions;
 
@@ -56,6 +59,9 @@ public class PlayerInputHandler : MonoBehaviour
 
         inputActions.Player.DropItem.performed += ctx => DropItemPressed = true;
         inputActions.Player.DropItem.canceled += ctx => DropItemPressed = false;
+
+        inputActions.Player.Inspact.performed += ctx => InspactItem = true;
+        inputActions.Player.Inspact.canceled += ctx => InspactItem = false;
 
 
 
