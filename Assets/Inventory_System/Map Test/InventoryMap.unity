@@ -1308,6 +1308,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8547774311420549350, guid: f6a2d0ab36519194bb26dd077718be6d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1786045518}
+    - targetCorrespondingSourceObject: {fileID: 8547774311420549350, guid: f6a2d0ab36519194bb26dd077718be6d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1786045522}
   m_SourcePrefab: {fileID: 100100000, guid: f6a2d0ab36519194bb26dd077718be6d, type: 3}
 --- !u!1 &1287149552
 GameObject:
@@ -2257,6 +2260,32 @@ MonoBehaviour:
   materialOver: {fileID: 2100000, guid: fa6fc15b8a393bf4d88581d86cddcb3a, type: 2}
   cameraRotation: {x: 0, y: 0, z: 0}
   cameraPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &1786045520 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6610698831533452849, guid: f6a2d0ab36519194bb26dd077718be6d, type: 3}
+  m_PrefabInstance: {fileID: 1237491979}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1786045508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7017ac8eece052d4bbaf631d8712b5a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputHandler
+--- !u!114 &1786045522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1786045508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e8ab0fb7e40493449948265df61df38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InspactItem
+  holdPosition: {fileID: 1527234848}
+  inventory: {fileID: 1786045517}
+  keySystem: {fileID: 1786045520}
 --- !u!1001 &1854323191
 PrefabInstance:
   m_ObjectHideFlags: 0
