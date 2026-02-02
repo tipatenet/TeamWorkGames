@@ -7,6 +7,7 @@ public class InspactItem : MonoBehaviour
     public GameObject holdPosition;
     public InventorySystem inventory;
     public PlayerInputHandler keySystem;
+    public Interact interact;
 
     private bool canInspact = true;
     private float cooldownTime = 1f;
@@ -23,12 +24,7 @@ public class InspactItem : MonoBehaviour
     private void Update()
     {
         OpenInspactMenu();
-        if (keySystem.InspactItem && canInspact)
-        {
-            StartCoroutine(InspactItemCooldown());
-        }
         UpdatePosition();
-
     }
 
     public void InstantiateItem()
@@ -52,20 +48,28 @@ public class InspactItem : MonoBehaviour
 
     private void OpenInspactMenu()
     {
+        if (inventory.currentInventorySize == 0)
+            return;
+
         if (keySystem.InspactItem && canInspact)
         {
             StartCoroutine(InspactItemCooldown());
+
+            if (inventory.currentInventorySize == 0)
+                canInspact = false;
 
             if (!isInspact)
             {
                 InstantiateItem();
                 isInspact = true;
+                interact.stopRaycast = true;
                 keySystem.LockGameplayInputs(true);
             }
             else
             {
                 Destroy(go);
                 isInspact = false;
+                interact.stopRaycast = false;
                 keySystem.LockGameplayInputs(false);
             }
         }

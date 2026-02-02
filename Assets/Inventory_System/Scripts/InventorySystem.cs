@@ -91,7 +91,7 @@ public class InventorySystem : MonoBehaviour
                 selectedIndex--;
                 ScroolInventory();
                 UpdateUI();
-                interaction.IsInteractive();
+                interaction.IsInteractive(false);
                 Vector3 dropPosition;
                 RaycastHit hitWall;
 

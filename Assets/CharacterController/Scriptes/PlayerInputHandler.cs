@@ -90,6 +90,7 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.Scroll.Disable();
             inputActions.Player.Interact.Disable();
             inputActions.Player.DropItem.Disable();
+            inputActions.Player.RotateItem.Enable();
         }
         else
         {

@@ -8,6 +8,7 @@ public class Interact : MonoBehaviour //Sera placer sur le joueur
     public float maxDistanceInteract = 3f;
     public Material materialOver;
     public RaycastHit hitInteract;
+    public bool stopRaycast = false;
 
     Renderer lastRenderer = null;
     GameObject particle = null;
@@ -28,16 +29,20 @@ public class Interact : MonoBehaviour //Sera placer sur le joueur
     {
         cameraPosition = cameTransfrom.position;
         cameraRotation = cameTransfrom.forward;
-        hitInteract = IsInteractive();
-        OverInteractive();
+        hitInteract = IsInteractive(false);
+        if (!stopRaycast)
+            OverInteractive();
     }
 
     //Fonction pour les interactions en globalité
-    public RaycastHit IsInteractive()
+    public RaycastHit IsInteractive(bool stopRaycast)
     {
-        Debug.DrawLine(cameraPosition, cameraPosition + cameraRotation * maxDistanceInteract, Color.red);
-        RaycastHit hit;
-        Physics.Raycast(cameraPosition, cameraRotation, out hit, maxDistanceInteract);
+        RaycastHit hit = default;
+        if (!stopRaycast)
+        {
+            Debug.DrawLine(cameraPosition, cameraPosition + cameraRotation * maxDistanceInteract, Color.red);
+            Physics.Raycast(cameraPosition, cameraRotation, out hit, maxDistanceInteract);
+        }
         return hit;
     }
 
