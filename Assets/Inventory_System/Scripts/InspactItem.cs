@@ -12,6 +12,8 @@ public class InspactItem : MonoBehaviour
     private float cooldownTime = 1f;
     private GameObject go;
     private bool isInspact = false;
+    private float rotationSpeed = 10f;
+    private Vector2 currentRotation;
 
     private void Start()
     {
@@ -44,6 +46,7 @@ public class InspactItem : MonoBehaviour
         if (isInspact && go != null)
         {
             go.transform.position = holdPosition.transform.position;
+            RotateItem();
         }
     }
 
@@ -66,6 +69,16 @@ public class InspactItem : MonoBehaviour
                 keySystem.LockGameplayInputs(false);
             }
         }
+    }
+
+    private void RotateItem()
+    {
+        Vector2 look = keySystem.RotateItemInspact;
+
+        currentRotation.x += look.x * rotationSpeed * Time.deltaTime;
+        currentRotation.y -= look.y * rotationSpeed * Time.deltaTime;
+
+        go.transform.rotation = Quaternion.Euler(currentRotation.y, currentRotation.x, 0f);
     }
 
     IEnumerator InspactItemCooldown()

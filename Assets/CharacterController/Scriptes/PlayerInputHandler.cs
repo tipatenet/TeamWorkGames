@@ -12,6 +12,7 @@ public class PlayerInputHandler : MonoBehaviour
     public Vector2 MoveInput { get; private set; }
     public Vector2 LookInput { get; private set; }
     public Vector2 ScrollInventory { get; private set; }
+    public Vector2 RotateItemInspact { get; private set; }
 
     //Stock dans une bool :
     public bool JumpPressed { get; private set; }
@@ -49,6 +50,9 @@ public class PlayerInputHandler : MonoBehaviour
         inputActions.Player.Scroll.performed += ctx => ScrollInventory = ctx.ReadValue<Vector2>();
         inputActions.Player.Scroll.canceled += ctx => ScrollInventory = Vector2.zero;
 
+        inputActions.Player.RotateItem.performed += ctx => RotateItemInspact = ctx.ReadValue<Vector2>();
+        inputActions.Player.RotateItem.canceled += ctx => RotateItemInspact = Vector2.zero;
+
         //Définie les valeurs des bool (Pour savoir si la touche est appuyer)
 
         inputActions.Player.Jump.performed += ctx => JumpPressed = true;
@@ -75,7 +79,7 @@ public class PlayerInputHandler : MonoBehaviour
         inputActions.Disable();
     }
 
-    //Attention à compléter à chaque fois que on rajoute un input
+    //Attention à compléter à chaque fois que on rajoute un input look les input sauf pour ceux qui doive pas etre look
     public void LockGameplayInputs(bool locked)
     {
         if (locked)
@@ -95,6 +99,7 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.Scroll.Enable();
             inputActions.Player.Interact.Enable();
             inputActions.Player.DropItem.Enable();
+            inputActions.Player.RotateItem.Disable();
         }
     }
 }
