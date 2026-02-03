@@ -1,29 +1,31 @@
-using Unity.VisualScripting;
-using UnityEditor.SceneManagement;
 using UnityEngine;
+
+
+/*Cette class permet de gerer toute les interaction avec les jeux 
+ * (Raycast lancer en continue pour voir se que le joueur regarde)*/
 
 public class Interact : MonoBehaviour //Sera placer sur le joueur
 {
-    public Transform cameTransfrom;
+    //Variables Publique :
+    public Camera cam;
     public float maxDistanceInteract = 3f;
-    public Material materialOver;
     public RaycastHit hitInteract;
     public bool stopRaycast = false;
 
-    Renderer lastRenderer = null;
-    GameObject particle = null;
-    Vector3 particlePositon;
-    Vector3 particleScale;
+    //Variables Privées :
+    private Renderer lastRenderer = null;
+    private GameObject particle = null;
     public Vector3 cameraRotation;
     public Vector3 cameraPosition;
-    private Vector3 itemPositon;
     private Item overParticle;
+    private Transform cameTransfrom;
+    private MaterialPropertyBlock mpb;
 
 
     private void Start()
     {
-        cameTransfrom = Camera.main.transform;
-        itemPositon = transform.position;
+        cameTransfrom = cam.transform;
+        mpb = new MaterialPropertyBlock();
     }
     private void Update()
     {
@@ -47,10 +49,13 @@ public class Interact : MonoBehaviour //Sera placer sur le joueur
     }
 
     //Fonction qui permet de faire le over de l'objet
-
     public void OverInteractive()
     {
-        if (hitInteract.collider != null && hitInteract.collider.CompareTag("item"))
+        //Marche que sur les gameobjects ayant un tag item
+        /*SINON pour les over qui sont pas des items il faudra créer un autre script
+         * mais c'est rapide c'est casiment la meme chose*/
+        //ATTENTION !! ne change que un material donc s'il y à un item qui en a plusieurs bah sa marche pas
+        if (hitInteract.collider != null && (hitInteract.collider.CompareTag("item")))
         {
             Renderer rend = hitInteract.collider.GetComponent<Renderer>();
 
@@ -60,8 +65,13 @@ public class Interact : MonoBehaviour //Sera placer sur le joueur
 
                 lastRenderer = rend;
 
-                lastRenderer.material.EnableKeyword("_EMISSION");
-                lastRenderer.material.SetColor("_EmissionColor", Color.yellow * 2f);
+                lastRenderer.sharedMaterial.EnableKeyword("_EMISSION");
+                lastRenderer.GetPropertyBlock(mpb);
+
+                //Parametre de couleur du hover :
+                mpb.SetColor("_EmissionColor", Color.blue * 2f);
+
+                lastRenderer.SetPropertyBlock(mpb);
 
                 overParticle = hitInteract.collider.GetComponent<Item>();
 
@@ -83,11 +93,12 @@ public class Interact : MonoBehaviour //Sera placer sur le joueur
         }
     }
 
+    //Fonction reset pour les particules et Material
     void ResetLast()
     {
         if (lastRenderer != null)
         {
-            lastRenderer.material.DisableKeyword("_EMISSION");
+            lastRenderer.SetPropertyBlock(null);
             lastRenderer = null;
         }
 
@@ -97,7 +108,4 @@ public class Interact : MonoBehaviour //Sera placer sur le joueur
             particle = null;
         }
     }
-
-
-
 }

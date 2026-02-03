@@ -1168,10 +1168,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: SphereItem_Test (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 8942597928326112320, guid: 16f92ec0d59a1f1408929f231a12c26c, type: 3}
-      propertyPath: m_TagString
-      value: item
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
