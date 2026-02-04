@@ -17,4 +17,4 @@ MonoBehaviour:
   particlePositionY: 0.2
   particleScale: {x: 0.2, y: 0.2, z: 0.2}
   icon: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  goItem: {fileID: 3919394019970707039, guid: ea81721c680e2c04bbc59e92fca72fad, type: 3}
+  goItem: {fileID: 3919394019970707039, guid: 769ba790ff5e5c24b864e1a8cbca2c22, type: 3}
