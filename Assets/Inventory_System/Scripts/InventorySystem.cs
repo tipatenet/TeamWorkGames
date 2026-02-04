@@ -5,28 +5,34 @@ using UnityEngine.UI;
 
 public class InventorySystem : MonoBehaviour
 {
-    public Interact interaction;
-    public PlayerInputHandler keySystem;
-    private Item_ScriptableObject itemPickUp;
-    public float scroolValue = 0f;
+    //Variables Pulique :
     public int inventoryMaxSize = 10;
-    public List<Item_ScriptableObject> inventory;
     public RectTransform item_Container;
-    public int selectedIndex = 0;
+    public float scrollSpeed = 20f;
+
+    //Variables Privées :
     private float targetX;
-    public float scrollSpeed;
-    public int currentInventorySize = 0;
-    private float cooldownTime = 1f;
+    private float cooldownTime = 0.5f;
     private bool canInteract = true;
     private UnityEngine.UI.Image currentIcon;
     private bool canDropItem = true;
     private Transform cameraTransform;
     private float dropDistance = 1f;
     private float distanceHitWall = 1f;
+    private Item_ScriptableObject itemPickUp;
+    private float scroolValue = 0f;
+    private Interact interaction;
+    private PlayerInputHandler keySystem;
+
+    //Pas touche :
+    public int selectedIndex = 0;
+    public int currentInventorySize = 0;
+    public List<Item_ScriptableObject> inventory;
 
 
     private void Start()
     {
+        //Récupère directement sur le Player les scripts : ATTENTION ils faut les ajoutées !!!
         interaction = GetComponent<Interact>();
         keySystem = GetComponent<PlayerInputHandler>();
     }
@@ -79,6 +85,7 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+    //Fonction qui permet de drop les items
     private void DropItem()
     {
         if (keySystem.DropItemPressed && canDropItem)
@@ -88,9 +95,14 @@ public class InventorySystem : MonoBehaviour
                 Item_ScriptableObject itemToDrop = inventory[selectedIndex];
                 inventory.RemoveAt(selectedIndex);
                 currentInventorySize--;
-                selectedIndex--;
-                ScroolInventory();
+
+                if (currentInventorySize <= 0)
+                    selectedIndex = 0;
+                else
+                    selectedIndex = Mathf.Clamp(selectedIndex, 0, currentInventorySize - 1);
+
                 UpdateUI();
+                ScroolInventory();
                 interaction.IsInteractive(false);
                 Vector3 dropPosition;
                 RaycastHit hitWall;
@@ -98,20 +110,22 @@ public class InventorySystem : MonoBehaviour
                 Physics.Raycast(interaction.cameraPosition,interaction.cameraRotation, out hitWall, distanceHitWall);
                 if (hitWall.collider)
                 {
-                    dropPosition = Camera.main.transform.position + Camera.main.transform.forward * 0.45f;
+                    dropPosition = interaction.cameraPosition + interaction.cam.transform.forward * 0.45f;
                 }
                 else
                 {
-                    dropPosition = Camera.main.transform.position + Camera.main.transform.forward * dropDistance;
+                    dropPosition = interaction.cameraPosition + interaction.cam.transform.forward * dropDistance;
                 }
-
                 GameObject droppedObj = Instantiate(itemToDrop.goItem, dropPosition, Quaternion.identity);
 
-                itemToDrop.goItem.GetComponent<Rigidbody>().constraints &= ~RigidbodyConstraints.FreezePositionY;
+                Rigidbody rb = droppedObj.GetComponent<Rigidbody>();
+                if (rb != null)
+                    rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
             }
         }
     }
 
+    //Fonction qui permet d'actualisée l'UI du canvas
     private void UpdateUI()
     {
         for(int i = 0; i < currentInventorySize; i++)
@@ -130,6 +144,7 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+    //Check pour savoir si l'inventaire est plein
     private bool inventoryFull()
     {
         if (inventory.Count == inventoryMaxSize)
@@ -139,13 +154,17 @@ public class InventorySystem : MonoBehaviour
         return false;
     }
 
+
+    //Permet de scroller dans l'inventaire
     private void ScroolInventory()
     {
         if (scroolValue > 0)
             selectedIndex--;
         else if (scroolValue < 0 && selectedIndex+1 < currentInventorySize)
             selectedIndex++;
-        selectedIndex = Mathf.Clamp(selectedIndex, 0,inventoryMaxSize);
+
+        selectedIndex = Mathf.Clamp(selectedIndex, 0,currentInventorySize);
+
 
         float itemWidth = 100f + 10;
         targetX = -selectedIndex * itemWidth;
@@ -154,6 +173,7 @@ public class InventorySystem : MonoBehaviour
         item_Container.anchoredPosition = currentPos;
     }
 
+    //Les coolDown pour les inputs :
     IEnumerator InteractCooldown()
     {
         canInteract = false;

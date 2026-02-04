@@ -15,11 +15,13 @@ public class Interact : MonoBehaviour //Sera placer sur le joueur
     //Variables Privées :
     private Renderer lastRenderer = null;
     private GameObject particle = null;
-    public Vector3 cameraRotation;
-    public Vector3 cameraPosition;
     private Item overParticle;
     private Transform cameTransfrom;
     private MaterialPropertyBlock mpb;
+
+    //Pas Touche :
+    public Vector3 cameraRotation;
+    public Vector3 cameraPosition;
 
 
     private void Start()
@@ -69,7 +71,7 @@ public class Interact : MonoBehaviour //Sera placer sur le joueur
                 lastRenderer.GetPropertyBlock(mpb);
 
                 //Parametre de couleur du hover :
-                mpb.SetColor("_EmissionColor", Color.blue * 2f);
+                mpb.SetColor("_EmissionColor", Color.yellow * 2f);
 
                 lastRenderer.SetPropertyBlock(mpb);
 
