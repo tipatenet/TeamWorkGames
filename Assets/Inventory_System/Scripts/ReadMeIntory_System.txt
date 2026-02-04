@@ -27,6 +27,8 @@ COMMENT SETUP UN ITEM ?
 
 5- Compléter les infos du scriptableObject en rajouter pour goItem la prefab de l'object avec le script et le RigidBody
 
+6- Rajouter le tage item sur le prefab de l'item
+
 Et après c'est bon tu peux placer la prefab de l'item (avec le script et rigidbody) dans la scene et sa marche !
 
 
