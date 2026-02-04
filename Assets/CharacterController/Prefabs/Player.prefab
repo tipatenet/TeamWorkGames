@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5025966686458103683}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CameraPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 2674786338948025080}
   - component: {fileID: 4223971065942291160}
   - component: {fileID: 6685996036812798931}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PlayerObj
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -157,7 +157,7 @@ GameObject:
   - component: {fileID: 7630798254355109415}
   - component: {fileID: 4000685525724232674}
   - component: {fileID: 6610698831533452849}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -234,6 +234,7 @@ MonoBehaviour:
   Grounded: 0
   maxSlopAngle: 40
   orientation: {fileID: 4955815801293719710}
+  rb: {fileID: 0}
 --- !u!114 &6610698831533452849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,7 +256,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4955815801293719710}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: orientation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
