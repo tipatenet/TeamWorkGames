@@ -45,7 +45,7 @@ public class EnigmeEngrainages : MonoBehaviour
                 if (interactScript.IsInteractive(false).transform.gameObject.tag == "ext")
                 {
                     EngrainageExt.transform.Rotate(0f, 0f, 60f);
-                    //iTween.RotateAdd(EngrainageExt, new Vector3(0, 0, 60), 0.3f);
+                    iTween.RotateAdd(gameObject, new Vector3(0, 0, 60), 1f);
                 }
                 else if (interactScript.IsInteractive(false).transform.gameObject.tag == "mid")
                 {
