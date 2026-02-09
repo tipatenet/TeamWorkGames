@@ -16,6 +16,9 @@ public class EnigmeEngrainages : MonoBehaviour
     public LayerMask Player;
     bool canInteract = true;
     private float cooldownTime = 0.5f;
+    private int currentNum1 = 0;
+    private int currentNum2 = 0;
+    private int currentNum3 = 0;
 
     void Start()
     {
@@ -45,15 +48,17 @@ public class EnigmeEngrainages : MonoBehaviour
                 if (interactScript.IsInteractive(false).transform.gameObject.tag == "ext")
                 {
                     EngrainageExt.transform.Rotate(0f, 0f, 60f);
-                    iTween.RotateAdd(gameObject, new Vector3(0, 0, 60), 1f);
+                    iTween.RotateAdd(EngrainageExt, new Vector3(0, 0, 60), 1f);
                 }
                 else if (interactScript.IsInteractive(false).transform.gameObject.tag == "mid")
                 {
-
+                    EngrainageMid.transform.Rotate(0f, 0f, 90f);
+                    iTween.RotateAdd(EngrainageMid, new Vector3(0, 0, 90), 1f);
                 }
                 else if (interactScript.IsInteractive(false).transform.gameObject.tag == "centre")
                 {
-
+                    EngrainageCentre.transform.Rotate(0f, 0f, 180f);
+                    iTween.RotateAdd(EngrainageCentre, new Vector3(0, 0, 180), 1f);
                 }
             }
         }
