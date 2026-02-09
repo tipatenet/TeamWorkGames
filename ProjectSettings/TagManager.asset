@@ -7,6 +7,9 @@ TagManager:
   - Player Cam
   - item
   - interactive
+  - ext
+  - mid
+  - centre
   layers:
   - Default
   - TransparentFX
@@ -16,7 +19,7 @@ TagManager:
   - UI
   - Ground
   - Player
-  - 
+  - interactive
   - 
   - 
   - 
