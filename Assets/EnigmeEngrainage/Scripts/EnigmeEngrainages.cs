@@ -16,9 +16,9 @@ public class EnigmeEngrainages : MonoBehaviour
     public LayerMask Player;
     bool canInteract = true;
     private float cooldownTime = 0.5f;
-    private int currentNum1 = 0;
-    private int currentNum2 = 0;
-    private int currentNum3 = 0;
+    public int currentNum1 = 0;
+    public int currentNum2 = 0;
+    public int currentNum3 = 0;
 
     void Start()
     {
@@ -48,16 +48,20 @@ public class EnigmeEngrainages : MonoBehaviour
                 if (interactScript.IsInteractive(false).transform.gameObject.tag == "ext")
                 {
                     iTween.RotateAdd(EngrainageExt, new Vector3(0, 0, 60), 1f);
+                    IncrementeExt(6, currentNum1);
                 }
                 else if (interactScript.IsInteractive(false).transform.gameObject.tag == "mid")
                 {
                     iTween.RotateAdd(EngrainageMid, new Vector3(0, 0, 90), 1f);
+                    IncrementeExt(4, currentNum2);
                 }
                 else if (interactScript.IsInteractive(false).transform.gameObject.tag == "centre")
                 {
                     iTween.RotateAdd(EngrainageCentre, new Vector3(0, 0, 180), 1f);
+                    IncrementeExt(2, currentNum3);
                 }
             }
+            VerifyCode();
         }
     }
 
@@ -80,5 +84,29 @@ public class EnigmeEngrainages : MonoBehaviour
         canInteract = false;
         yield return new WaitForSeconds(cooldownTime);
         canInteract = true;
+    }
+
+    void IncrementeExt(int maxReset, int refIncrement)
+    {
+        if (refIncrement != maxReset)
+            refIncrement++;
+        else
+            refIncrement = 0;
+    }
+
+    bool VerifyCode()
+    {
+        if(currentNum1 == codeNum1)
+        {
+            if(currentNum2 == codeNum2)
+            {
+                if(currentNum3 == codeNum3)
+                {
+                    print("Code bon");
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
