@@ -15,7 +15,7 @@ public class EnigmeEngrainages : MonoBehaviour
     public float SphereInteract = 3f;
     public LayerMask Player;
     bool canInteract = true;
-    private float cooldownTime = 0.5f;
+    private float cooldownTime = 1f;
     public int currentNum1 = 0;
     public int currentNum2 = 0;
     public int currentNum3 = 0;
@@ -48,20 +48,22 @@ public class EnigmeEngrainages : MonoBehaviour
                 if (interactScript.IsInteractive(false).transform.gameObject.tag == "ext")
                 {
                     iTween.RotateAdd(EngrainageExt, new Vector3(0, 0, 60), 1f);
-                    IncrementeExt(6, currentNum1);
+                    IncrementeExt(6, ref currentNum1);
+                    VerifyCode();
                 }
                 else if (interactScript.IsInteractive(false).transform.gameObject.tag == "mid")
                 {
                     iTween.RotateAdd(EngrainageMid, new Vector3(0, 0, 90), 1f);
-                    IncrementeExt(4, currentNum2);
+                    IncrementeExt(4, ref currentNum2);
+                    VerifyCode();
                 }
                 else if (interactScript.IsInteractive(false).transform.gameObject.tag == "centre")
                 {
                     iTween.RotateAdd(EngrainageCentre, new Vector3(0, 0, 180), 1f);
-                    IncrementeExt(2, currentNum3);
+                    IncrementeExt(2, ref currentNum3);
+                    VerifyCode();
                 }
             }
-            VerifyCode();
         }
     }
 
@@ -86,9 +88,9 @@ public class EnigmeEngrainages : MonoBehaviour
         canInteract = true;
     }
 
-    void IncrementeExt(int maxReset, int refIncrement)
+    void IncrementeExt(int maxReset, ref int refIncrement)
     {
-        if (refIncrement != maxReset)
+        if ((refIncrement+1) != maxReset)
             refIncrement++;
         else
             refIncrement = 0;
