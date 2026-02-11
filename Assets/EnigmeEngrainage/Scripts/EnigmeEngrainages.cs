@@ -14,6 +14,8 @@ public class EnigmeEngrainages : MonoBehaviour
     public int codeNum3;
     public float SphereInteract = 3f;
     public LayerMask Player;
+    public AudioSource source;
+    public AudioClip RotationSound;
     bool canInteract = true;
     private float cooldownTime = 2f;
     public int currentNum1 = 0;
@@ -22,7 +24,7 @@ public class EnigmeEngrainages : MonoBehaviour
 
     void Start()
     {
-        
+        source = this.gameObject.GetComponent<AudioSource>();
     }
 
     void Update()
@@ -50,18 +52,21 @@ public class EnigmeEngrainages : MonoBehaviour
                     iTween.RotateAdd(EngrainageExt, new Vector3(0, 0, 60), 2f);
                     IncrementeExt(6, ref currentNum1);
                     VerifyCode();
+                    source.PlayOneShot(RotationSound);
                 }
                 else if (interactScript.IsInteractive(false).transform.gameObject.tag == "mid")
                 {
                     iTween.RotateAdd(EngrainageMid, new Vector3(0, 0, 90), 2f);
                     IncrementeExt(4, ref currentNum2);
                     VerifyCode();
+                    source.PlayOneShot(RotationSound);
                 }
                 else if (interactScript.IsInteractive(false).transform.gameObject.tag == "centre")
                 {
                     iTween.RotateAdd(EngrainageCentre, new Vector3(0, 0, 180), 2f);
                     IncrementeExt(2, ref currentNum3);
                     VerifyCode();
+                    source.PlayOneShot(RotationSound);
                 }
             }
         }
