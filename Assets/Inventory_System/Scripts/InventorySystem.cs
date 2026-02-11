@@ -9,6 +9,9 @@ public class InventorySystem : MonoBehaviour
     public int inventoryMaxSize = 10;
     public RectTransform item_Container;
     public float scrollSpeed = 20f;
+    public AudioSource source;
+    public AudioClip DropSound;
+    public AudioClip PickUpSound;
 
     //Variables Privées :
     private float targetX;
@@ -35,6 +38,7 @@ public class InventorySystem : MonoBehaviour
         //Récupère directement sur le Player les scripts : ATTENTION ils faut les ajoutées !!!
         interaction = GetComponent<Interact>();
         keySystem = GetComponent<PlayerInputHandler>();
+        source = this.gameObject.GetComponent<AudioSource>();
     }
     private void Update()
     {
@@ -79,7 +83,7 @@ public class InventorySystem : MonoBehaviour
                     currentInventorySize++;
                     UpdateUI();
                     Destroy(hit.collider.gameObject);
-
+                    source.PlayOneShot(PickUpSound);
                 }
             }
         }
@@ -121,6 +125,7 @@ public class InventorySystem : MonoBehaviour
                 Rigidbody rb = droppedObj.GetComponent<Rigidbody>();
                 if (rb != null)
                     rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
+                source.PlayOneShot(DropSound);
             }
         }
     }
