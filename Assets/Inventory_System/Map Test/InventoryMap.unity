@@ -3227,7 +3227,7 @@ PrefabInstance:
       objectReference: {fileID: 167919319}
     - target: {fileID: 3191861471629149975, guid: 4907c110d986e0e4b8cb2a1249f59b7a, type: 3}
       propertyPath: m_Pitch
-      value: 3
+      value: 0.9
       objectReference: {fileID: 0}
     - target: {fileID: 3191861471629149975, guid: 4907c110d986e0e4b8cb2a1249f59b7a, type: 3}
       propertyPath: m_Volume
