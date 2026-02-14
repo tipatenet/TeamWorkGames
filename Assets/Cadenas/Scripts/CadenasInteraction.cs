@@ -16,6 +16,8 @@ public class CadenasInteraction : MonoBehaviour
     private float cooldownTime = 0.5f;
     private bool switchCam = false;
     private float transitionTime = 2f;
+    private Vector3 resetPos;
+    private Vector3 resetRot;
     void Start()
     {
 
@@ -78,24 +80,36 @@ public class CadenasInteraction : MonoBehaviour
         {
             playerCam.gameObject.SetActive(false);
             lookCam.gameObject.SetActive(true);
-            camTransition();
+            camTransition(switchCam);
         }
         else
         {
+            camTransition(switchCam);
             playerCam.gameObject.SetActive(true);
             lookCam.gameObject.SetActive(false);
         }
     }
 
-    void camTransition()
+    void camTransition(bool switchCam)
     {
-        StartCoroutine(TransitionCoolDown());
-        Vector3 targetPos = lookCam.gameObject.transform.position;
-        Vector3 targetRotation = lookCam.transform.eulerAngles;
-        lookCam.gameObject.transform.position = playerCam.gameObject.transform.position;
-        lookCam.gameObject.transform.eulerAngles = playerCam.gameObject.transform.eulerAngles;
-        iTween.MoveTo(lookCam.gameObject,targetPos, transitionTime);
-        iTween.RotateTo(lookCam.gameObject, targetRotation, transitionTime*1.5f);
+        if (switchCam)
+        {
+            StartCoroutine(TransitionCoolDown());
+            Vector3 targetPos = lookCam.gameObject.transform.position;
+            Vector3 targetRotation = lookCam.transform.eulerAngles;
+            lookCam.gameObject.transform.position = playerCam.gameObject.transform.position;
+            lookCam.gameObject.transform.eulerAngles = playerCam.gameObject.transform.eulerAngles;
+            iTween.MoveTo(lookCam.gameObject, targetPos, transitionTime);
+            iTween.RotateTo(lookCam.gameObject, targetRotation, transitionTime * 1.5f);
+        }
+        else
+        {
+            StartCoroutine(TransitionCoolDown());
+            Vector3 targetPos = playerCam.gameObject.transform.position;
+            Vector3 targetRotation = playerCam.transform.eulerAngles;
+            iTween.MoveTo(lookCam.gameObject, targetPos, transitionTime);
+            iTween.RotateTo(lookCam.gameObject, targetRotation, transitionTime * 1.5f);
+        }
     }
 
     IEnumerator InteractCooldown()
