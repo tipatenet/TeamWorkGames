@@ -97,6 +97,51 @@ public class CadenasInteraction : MonoBehaviour
             StartCoroutine(TransitionCoolDown());
             Vector3 targetPos = lookCam.gameObject.transform.position;
             Vector3 targetRotation = lookCam.transform.eulerAngles;
+            void toogleSwitchCam(ref bool switchCam)
+    {
+        if (!switchCam)
+            switchCam = true;
+        else
+            switchCam = false;
+    }
+
+    void switchCamPos(ref bool switchCam)
+    {
+        if (switchCam)
+        {
+            playerCam.gameObject.SetActive(false);
+            lookCam.gameObject.SetActive(true);
+            camTransition(switchCam);
+        }
+        else
+        {
+            camTransition(switchCam);
+            playerCam.gameObject.SetActive(true);
+            lookCam.gameObject.SetActive(false);
+        }
+    }
+
+    void camTransition(bool switchCam)
+    {
+        if (switchCam)
+        {
+            StartCoroutine(TransitionCoolDown());
+            Vector3 targetPos = lookCam.gameObject.transform.position;
+            Vector3 targetRotation = lookCam.transform.eulerAngles;
+            lookCam.gameObject.transform.position = playerCam.gameObject.transform.position;
+            lookCam.gameObject.transform.eulerAngles = playerCam.gameObject.transform.eulerAngles;
+            iTween.MoveTo(lookCam.gameObject, targetPos, transitionTime);
+            iTween.RotateTo(lookCam.gameObject, targetRotation, transitionTime * 1.5f);
+        }
+        else
+        {
+            StartCoroutine(TransitionCoolDown());
+            Vector3 targetPos = playerCam.gameObject.transform.position;
+            Vector3 targetRotation = playerCam.transform.eulerAngles;
+            iTween.MoveTo(lookCam.gameObject, targetPos, transitionTime);
+            iTween.RotateTo(lookCam.gameObject, targetRotation, transitionTime * 1.5f);
+        }
+    }
             lookCam.gameObject.transform.position = playerCam.gameObject.transform.position;
             lookCam.gameObject.transform.eulerAngles = playerCam.gameObject.transform.eulerAngles;
             iTween.MoveTo(lookCam.gameObject, targetPos, transitionTime);
