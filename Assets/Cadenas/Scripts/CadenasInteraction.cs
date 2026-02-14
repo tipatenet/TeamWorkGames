@@ -15,6 +15,7 @@ public class CadenasInteraction : MonoBehaviour
     private bool canInteract = true;
     private float cooldownTime = 0.5f;
     private bool switchCam = false;
+    private float transitionTime = 2f;
     void Start()
     {
 
@@ -77,6 +78,7 @@ public class CadenasInteraction : MonoBehaviour
         {
             playerCam.gameObject.SetActive(false);
             lookCam.gameObject.SetActive(true);
+            camTransition();
         }
         else
         {
@@ -85,10 +87,27 @@ public class CadenasInteraction : MonoBehaviour
         }
     }
 
+    void camTransition()
+    {
+        StartCoroutine(TransitionCoolDown());
+        Vector3 targetPos = lookCam.gameObject.transform.position;
+        Vector3 targetRotation = lookCam.transform.eulerAngles;
+        lookCam.gameObject.transform.position = playerCam.gameObject.transform.position;
+        lookCam.gameObject.transform.eulerAngles = playerCam.gameObject.transform.eulerAngles;
+        iTween.MoveTo(lookCam.gameObject,targetPos, transitionTime);
+        iTween.RotateTo(lookCam.gameObject, targetRotation, transitionTime*1.5f);
+    }
+
     IEnumerator InteractCooldown()
     {
         canInteract = false;
         yield return new WaitForSeconds(cooldownTime);
+        canInteract = true;
+    }
+    IEnumerator TransitionCoolDown()
+    {
+        canInteract = false;
+        yield return new WaitForSeconds(transitionTime);
         canInteract = true;
     }
 }
