@@ -113,8 +113,9 @@ public class CadenasInteraction : MonoBehaviour
             Mouse.current.WarpCursorPosition(center);
             cursorPosition = center;
             cursorPoint.position = center;
-            Cursor.lockState = CursorLockMode.Locked;
             boxCadenas.enabled = true;
+
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
