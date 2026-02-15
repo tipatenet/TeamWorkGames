@@ -103,4 +103,28 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.RotateItem.Disable();
         }
     }
+
+    public void LockGamePlayForCodeLock(bool locked)
+    {
+        if (locked)
+        {
+            inputActions.Player.Move.Disable();
+            inputActions.Player.Look.Disable();
+            inputActions.Player.Jump.Disable();
+            inputActions.Player.Scroll.Disable();
+            inputActions.Player.Interact.Enable();
+            inputActions.Player.DropItem.Disable();
+            inputActions.Player.RotateItem.Disable();
+        }
+        else
+        {
+            inputActions.Player.Move.Enable();
+            inputActions.Player.Look.Enable();
+            inputActions.Player.Jump.Enable();
+            inputActions.Player.Scroll.Enable();
+            inputActions.Player.Interact.Enable();
+            inputActions.Player.DropItem.Enable();
+            inputActions.Player.RotateItem.Enable();
+        }
+    }
 }
