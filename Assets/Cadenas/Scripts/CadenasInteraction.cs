@@ -12,6 +12,10 @@ public class CadenasInteraction : MonoBehaviour
     public float maxDistanceInteract = 1f;
     public float cursorSpeed = 800f;
 
+    /*Variable publique permetant au autres srcipts de s'avoir si le code est bon et
+     donc de faire les actions après (ouverture coffre...)*/
+    public bool codeValid = false;
+
     [Header("References")]
     public PlayerInputHandler keySystem;
     public Interact interact;
@@ -177,7 +181,12 @@ public class CadenasInteraction : MonoBehaviour
     public bool validCode()
     {
         for (int i = 0; i < targetCodes.Length; i++)
-            if (currentCodes[i] != targetCodes[i]) return false;
+        {
+            if (currentCodes[i] != targetCodes[i])
+            {
+                return false;
+            }
+        }
         return true;
     }
 
@@ -201,6 +210,7 @@ public class CadenasInteraction : MonoBehaviour
             rb.mass = 0.005f;
 
             StartCoroutine(StopCooldown());
+            codeValid = true;
         }
     }
 

@@ -3145,6 +3145,7 @@ MonoBehaviour:
   transitionTime: 1
   maxDistanceInteract: 1
   cursorSpeed: 800
+  codeValid: 0
   keySystem: {fileID: 0}
   interact: {fileID: 0}
   lookCam: {fileID: 1505521235450160701}
