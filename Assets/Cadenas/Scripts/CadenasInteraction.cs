@@ -1,313 +1,217 @@
-﻿using Mono.Cecil.Cil;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CadenasInteraction : MonoBehaviour
 {
-    //Variables Publique :
+    [Header("Settings")]
     public float interactRadius = 2f;
-    public LayerMask player;
-    public bool continueToInteract = true;
+    public LayerMask playerLayer;
+    public float cooldownTime = 0.5f;
+    public float transitionTime = 1f;
+    public float maxDistanceInteract = 1f;
+    public float cursorSpeed = 800f;
+
+    [Header("References")]
     public PlayerInputHandler keySystem;
     public Interact interact;
     public Camera lookCam;
     public Camera playerCam;
     public RectTransform cursorPoint;
-    public int code1 = 0;
-    public int code2 = 0;
-    public int code3 = 0;
-    public int code4 = 0;
-    public bool CodeValid = false;
     public AudioClip rotationCodeSound;
-    public GameObject goCode1;
-    public GameObject goCode2;
-    public GameObject goCode3;
-    public GameObject goCode4;
     public GameObject goCorps;
     public GameObject goArc;
+    public GameObject[] codeObjects; // code1 à code4
 
-    //Variables Privée :
+    [Header("Code Values")]
+    public int[] targetCodes = new int[4]; // code1 à code4
+
+    private int[] currentCodes = new int[4];
     private bool canInteract = true;
-    private float cooldownTime = 0.5f;
-    private bool switchCam = false;
-    private float transitionTime = 1f;
-    private Vector3 resetPos;
-    private Vector3 resetRot;
-    private Vector3 cameraRotation;
-    private Vector3 cameraPosition;
-    private float maxDistanceInteract = 1f;
-    private BoxCollider boxCadenas;
+    private bool cameraModeActive = false;
     private Vector2 cursorPosition;
-    private float cursorSpeed = 800f;
-    public int currentCode1 = 0;
-    private int currentCode2 = 0;
-    private int currentCode3 = 0;
-    private int currentCode4 = 0;
+    private BoxCollider boxCadenas;
     private AudioSource source;
 
     void Start()
     {
         cursorPosition = new Vector2(Screen.width / 2f, Screen.height / 2f);
-        source = this.gameObject.GetComponent<AudioSource>();
+        source = GetComponent<AudioSource>();
     }
 
     void Update()
     {
-        InteractCadenas();
+        if (IsPlayerInRange())
+        {
+            HandleInteraction();
+            RotateCodes();
+            UnlockCadenasIfValid();
+        }
     }
 
-    //Permet de dessiner la sphere d'interaction
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(transform.position, interactRadius);
     }
 
-    //Detecte si le joueur est dans la sphere
-    bool detectPlayer(bool isActive)
+    private bool IsPlayerInRange()
     {
-        if (isActive)
-        {
-            Collider[] hits = Physics.OverlapSphere(this.gameObject.transform.position, interactRadius, player);
-            if (hits.Length > 0)
-            {
-                return true;
-            }
-        }
-        return false;
+        Collider[] hits = Physics.OverlapSphere(transform.position, interactRadius, playerLayer);
+        return hits.Length > 0;
     }
 
-    //Fonction qui gère l'interaction avec le cadenas
-    void InteractCadenas()
+    private void HandleInteraction()
     {
-        if (detectPlayer(continueToInteract))
+        if (keySystem.InteractPressed && canInteract)
         {
-            if (keySystem.InteractPressed && canInteract)
+            var hitObj = interact.IsInteractive(false).transform.gameObject;
+            if (hitObj != null && hitObj.CompareTag("cadenas"))
             {
-                if (interact.IsInteractive(false).transform.gameObject.tag == "cadenas")
-                {
-                    if(!switchCam)
-                    boxCadenas = interact.IsInteractive(false).transform.gameObject.GetComponent<BoxCollider>();
+                if (!cameraModeActive)
+                    boxCadenas = hitObj.GetComponent<BoxCollider>();
 
-                    toogleSwitchCam(ref switchCam);
-                    switchCamPos(switchCam);
-                }
+                ToggleCameraMode();
+                SwitchCameraPosition(cameraModeActive);
             }
-            RotateCodes();
-            CadenasACodeValide();
         }
-        CodeValid = validCode();
     }
 
-    //Fonction qui permet de switch de cam et aussi la desactivation des inputs
-    void toogleSwitchCam(ref bool switchCam)
+    private void ToggleCameraMode()
     {
-        if (!switchCam)
+        cameraModeActive = !cameraModeActive;
+
+        if (cameraModeActive)
         {
-            switchCam = true;
             cursorPoint.gameObject.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
-            boxCadenas.enabled = false;
+            if (boxCadenas != null) boxCadenas.enabled = false;
         }
         else
         {
-            switchCam = false;
             Vector2 center = new Vector2(Screen.width / 2f, Screen.height / 2f);
-            Mouse.current.WarpCursorPosition(center);
+            Mouse.current?.WarpCursorPosition(center);
             cursorPosition = center;
             cursorPoint.position = center;
-            boxCadenas.enabled = true;
-
             Cursor.lockState = CursorLockMode.Locked;
+            if (boxCadenas != null) boxCadenas.enabled = true;
         }
     }
 
-    //Fonction qui permet d'activer et de désactiver les cameras
-    void switchCamPos(bool switchCam)
+    private void SwitchCameraPosition(bool active)
     {
-        if (switchCam)
-        {
-            keySystem.LockGamePlayForCodeLock(true);
-            playerCam.gameObject.SetActive(false);
-            lookCam.gameObject.SetActive(true);
-            camTransition(switchCam);
-        }
-        else
-        {
-            keySystem.LockGamePlayForCodeLock(false);
-            camTransition(switchCam);
-            playerCam.gameObject.SetActive(true);
-            lookCam.gameObject.SetActive(false);
-        }
+        keySystem.LockGamePlayForCodeLock(active);
+
+        playerCam.gameObject.SetActive(!active);
+        lookCam.gameObject.SetActive(active);
+
+        StartCoroutine(CameraTransition(active));
     }
 
-    //Fonction qui permet de faire les transitions entre les cameras
-    void camTransition(bool switchCam)
+    private IEnumerator CameraTransition(bool active)
     {
-        if (switchCam)
+        canInteract = false;
+
+        Vector3 targetPos = active ? lookCam.transform.position : playerCam.transform.position;
+        Vector3 targetRot = active ? lookCam.transform.eulerAngles : playerCam.transform.eulerAngles;
+
+        if (active)
         {
-            StartCoroutine(TransitionCoolDown());
-            Vector3 targetPos = lookCam.gameObject.transform.position;
-            Vector3 targetRotation = lookCam.transform.eulerAngles;
-            lookCam.gameObject.transform.position = playerCam.gameObject.transform.position;
-            lookCam.gameObject.transform.eulerAngles = playerCam.gameObject.transform.eulerAngles;
-            iTween.MoveTo(lookCam.gameObject, targetPos, transitionTime);
-            iTween.RotateTo(lookCam.gameObject, targetRotation, transitionTime * 1.5f);
+            lookCam.transform.position = playerCam.transform.position;
+            lookCam.transform.eulerAngles = playerCam.transform.eulerAngles;
         }
-        else
-        {
-            StartCoroutine(TransitionCoolDown());
-            Vector3 targetPos = playerCam.gameObject.transform.position;
-            Vector3 targetRotation = playerCam.transform.eulerAngles;
-            iTween.MoveTo(lookCam.gameObject, targetPos, transitionTime);
-            iTween.RotateTo(lookCam.gameObject, targetRotation, transitionTime * 1.5f);
-        }
+
+        iTween.MoveTo(lookCam.gameObject, targetPos, transitionTime);
+        iTween.RotateTo(lookCam.gameObject, targetRot, transitionTime * 1.5f);
+
+        yield return new WaitForSeconds(transitionTime);
+        canInteract = true;
     }
 
-    void RotateCodes()
+    private void RotateCodes()
     {
-        if (!switchCam) return; // seulement en mode cadenas
+        if (!cameraModeActive) return;
 
         UpdateCursor();
 
         Ray ray = lookCam.ScreenPointToRay(cursorPosition);
-        RaycastHit hit;
-
-        Debug.DrawRay(ray.origin, ray.direction * maxDistanceInteract, Color.green);
-        if (Physics.Raycast(ray, out hit, maxDistanceInteract))
+        if (Physics.Raycast(ray, out RaycastHit hit, maxDistanceInteract))
         {
-            if (hit.transform.gameObject.tag == "Code1") 
+            for (int i = 0; i < codeObjects.Length; i++)
             {
-                if(keySystem.ClickInteract && canInteract)
+                if (hit.transform.gameObject == codeObjects[i] && keySystem.ClickInteract && canInteract)
                 {
-                    IncrementCode(ref currentCode1);
-                    iTween.RotateAdd(hit.transform.gameObject, new Vector3(0, 0, -36), cooldownTime);
+                    IncrementCode(i);
+                    iTween.RotateAdd(codeObjects[i], new Vector3(0, 0, -36), cooldownTime);
                     source.PlayOneShot(rotationCodeSound);
-                    StartCoroutine(InteractCooldown());
-                }
-            }
-            if (hit.transform.gameObject.tag == "Code2") 
-            {
-                if (keySystem.ClickInteract && canInteract)
-                {
-                    IncrementCode(ref currentCode2);
-                    iTween.RotateAdd(hit.transform.gameObject, new Vector3(0, 0, -36), cooldownTime);
-                    source.PlayOneShot(rotationCodeSound);
-                    StartCoroutine(InteractCooldown());
-                }
-            }
-            if (hit.transform.gameObject.tag == "Code3") 
-            {
-                if (keySystem.ClickInteract && canInteract)
-                {
-                    IncrementCode(ref currentCode3);
-                    iTween.RotateAdd(hit.transform.gameObject, new Vector3(0, 0, -36), cooldownTime);
-                    source.PlayOneShot(rotationCodeSound);
-                    StartCoroutine(InteractCooldown());
-                }
-            }
-            if (hit.transform.gameObject.tag == "Code4") 
-            {
-                if (keySystem.ClickInteract && canInteract)
-                {
-                    IncrementCode(ref currentCode4);
-                    iTween.RotateAdd(hit.transform.gameObject, new Vector3(0, 0, -36), cooldownTime);
-                    source.PlayOneShot(rotationCodeSound);
-                    StartCoroutine(InteractCooldown());
+                    StartCoroutine(InteractionCooldown());
                 }
             }
         }
     }
 
-    void UpdateCursor()
+    private void UpdateCursor()
     {
-        // Si souris utilisée
         if (Mouse.current != null && Mouse.current.delta.ReadValue() != Vector2.zero)
         {
             cursorPosition = Mouse.current.position.ReadValue();
         }
         else
         {
-            // Sinon manette (stick droit)
-            Vector2 stickInput = keySystem.LookInput;
-            cursorPosition += stickInput * cursorSpeed * Time.deltaTime;
+            cursorPosition += keySystem.LookInput * cursorSpeed * Time.deltaTime;
         }
 
-        // Limite à l'écran
         cursorPosition.x = Mathf.Clamp(cursorPosition.x, 0, Screen.width);
         cursorPosition.y = Mathf.Clamp(cursorPosition.y, 0, Screen.height);
 
-        //deplace le cursor UI
         if (cursorPoint != null)
             cursorPoint.position = cursorPosition;
     }
 
-    void IncrementCode(ref int code)
+    private void IncrementCode(int index)
     {
-        if (canInteract)
-        {
-            if ((code + 1) > 9)
-                code = 0;
-            else
-                code++;
-        }
+        if (!canInteract) return;
+        currentCodes[index] = (currentCodes[index] + 1) % 10;
     }
 
     public bool validCode()
     {
-        if(currentCode1 == code1)
-        {
-            if (currentCode2 == code2)
-            {
-                if (currentCode3 == code3)
-                {
-                    if (currentCode4 == code4)
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+        for (int i = 0; i < targetCodes.Length; i++)
+            if (currentCodes[i] != targetCodes[i]) return false;
+        return true;
     }
 
-    //Fonction qui permet de desactiver le cadena quand le code est bon et de la faire tomber au sol
-    public void CadenasACodeValide()
+    private void UnlockCadenasIfValid()
     {
         if (validCode() && canInteract)
         {
-            toogleSwitchCam(ref switchCam);
-            switchCamPos(switchCam);
-            goCode1.GetComponent<MeshCollider>().enabled = false;
-            goCode2.GetComponent<MeshCollider>().enabled = false;
-            goCode3.GetComponent<MeshCollider>().enabled = false;
-            goCode4.GetComponent<MeshCollider>().enabled = false;
-            goCorps.GetComponent<MeshCollider>().enabled = false;
-            goArc.GetComponent<MeshCollider>().enabled = false;
-            iTween.MoveTo(gameObject, gameObject.transform.position + new Vector3(0, 0.3f, 0), 0.2f);
+            ToggleCameraMode();
+            SwitchCameraPosition(cameraModeActive);
+
+            foreach (var obj in codeObjects)
+                obj.GetComponent<Collider>().enabled = false;
+
+            goCorps.GetComponent<Collider>().enabled = false;
+            goArc.GetComponent<Collider>().enabled = false;
+
+            iTween.MoveTo(gameObject, transform.position + Vector3.up * 0.3f, 0.2f);
             goArc.transform.localRotation = Quaternion.Euler(-90f, 180f, 0f);
+
             Rigidbody rb = gameObject.AddComponent<Rigidbody>();
             rb.mass = 0.005f;
-            StartCoroutine(StopCoolDown());
+
+            StartCoroutine(StopCooldown());
         }
     }
 
-
-    IEnumerator InteractCooldown()
+    private IEnumerator InteractionCooldown()
     {
         canInteract = false;
         yield return new WaitForSeconds(cooldownTime);
         canInteract = true;
     }
-    IEnumerator TransitionCoolDown()
-    {
-        canInteract = false;
-        yield return new WaitForSeconds(transitionTime);
-        canInteract = true;
-    }
-    IEnumerator StopCoolDown()
+
+    private IEnumerator StopCooldown()
     {
         canInteract = false;
         yield return new WaitForSeconds(transitionTime);
