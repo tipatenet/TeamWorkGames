@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Mono.Cecil.Cil;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,6 +15,12 @@ public class CadenasInteraction : MonoBehaviour
     public Camera lookCam;
     public Camera playerCam;
     public RectTransform cursorPoint;
+    public int code1 = 0;
+    public int code2 = 0;
+    public int code3 = 0;
+    public int code4 = 0;
+    public bool CodeValid = false;
+    public AudioClip rotationCodeSound;
 
     //Variables Privée :
     private bool canInteract = true;
@@ -28,10 +35,16 @@ public class CadenasInteraction : MonoBehaviour
     private BoxCollider boxCadenas;
     private Vector2 cursorPosition;
     private float cursorSpeed = 800f;
+    public int currentCode1 = 0;
+    private int currentCode2 = 0;
+    private int currentCode3 = 0;
+    private int currentCode4 = 0;
+    private AudioSource source;
 
     void Start()
     {
         cursorPosition = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        source = this.gameObject.GetComponent<AudioSource>();
     }
 
     void Update()
@@ -76,11 +89,11 @@ public class CadenasInteraction : MonoBehaviour
 
                     toogleSwitchCam(ref switchCam);
                     switchCamPos(switchCam);
-
                 }
             }
             RotateCodes();
         }
+        CodeValid = validCode();
     }
 
     //Fonction qui permet de switch de cam et aussi la desactivation des inputs
@@ -123,7 +136,7 @@ public class CadenasInteraction : MonoBehaviour
         }
     }
 
-    //Fonction qui permet de faire les transition des cameras
+    //Fonction qui permet de faire les transitions entre les cameras
     void camTransition(bool switchCam)
     {
         if (switchCam)
@@ -162,32 +175,40 @@ public class CadenasInteraction : MonoBehaviour
             {
                 if(keySystem.ClickInteract && canInteract)
                 {
-                    print("HitCode1");
-                    iTween.RotateAdd(hit.transform.gameObject, new Vector3(0, 0, 36), cooldownTime);
+                    IncrementCode(ref currentCode1);
+                    iTween.RotateAdd(hit.transform.gameObject, new Vector3(0, 0, -36), cooldownTime);
+                    source.PlayOneShot(rotationCodeSound);
+                    StartCoroutine(InteractCooldown());
                 }
             }
             if (hit.transform.gameObject.tag == "Code2") 
             {
                 if (keySystem.ClickInteract && canInteract)
                 {
-                    print("HitCode2");
-                    iTween.RotateAdd(hit.transform.gameObject, new Vector3(0, 0, 36), cooldownTime);
+                    IncrementCode(ref currentCode2);
+                    iTween.RotateAdd(hit.transform.gameObject, new Vector3(0, 0, -36), cooldownTime);
+                    source.PlayOneShot(rotationCodeSound);
+                    StartCoroutine(InteractCooldown());
                 }
             }
             if (hit.transform.gameObject.tag == "Code3") 
             {
                 if (keySystem.ClickInteract && canInteract)
                 {
-                    print("HitCode3");
-                    iTween.RotateAdd(hit.transform.gameObject, new Vector3(0, 0, 36), cooldownTime);
+                    IncrementCode(ref currentCode3);
+                    iTween.RotateAdd(hit.transform.gameObject, new Vector3(0, 0, -36), cooldownTime);
+                    source.PlayOneShot(rotationCodeSound);
+                    StartCoroutine(InteractCooldown());
                 }
             }
             if (hit.transform.gameObject.tag == "Code4") 
             {
                 if (keySystem.ClickInteract && canInteract)
                 {
-                    print("HitCode4");
-                    iTween.RotateAdd(hit.transform.gameObject, new Vector3(0, 0, 36), cooldownTime);
+                    IncrementCode(ref currentCode4);
+                    iTween.RotateAdd(hit.transform.gameObject, new Vector3(0, 0, -36), cooldownTime);
+                    source.PlayOneShot(rotationCodeSound);
+                    StartCoroutine(InteractCooldown());
                 }
             }
         }
@@ -214,6 +235,35 @@ public class CadenasInteraction : MonoBehaviour
         // 👇 AJOUT IMPORTANT : déplacer le point UI
         if (cursorPoint != null)
             cursorPoint.position = cursorPosition;
+    }
+
+    void IncrementCode(ref int code)
+    {
+        if (canInteract)
+        {
+            if ((code + 1) > 9)
+                code = 0;
+            else
+                code++;
+        }
+    }
+
+    public bool validCode()
+    {
+        if(currentCode1 == code1)
+        {
+            if (currentCode2 == code2)
+            {
+                if (currentCode3 == code3)
+                {
+                    if (currentCode4 == code4)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 
