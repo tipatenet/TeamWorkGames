@@ -201,6 +201,17 @@
                 },
                 {
                     "name": "",
+                    "id": "557d6b42-c495-4540-a5b1-fbb3e0492fdb",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "173e97a5-8c83-4311-ae62-a6daac773650",
                     "path": "<Mouse>/scroll",
                     "interactions": "",
@@ -234,6 +245,17 @@
                 },
                 {
                     "name": "",
+                    "id": "3b43fa0d-b77f-45c6-ba12-28937e4c601f",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Inspact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "4e3d2df4-15e6-49ac-9aab-801030b4f5b9",
                     "path": "<Mouse>/delta",
                     "interactions": "",
@@ -245,8 +267,30 @@
                 },
                 {
                     "name": "",
+                    "id": "511b7428-6167-4710-87c3-ded72127d164",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateItem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "54807904-bf4d-4c79-8722-703469f32c4c",
                     "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3e308cf2-2638-48b8-b367-47a3fc12375b",
+                    "path": "<Gamepad>/{Back}",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
