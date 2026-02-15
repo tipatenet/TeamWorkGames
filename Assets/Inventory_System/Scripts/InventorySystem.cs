@@ -15,7 +15,7 @@ public class InventorySystem : MonoBehaviour
 
     //Variables Privées :
     private float targetX;
-    private float cooldownTime = 0.5f;
+    private float cooldownTime = 0.3f;
     private bool canInteract = true;
     private UnityEngine.UI.Image currentIcon;
     private bool canDropItem = true;
@@ -26,6 +26,7 @@ public class InventorySystem : MonoBehaviour
     private float scroolValue = 0f;
     private Interact interaction;
     private PlayerInputHandler keySystem;
+    private bool canScroll = true;
 
     //Pas touche :
     public int selectedIndex = 0;
@@ -163,19 +164,24 @@ public class InventorySystem : MonoBehaviour
     //Permet de scroller dans l'inventaire
     private void ScroolInventory()
     {
-        if (scroolValue > 0)
-            selectedIndex--;
-        else if (scroolValue < 0 && selectedIndex+1 < currentInventorySize)
-            selectedIndex++;
+        if (canScroll)
+        {
+            if (scroolValue > 0)
+            {
+                selectedIndex--;
+            }
+            else if (scroolValue < 0 && selectedIndex + 1 < currentInventorySize)
+                selectedIndex++;
 
-        selectedIndex = Mathf.Clamp(selectedIndex, 0,currentInventorySize);
+            selectedIndex = Mathf.Clamp(selectedIndex, 0, currentInventorySize);
 
 
-        float itemWidth = 100f + 10;
-        targetX = -selectedIndex * itemWidth;
-        Vector2 currentPos = item_Container.anchoredPosition;
-        currentPos.x = Mathf.Lerp(currentPos.x, targetX, Time.deltaTime * scrollSpeed);
-        item_Container.anchoredPosition = currentPos;
+            float itemWidth = 100f + 10;
+            targetX = -selectedIndex * itemWidth;
+            Vector2 currentPos = item_Container.anchoredPosition;
+            currentPos.x = Mathf.Lerp(currentPos.x, targetX, Time.deltaTime * scrollSpeed);
+            item_Container.anchoredPosition = currentPos;
+        }
     }
 
     //Les coolDown pour les inputs :
