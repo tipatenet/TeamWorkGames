@@ -50,8 +50,6 @@ public class CadenasInteraction : MonoBehaviour
     void Update()
     {
         InteractCadenas();
-        if (keySystem.InteractPressed && canInteract)
-            StartCoroutine(InteractCooldown());
     }
 
     //Permet de dessiner la sphere d'interaction
