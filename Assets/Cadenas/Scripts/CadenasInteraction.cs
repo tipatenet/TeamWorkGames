@@ -1,10 +1,11 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CadenasInteraction : MonoBehaviour
 {
+    //Variables Publique :
     public float interactRadius = 2f;
     public LayerMask player;
     public bool continueToInteract = true;
@@ -12,7 +13,9 @@ public class CadenasInteraction : MonoBehaviour
     public Interact interact;
     public Camera lookCam;
     public Camera playerCam;
+    public RectTransform cursorPoint;
 
+    //Variables Privée :
     private bool canInteract = true;
     private float cooldownTime = 0.5f;
     private bool switchCam = false;
@@ -22,9 +25,10 @@ public class CadenasInteraction : MonoBehaviour
     private Vector3 cameraRotation;
     private Vector3 cameraPosition;
     private float maxDistanceInteract = 1f;
-
+    private BoxCollider boxCadenas;
     private Vector2 cursorPosition;
-    public float cursorSpeed = 800f;
+    private float cursorSpeed = 800f;
+
     void Start()
     {
         cursorPosition = new Vector2(Screen.width / 2f, Screen.height / 2f);
@@ -37,6 +41,7 @@ public class CadenasInteraction : MonoBehaviour
             StartCoroutine(InteractCooldown());
     }
 
+    //Permet de dessiner la sphere d'interaction
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -57,6 +62,7 @@ public class CadenasInteraction : MonoBehaviour
         return false;
     }
 
+    //Fonction qui gère l'interaction avec le cadenas
     void InteractCadenas()
     {
         if (detectPlayer(continueToInteract))
@@ -65,31 +71,40 @@ public class CadenasInteraction : MonoBehaviour
             {
                 if (interact.IsInteractive(false).transform.gameObject.tag == "cadenas")
                 {
+                    if(!switchCam)
+                    boxCadenas = interact.IsInteractive(false).transform.gameObject.GetComponent<BoxCollider>();
+
                     toogleSwitchCam(ref switchCam);
                     switchCamPos(switchCam);
-                    interact.IsInteractive(false).transform.gameObject.GetComponent<BoxCollider>().enabled = false;
+
                 }
             }
             RotateCodes();
         }
     }
 
+    //Fonction qui permet de switch de cam et aussi la desactivation des inputs
     void toogleSwitchCam(ref bool switchCam)
     {
         if (!switchCam)
         {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
             switchCam = true;
+            cursorPoint.gameObject.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            boxCadenas.enabled = false;
         }
         else
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
             switchCam = false;
+            Vector2 center = new Vector2(Screen.width / 2f, Screen.height / 2f);
+            Mouse.current.WarpCursorPosition(center);
+            cursorPosition = center;
+            cursorPoint.position = center;
+            boxCadenas.enabled = true;
         }
     }
 
+    //Fonction qui permet d'activer et de désactiver les cameras
     void switchCamPos(bool switchCam)
     {
         if (switchCam)
@@ -108,7 +123,7 @@ public class CadenasInteraction : MonoBehaviour
         }
     }
 
-
+    //Fonction qui permet de faire les transition des cameras
     void camTransition(bool switchCam)
     {
         if (switchCam)
@@ -144,31 +159,43 @@ public class CadenasInteraction : MonoBehaviour
         if (Physics.Raycast(ray, out hit, maxDistanceInteract))
         {
             if (hit.transform.gameObject.tag == "Code1") 
-            { 
-                print("HitCode1");
-                iTween.RotateAdd(hit.transform.gameObject, new Vector3(0, 0, 36), 2f);
+            {
+                if(keySystem.ClickInteract && canInteract)
+                {
+                    print("HitCode1");
+                    iTween.RotateAdd(hit.transform.gameObject, new Vector3(0, 0, 36), cooldownTime);
+                }
             }
             if (hit.transform.gameObject.tag == "Code2") 
-            { 
-                print("HitCode2");
-                iTween.RotateAdd(hit.transform.gameObject, new Vector3(0, 0, 36), 2f);
+            {
+                if (keySystem.ClickInteract && canInteract)
+                {
+                    print("HitCode2");
+                    iTween.RotateAdd(hit.transform.gameObject, new Vector3(0, 0, 36), cooldownTime);
+                }
             }
             if (hit.transform.gameObject.tag == "Code3") 
-            { 
-                print("HitCode3");
-                iTween.RotateAdd(hit.transform.gameObject, new Vector3(0, 0, 36), 2f);
+            {
+                if (keySystem.ClickInteract && canInteract)
+                {
+                    print("HitCode3");
+                    iTween.RotateAdd(hit.transform.gameObject, new Vector3(0, 0, 36), cooldownTime);
+                }
             }
             if (hit.transform.gameObject.tag == "Code4") 
-            { 
-                print("HitCode4");
-                iTween.RotateAdd(hit.transform.gameObject, new Vector3(0, 0, 36), 2f);
+            {
+                if (keySystem.ClickInteract && canInteract)
+                {
+                    print("HitCode4");
+                    iTween.RotateAdd(hit.transform.gameObject, new Vector3(0, 0, 36), cooldownTime);
+                }
             }
         }
     }
 
     void UpdateCursor()
     {
-        // Si souris utilis�e
+        // Si souris utilisée
         if (Mouse.current != null && Mouse.current.delta.ReadValue() != Vector2.zero)
         {
             cursorPosition = Mouse.current.position.ReadValue();
@@ -180,10 +207,15 @@ public class CadenasInteraction : MonoBehaviour
             cursorPosition += stickInput * cursorSpeed * Time.deltaTime;
         }
 
-        // Limite � l'�cran
+        // Limite à l'écran
         cursorPosition.x = Mathf.Clamp(cursorPosition.x, 0, Screen.width);
         cursorPosition.y = Mathf.Clamp(cursorPosition.y, 0, Screen.height);
+
+        // 👇 AJOUT IMPORTANT : déplacer le point UI
+        if (cursorPoint != null)
+            cursorPoint.position = cursorPosition;
     }
+
 
 
 

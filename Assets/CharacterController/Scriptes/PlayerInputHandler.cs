@@ -26,6 +26,8 @@ public class PlayerInputHandler : MonoBehaviour
     //Inspact item touch :
     public bool InspactItem { get; private set; }
 
+    public bool ClickInteract { get; private set; }
+
 
     private PlayerInputActions inputActions;
 
@@ -66,6 +68,9 @@ public class PlayerInputHandler : MonoBehaviour
 
         inputActions.Player.Inspact.performed += ctx => InspactItem = true;
         inputActions.Player.Inspact.canceled += ctx => InspactItem = false;
+
+        inputActions.Player.Click.performed += ctx => ClickInteract = true;
+        inputActions.Player.Click.canceled += ctx => ClickInteract = false;
 
 
 
