@@ -21,6 +21,12 @@ public class CadenasInteraction : MonoBehaviour
     public int code4 = 0;
     public bool CodeValid = false;
     public AudioClip rotationCodeSound;
+    public GameObject goCode1;
+    public GameObject goCode2;
+    public GameObject goCode3;
+    public GameObject goCode4;
+    public GameObject goCorps;
+    public GameObject goArc;
 
     //Variables Privée :
     private bool canInteract = true;
@@ -90,6 +96,7 @@ public class CadenasInteraction : MonoBehaviour
                 }
             }
             RotateCodes();
+            CadenasACodeValide();
         }
         CodeValid = validCode();
     }
@@ -232,7 +239,7 @@ public class CadenasInteraction : MonoBehaviour
         cursorPosition.x = Mathf.Clamp(cursorPosition.x, 0, Screen.width);
         cursorPosition.y = Mathf.Clamp(cursorPosition.y, 0, Screen.height);
 
-        // 👇 AJOUT IMPORTANT : déplacer le point UI
+        //deplace le cursor UI
         if (cursorPoint != null)
             cursorPoint.position = cursorPosition;
     }
@@ -266,7 +273,26 @@ public class CadenasInteraction : MonoBehaviour
         return false;
     }
 
-
+    //Fonction qui permet de desactiver le cadena quand le code est bon et de la faire tomber au sol
+    public void CadenasACodeValide()
+    {
+        if (validCode() && canInteract)
+        {
+            toogleSwitchCam(ref switchCam);
+            switchCamPos(switchCam);
+            goCode1.GetComponent<MeshCollider>().enabled = false;
+            goCode2.GetComponent<MeshCollider>().enabled = false;
+            goCode3.GetComponent<MeshCollider>().enabled = false;
+            goCode4.GetComponent<MeshCollider>().enabled = false;
+            goCorps.GetComponent<MeshCollider>().enabled = false;
+            goArc.GetComponent<MeshCollider>().enabled = false;
+            iTween.MoveTo(gameObject, gameObject.transform.position + new Vector3(0, 0.3f, 0), 0.2f);
+            goArc.transform.localRotation = Quaternion.Euler(-90f, 180f, 0f);
+            Rigidbody rb = gameObject.AddComponent<Rigidbody>();
+            rb.mass = 0.005f;
+            StartCoroutine(StopCoolDown());
+        }
+    }
 
 
     IEnumerator InteractCooldown()
@@ -280,5 +306,11 @@ public class CadenasInteraction : MonoBehaviour
         canInteract = false;
         yield return new WaitForSeconds(transitionTime);
         canInteract = true;
+    }
+    IEnumerator StopCoolDown()
+    {
+        canInteract = false;
+        yield return new WaitForSeconds(transitionTime);
+        canInteract = false;
     }
 }
