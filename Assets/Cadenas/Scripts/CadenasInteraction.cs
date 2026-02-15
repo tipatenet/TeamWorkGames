@@ -26,7 +26,7 @@ public class CadenasInteraction : MonoBehaviour
     private bool canInteract = true;
     private float cooldownTime = 0.5f;
     private bool switchCam = false;
-    private float transitionTime = 2f;
+    private float transitionTime = 1f;
     private Vector3 resetPos;
     private Vector3 resetRot;
     private Vector3 cameraRotation;
