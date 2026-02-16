@@ -15,6 +15,7 @@ public class Opening_System : MonoBehaviour
     public GameObject objectHaveToMove;
     public typeOfOpening typeOfMouvement;
     public Vector3 amountOpen;
+    public CadenasInteraction cadenasInteraction = null;
 
     [Header("States")]
 
@@ -22,28 +23,38 @@ public class Opening_System : MonoBehaviour
     private bool isOpen = false;
 
     //Fonction qui permet de lancer l'ouverture
-    public void StartOpening()
+    public void StartOpeningOrClose()
     {
-        if (!isOpen)
+        if (canBeOpened())
         {
-            if (!isMoving)
+            if (!isOpen)
             {
-                ModeSelected(amountOpen);
-                StartCoroutine(coolDownMoving());
-                isOpen = true;
+                if (!isMoving)
+                {
+                    ModeSelected(amountOpen);
+                    StartCoroutine(coolDownMoving());
+                    isOpen = true;
+                }
+            }
+            else
+            {
+                Close();
             }
         }
     }
 
     public void Close()
     {
-        if (isOpen)
+        if (canBeOpened())
         {
-            if (!isMoving)
+            if (isOpen)
             {
-                ModeSelected(-amountOpen);
-                StartCoroutine(coolDownMoving());
-                isOpen = false;
+                if (!isMoving)
+                {
+                    ModeSelected(-amountOpen);
+                    StartCoroutine(coolDownMoving());
+                    isOpen = false;
+                }
             }
         }
     }
@@ -59,6 +70,22 @@ public class Opening_System : MonoBehaviour
         {
             iTween.MoveBy(objectHaveToMove, amount, timeToOpen);
         }
+    }
+
+    private bool canBeOpened()
+    {
+        if (cadenasInteraction != null)
+        {
+            if (cadenasInteraction.codeValid)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     /*CoolDown pour eviter que la fonction soit appelée

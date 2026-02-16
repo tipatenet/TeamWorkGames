@@ -31,6 +31,7 @@ public class CadenasInteraction : MonoBehaviour
     public int[] targetCodes = new int[4]; // code1 à code4
 
     private int[] currentCodes = new int[4];
+
     private bool canInteract = true;
     private bool cameraModeActive = false;
     private Vector2 cursorPosition;
