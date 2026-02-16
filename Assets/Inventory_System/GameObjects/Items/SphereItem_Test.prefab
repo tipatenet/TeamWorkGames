@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1681213143232015369}
   - component: {fileID: 5755195484798659720}
   - component: {fileID: -878063598128206795}
+  - component: {fileID: 2746665505726313453}
   - component: {fileID: -5172834031603563198}
   m_Layer: 0
   m_Name: SphereItem_Test
@@ -127,6 +128,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   info: {fileID: 11400000, guid: 322db8fdd211765409f723f9e9600ee2, type: 2}
+--- !u!114 &2746665505726313453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8942597928326112320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb40ce606288b66409f25d2b47bbb02d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hoverable
+  overParticlePrefab: {fileID: 1269317910098620064, guid: a5d5d1532ca91ff42a8826b0b1d083c8, type: 3}
+  particleOffsetY: 0.15
+  particleScale: {x: 0.1, y: 0.1, z: 0.1}
+  objectRenderer: {fileID: 1681213143232015369}
+  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  emissionIntensity: 2
+  currentParticle: {fileID: 0}
 --- !u!54 &-5172834031603563198
 Rigidbody:
   m_ObjectHideFlags: 0

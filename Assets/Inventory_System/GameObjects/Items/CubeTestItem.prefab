@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5283023441932106607}
   - component: {fileID: 741380150203362341}
   - component: {fileID: 5871515565533015759}
+  - component: {fileID: 1643669505229433384}
   m_Layer: 0
   m_Name: CubeTestItem
   m_TagString: item
@@ -154,3 +155,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 122
   m_CollisionDetection: 0
+--- !u!114 &1643669505229433384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3919394019970707039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb40ce606288b66409f25d2b47bbb02d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hoverable
+  overParticlePrefab: {fileID: 1269317910098620064, guid: a5d5d1532ca91ff42a8826b0b1d083c8, type: 3}
+  particleOffsetY: 0.15
+  particleScale: {x: 0.1, y: 0.1, z: 0.1}
+  objectRenderer: {fileID: 6153716646295931599}
+  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  emissionIntensity: 2
+  currentParticle: {fileID: 0}
