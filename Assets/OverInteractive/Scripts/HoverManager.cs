@@ -3,6 +3,7 @@
 public class HoverManager : MonoBehaviour
 {
     public Interact interact;
+    public InspactItem inspact;
 
     private Hoverable lastHoverable;
     private MaterialPropertyBlock mpb;
@@ -16,63 +17,66 @@ public class HoverManager : MonoBehaviour
     {
         RaycastHit hit = interact.hitInteract;
 
-        if (hit.collider != null)
+        if (!inspact.isInspact)
         {
-            Hoverable hoverable = hit.collider.GetComponent<Hoverable>();
-
-            if (hoverable != null)
+            if (hit.collider != null)
             {
-                if (hoverable != lastHoverable)
+                Hoverable hoverable = hit.collider.GetComponent<Hoverable>();
+
+                if (hoverable != null)
+                {
+                    if (hoverable != lastHoverable)
+                    {
+                        ResetLast();
+
+                        lastHoverable = hoverable;
+
+                        // Renderer
+                        Renderer rend = hoverable.objectRenderer != null
+                            ? hoverable.objectRenderer
+                            : hit.collider.GetComponent<Renderer>();
+
+                        if (rend != null)
+                        {
+                            rend.sharedMaterial.EnableKeyword("_EMISSION");
+
+                            rend.GetPropertyBlock(mpb);
+                            mpb.SetColor("_EmissionColor",
+                                hoverable.hoverColor * hoverable.emissionIntensity);
+                            rend.SetPropertyBlock(mpb);
+                        }
+
+                        // Particule attachée à l'objet
+                        if (hoverable.overParticlePrefab != null &&
+                            hoverable.currentParticle == null)
+                        {
+                            GameObject particle =
+                                Instantiate(hoverable.overParticlePrefab);
+
+                            Vector3 pos = hoverable.transform.position;
+                            pos.y += hoverable.particleOffsetY;
+
+                            particle.transform.position = pos;
+                            particle.transform.localScale =
+                                hoverable.particleScale;
+
+                            particle.transform.SetParent(hoverable.transform);
+
+                            hoverable.currentParticle = particle;
+                        }
+
+                        hoverable.OnHoverEnter();
+                    }
+                }
+                else
                 {
                     ResetLast();
-
-                    lastHoverable = hoverable;
-
-                    // Renderer
-                    Renderer rend = hoverable.objectRenderer != null
-                        ? hoverable.objectRenderer
-                        : hit.collider.GetComponent<Renderer>();
-
-                    if (rend != null)
-                    {
-                        rend.sharedMaterial.EnableKeyword("_EMISSION");
-
-                        rend.GetPropertyBlock(mpb);
-                        mpb.SetColor("_EmissionColor",
-                            hoverable.hoverColor * hoverable.emissionIntensity);
-                        rend.SetPropertyBlock(mpb);
-                    }
-
-                    // Particule attachée à l'objet
-                    if (hoverable.overParticlePrefab != null &&
-                        hoverable.currentParticle == null)
-                    {
-                        GameObject particle =
-                            Instantiate(hoverable.overParticlePrefab);
-
-                        Vector3 pos = hoverable.transform.position;
-                        pos.y += hoverable.particleOffsetY;
-
-                        particle.transform.position = pos;
-                        particle.transform.localScale =
-                            hoverable.particleScale;
-
-                        particle.transform.SetParent(hoverable.transform);
-
-                        hoverable.currentParticle = particle;
-                    }
-
-                    hoverable.OnHoverEnter();
                 }
             }
             else
             {
                 ResetLast();
             }
-        }
-        else
-        {
-            ResetLast();
         }
     }
 

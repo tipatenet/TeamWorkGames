@@ -3582,7 +3582,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -14.46
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -3930,6 +3931,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df3831f25ae40ed4f98125aea333422f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interact
+--- !u!114 &8215426840843082546 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 337871307818046262, guid: 4907c110d986e0e4b8cb2a1249f59b7a, type: 3}
+  m_PrefabInstance: {fileID: 4678580336623184900}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1717615307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e8ab0fb7e40493449948265df61df38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InspactItem
 --- !u!114 &8215426840843082550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3943,6 +3955,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoverManager
   interact: {fileID: 8215426840843082543}
+  inspact: {fileID: 8215426840843082546}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

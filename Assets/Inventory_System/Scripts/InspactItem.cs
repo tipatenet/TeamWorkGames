@@ -12,7 +12,7 @@ public class InspactItem : MonoBehaviour
     private bool canInspact = true;
     private float cooldownTime = 1f;
     private GameObject go;
-    private bool isInspact = false;
+    public bool isInspact = false;
     private float rotationSpeed = 10f;
     private Vector2 currentRotation;
     private InventorySystem inventory;
