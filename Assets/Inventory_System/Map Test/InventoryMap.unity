@@ -2274,6 +2274,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7618769129112988947, guid: dde94680a8881674d92b41759649015f, type: 3}
+      propertyPath: cadenasInteraction
+      value: 
+      objectReference: {fileID: 4612291563363683583}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3732,6 +3736,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: d73bb841365f0344787a349fc1ee9c38, type: 3}
+--- !u!114 &4612291563363683583 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7318831805279616088, guid: d73bb841365f0344787a349fc1ee9c38, type: 3}
+  m_PrefabInstance: {fileID: 4592779472467427845}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81df42b9c2ddca74a99a87d878d95734, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CadenasInteraction
 --- !u!1001 &4678580336623184900
 PrefabInstance:
   m_ObjectHideFlags: 0
