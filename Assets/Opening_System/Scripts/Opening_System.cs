@@ -15,6 +15,8 @@ public class Opening_System : MonoBehaviour
     public GameObject objectHaveToMove;
     public typeOfOpening typeOfMouvement;
     public Vector3 amountOpen;
+
+    [Header("L'object à t'il un code")]
     public CadenasInteraction cadenasInteraction = null;
 
     [Header("States")]

@@ -13,18 +13,29 @@ public class InteractWithCanBeOpen : MonoBehaviour
     {
         Interact();
     }
+
     private void Interact()
     {
         if (inputs.InteractPressed && canOpen)
         {
             hit = interact.IsInteractive(false);
-            if (hit.transform.gameObject.tag == "canBeOpen")
+
+            if (hit.collider != null)
             {
-                hit.transform.gameObject.GetComponent<Opening_System>().StartOpeningOrClose();
-                StartCoroutine(InteractCooldown());
+                if (hit.collider.CompareTag("canBeOpen"))
+                {
+                    Opening_System opening = hit.collider.GetComponent<Opening_System>();
+
+                    if (opening != null)
+                    {
+                        opening.StartOpeningOrClose();
+                        StartCoroutine(InteractCooldown());
+                    }
+                }
             }
         }
     }
+
 
     IEnumerator InteractCooldown()
     {
