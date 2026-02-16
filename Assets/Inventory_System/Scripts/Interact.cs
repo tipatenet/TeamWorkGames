@@ -13,11 +13,7 @@ public class Interact : MonoBehaviour //Sera placer sur le joueur
     public bool stopRaycast = false;
 
     //Variables Privées :
-    private Renderer lastRenderer = null;
-    private GameObject particle = null;
-    private Item overParticle;
     private Transform cameTransfrom;
-    private MaterialPropertyBlock mpb;
 
     //Pas Touche :
     public Vector3 cameraRotation;
@@ -27,7 +23,6 @@ public class Interact : MonoBehaviour //Sera placer sur le joueur
     private void Start()
     {
         cameTransfrom = cam.transform;
-        mpb = new MaterialPropertyBlock();
     }
     private void Update()
     {
