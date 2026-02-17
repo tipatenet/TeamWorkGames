@@ -23,6 +23,7 @@ public class CadenasInteraction : MonoBehaviour
     public Camera playerCam;
     public RectTransform cursorPoint;
     public AudioClip rotationCodeSound;
+    public AudioClip openLock;
     public GameObject goCorps;
     public GameObject goArc;
     public GameObject[] codeObjects; // code1 à code4
@@ -209,7 +210,7 @@ public class CadenasInteraction : MonoBehaviour
 
             Rigidbody rb = gameObject.AddComponent<Rigidbody>();
             rb.mass = 0.005f;
-
+            source.PlayOneShot(openLock);
             StartCoroutine(StopCooldown());
             codeValid = true;
         }

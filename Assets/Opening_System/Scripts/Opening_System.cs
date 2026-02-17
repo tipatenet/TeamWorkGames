@@ -15,6 +15,9 @@ public class Opening_System : MonoBehaviour
     public GameObject objectHaveToMove;
     public typeOfOpening typeOfMouvement;
     public Vector3 amountOpen;
+    public AudioSource source;
+    public AudioClip openSound;
+    public AudioClip closeSound;
 
     [Header("L'object à t'il un code")]
     public CadenasInteraction cadenasInteraction = null;
@@ -34,6 +37,7 @@ public class Opening_System : MonoBehaviour
                 if (!isMoving)
                 {
                     ModeSelected(amountOpen);
+                    source.PlayOneShot(openSound);
                     StartCoroutine(coolDownMoving());
                     isOpen = true;
                 }
@@ -54,6 +58,7 @@ public class Opening_System : MonoBehaviour
                 if (!isMoving)
                 {
                     ModeSelected(-amountOpen);
+                    source.PlayOneShot(closeSound);
                     StartCoroutine(coolDownMoving());
                     isOpen = false;
                 }
