@@ -12,6 +12,7 @@ public class Opening_System : MonoBehaviour
     [Header("Settings")]
 
     public float timeToOpen = 1f;
+    public float timeToClose = 1f;
     public GameObject objectHaveToMove;
     public typeOfOpening typeOfMouvement;
     public Vector3 amountOpen;
@@ -36,7 +37,7 @@ public class Opening_System : MonoBehaviour
             {
                 if (!isMoving)
                 {
-                    ModeSelected(amountOpen);
+                    ModeSelected(amountOpen, timeToOpen);
                     source.PlayOneShot(openSound);
                     StartCoroutine(coolDownMoving());
                     isOpen = true;
@@ -57,7 +58,7 @@ public class Opening_System : MonoBehaviour
             {
                 if (!isMoving)
                 {
-                    ModeSelected(-amountOpen);
+                    ModeSelected(-amountOpen, timeToClose);
                     source.PlayOneShot(closeSound);
                     StartCoroutine(coolDownMoving());
                     isOpen = false;
@@ -67,15 +68,15 @@ public class Opening_System : MonoBehaviour
     }
 
     //Fonction qui fait le mouvement en fonction du mode de mouvement
-    public void ModeSelected(Vector3 amount)
+    public void ModeSelected(Vector3 amount, float time)
     {
         if (typeOfMouvement == typeOfOpening.Rotation)
         {
-            iTween.RotateAdd(objectHaveToMove, amount, timeToOpen);
+            iTween.RotateAdd(objectHaveToMove, amount, time);
         }
         else if(typeOfMouvement == typeOfOpening.Translation)
         {
-            iTween.MoveBy(objectHaveToMove, amount, timeToOpen);
+            iTween.MoveBy(objectHaveToMove, amount, time);
         }
     }
 

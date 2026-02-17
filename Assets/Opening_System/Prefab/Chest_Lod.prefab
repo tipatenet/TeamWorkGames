@@ -176,12 +176,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Opening_System
   timeToOpen: 4
+  timeToClose: 2
   objectHaveToMove: {fileID: 5875787036986748166}
   typeOfMouvement: 1
   amountOpen: {x: -90, y: 0, z: 0}
   source: {fileID: 3712919991751091774}
   openSound: {fileID: 8300000, guid: 5cccc1f015cb6c84e8e4fdd75aea45c7, type: 3}
-  closeSound: {fileID: 8300000, guid: 187a9b911a0cf0e46b6ac1bfb118a806, type: 3}
+  closeSound: {fileID: 8300000, guid: 5cccc1f015cb6c84e8e4fdd75aea45c7, type: 3}
   cadenasInteraction: {fileID: 0}
 --- !u!82 &3712919991751091774
 AudioSource:

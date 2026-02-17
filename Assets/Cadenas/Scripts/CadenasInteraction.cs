@@ -229,6 +229,7 @@ public class CadenasInteraction : MonoBehaviour
             source.PlayOneShot(openLock);
 
             codeValid = true;
+            this.enabled = false; //Désactive le script quand le code est bon (optimisation)
         }
     }
 
