@@ -38,6 +38,7 @@ public class CadenasInteraction : MonoBehaviour
     private Vector2 cursorPosition;
     private BoxCollider boxCadenas;
     private AudioSource source;
+    private bool isUnlocked = false;
 
     void Start()
     {
@@ -69,19 +70,26 @@ public class CadenasInteraction : MonoBehaviour
 
     private void HandleInteraction()
     {
-        if (keySystem.InteractPressed && canInteract)
-        {
-            var hitObj = interact.IsInteractive(false).transform.gameObject;
-            if (hitObj != null && hitObj.CompareTag("cadenas"))
-            {
-                if (!cameraModeActive)
-                    boxCadenas = hitObj.GetComponent<BoxCollider>();
+        if (!keySystem.InteractPressed || !canInteract)
+            return;
 
-                ToggleCameraMode();
-                SwitchCameraPosition(cameraModeActive);
-            }
-        }
+        RaycastHit hit = interact.IsInteractive(false);
+
+        if (hit.collider == null)
+            return;
+
+        GameObject hitObj = hit.collider.gameObject;
+
+        if (!hitObj.CompareTag("cadenas"))
+            return;
+
+        if (!cameraModeActive)
+            boxCadenas = hitObj.GetComponent<BoxCollider>();
+
+        ToggleCameraMode();
+        SwitchCameraPosition(cameraModeActive);
     }
+
 
     private void ToggleCameraMode()
     {
@@ -158,14 +166,14 @@ public class CadenasInteraction : MonoBehaviour
 
     private void UpdateCursor()
     {
-        if (Mouse.current != null && Mouse.current.delta.ReadValue() != Vector2.zero)
+        // Souris
+        if (Mouse.current != null)
         {
-            cursorPosition = Mouse.current.position.ReadValue();
+            Vector2 mouseDelta = Mouse.current.delta.ReadValue();
+            cursorPosition += mouseDelta;
         }
-        else
-        {
-            cursorPosition += keySystem.LookInput * cursorSpeed * Time.deltaTime;
-        }
+
+        cursorPosition += keySystem.LookInput * cursorSpeed * Time.deltaTime;
 
         cursorPosition.x = Mathf.Clamp(cursorPosition.x, 0, Screen.width);
         cursorPosition.y = Mathf.Clamp(cursorPosition.y, 0, Screen.height);
@@ -194,10 +202,17 @@ public class CadenasInteraction : MonoBehaviour
 
     private void UnlockCadenasIfValid()
     {
+        if (isUnlocked) return;
+
         if (validCode() && canInteract)
         {
-            ToggleCameraMode();
-            SwitchCameraPosition(cameraModeActive);
+            isUnlocked = true;
+
+            if (cameraModeActive)
+            {
+                ToggleCameraMode();
+                SwitchCameraPosition(false);
+            }
 
             foreach (var obj in codeObjects)
                 obj.GetComponent<Collider>().enabled = false;
@@ -210,23 +225,18 @@ public class CadenasInteraction : MonoBehaviour
 
             Rigidbody rb = gameObject.AddComponent<Rigidbody>();
             rb.mass = 0.005f;
+
             source.PlayOneShot(openLock);
-            StartCoroutine(StopCooldown());
+
             codeValid = true;
         }
     }
+
 
     private IEnumerator InteractionCooldown()
     {
         canInteract = false;
         yield return new WaitForSeconds(cooldownTime);
         canInteract = true;
-    }
-
-    private IEnumerator StopCooldown()
-    {
-        canInteract = false;
-        yield return new WaitForSeconds(transitionTime);
-        canInteract = false;
     }
 }

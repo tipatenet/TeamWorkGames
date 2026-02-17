@@ -114,7 +114,7 @@ public class PlayerInputHandler : MonoBehaviour
         if (locked)
         {
             inputActions.Player.Move.Disable();
-            inputActions.Player.Look.Disable();
+            inputActions.Player.Look.Enable();
             inputActions.Player.Jump.Disable();
             inputActions.Player.Scroll.Disable();
             inputActions.Player.Interact.Enable();
