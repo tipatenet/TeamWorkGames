@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interact
   cam: {fileID: 0}
-  maxDistanceInteract: 3
+  maxDistanceInteract: 1.5
   stopRaycast: 0
   cameraRotation: {x: 0, y: 0, z: 0}
   cameraPosition: {x: 0, y: 0, z: 0}
@@ -157,6 +157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InspactItem
   holdPosition: {fileID: 0}
+  isInspact: 0
 --- !u!82 &3191861471629149975
 AudioSource:
   m_ObjectHideFlags: 0

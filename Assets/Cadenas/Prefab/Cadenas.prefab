@@ -8756,7 +8756,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81df42b9c2ddca74a99a87d878d95734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CadenasInteraction
-  interactRadius: 1
+  interactRadius: 1.5
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -8771,6 +8771,7 @@ MonoBehaviour:
   playerCam: {fileID: 0}
   cursorPoint: {fileID: 0}
   rotationCodeSound: {fileID: 8300000, guid: 6a840f0b8e1570c43893284d0ab3eced, type: 3}
+  openLock: {fileID: 0}
   goCorps: {fileID: 1464227622982788033}
   goArc: {fileID: 4758272768342258998}
   codeObjects:

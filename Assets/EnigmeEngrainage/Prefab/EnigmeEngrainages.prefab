@@ -228,10 +228,15 @@ MonoBehaviour:
   codeNum1: 0
   codeNum2: 0
   codeNum3: 0
-  SphereInteract: 2
+  SphereInteract: 1.5
   Player:
     serializedVersion: 2
     m_Bits: 128
+  source: {fileID: 0}
+  RotationSound: {fileID: 0}
+  currentNum1: 0
+  currentNum2: 0
+  currentNum3: 0
 --- !u!1 &5188882416804436879
 GameObject:
   m_ObjectHideFlags: 0

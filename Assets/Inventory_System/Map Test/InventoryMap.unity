@@ -2166,7 +2166,7 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 211fa5775d07a2b4d94074eafb8e08d7, type: 3}
     - target: {fileID: 3745249603617023847, guid: c9554203379d9ef4a8a00022ab1bde40, type: 3}
       propertyPath: SphereInteract
-      value: 1.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3745249603617023847, guid: c9554203379d9ef4a8a00022ab1bde40, type: 3}
       propertyPath: interactScript
@@ -2266,6 +2266,10 @@ PrefabInstance:
       propertyPath: cursorPoint
       value: 
       objectReference: {fileID: 996156346}
+    - target: {fileID: 7318831805279616088, guid: d73bb841365f0344787a349fc1ee9c38, type: 3}
+      propertyPath: interactRadius
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9063688239741381577, guid: d73bb841365f0344787a349fc1ee9c38, type: 3}
       propertyPath: m_Name
       value: Cadenas
