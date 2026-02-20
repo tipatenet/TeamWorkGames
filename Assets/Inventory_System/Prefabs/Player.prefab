@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 7017700529446157113}
   - component: {fileID: 461349637201482356}
   - component: {fileID: 337871307818046262}
+  - component: {fileID: 651717123757968996}
+  - component: {fileID: 7460799739522947688}
   - component: {fileID: 3191861471629149975}
   m_Layer: 7
   m_Name: Player
@@ -122,7 +124,7 @@ MonoBehaviour:
   item_Container: {fileID: 0}
   scrollSpeed: 20
   source: {fileID: 0}
-  DropSound: {fileID: 0}
+  DropSound: {fileID: 8300000, guid: a47399f893d699645b1c2c1ef8e7c99f, type: 3}
   PickUpSound: {fileID: 8300000, guid: aaaa5490780f8a349a277334723ac2c3, type: 3}
   selectedIndex: 0
   currentInventorySize: 0
@@ -158,6 +160,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InspactItem
   holdPosition: {fileID: 0}
   isInspact: 0
+--- !u!114 &651717123757968996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110865528592120011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bcb128256cb02240ad068a511f6fb25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoverManager
+  interact: {fileID: 461349637201482356}
+  inspact: {fileID: 337871307818046262}
+--- !u!114 &7460799739522947688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110865528592120011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b45acbb90c51da40aa9d3264f26add2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractWithCanBeOpen
+  interact: {fileID: 461349637201482356}
+  inputs: {fileID: 8095631672690336976}
 --- !u!82 &3191861471629149975
 AudioSource:
   m_ObjectHideFlags: 0
@@ -171,8 +201,8 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.452
-  m_Pitch: 1
+  m_Volume: 0.05
+  m_Pitch: 0.9
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -215,7 +245,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
