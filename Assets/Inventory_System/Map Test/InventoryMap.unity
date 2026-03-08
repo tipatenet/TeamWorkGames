@@ -465,15 +465,15 @@ PrefabInstance:
       objectReference: {fileID: 2733903918965175828}
     - target: {fileID: 7392772198432889953, guid: ed552b68412264e4d8b265ba2487a393, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.8547697
+      value: 0.52
       objectReference: {fileID: 0}
     - target: {fileID: 7392772198432889953, guid: ed552b68412264e4d8b265ba2487a393, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.304
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 7392772198432889953, guid: ed552b68412264e4d8b265ba2487a393, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.53458
+      value: -4.43
       objectReference: {fileID: 0}
     - target: {fileID: 7392772198432889953, guid: ed552b68412264e4d8b265ba2487a393, type: 3}
       propertyPath: m_LocalRotation.w
@@ -513,6 +513,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5745770207458604737, guid: ed552b68412264e4d8b265ba2487a393, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1527234849}
+    - targetCorrespondingSourceObject: {fileID: 5745770207458604737, guid: ed552b68412264e4d8b265ba2487a393, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2035388121}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed552b68412264e4d8b265ba2487a393, type: 3}
 --- !u!1 &430311312
@@ -1134,7 +1137,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2733903918965175828}
+    m_TransformParent: {fileID: 167919315}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 95786e369c468d7459f4d87785be8351, type: 3}
       propertyPath: m_LocalScale.x
@@ -1150,15 +1153,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 95786e369c468d7459f4d87785be8351, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.019883811
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 95786e369c468d7459f4d87785be8351, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.37000012
+      value: -0.2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 95786e369c468d7459f4d87785be8351, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.06733799
+      value: -0.07
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 95786e369c468d7459f4d87785be8351, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1187,6 +1190,14 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 95786e369c468d7459f4d87785be8351, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 95786e369c468d7459f4d87785be8351, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4292154010595695564, guid: 95786e369c468d7459f4d87785be8351, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.16
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 95786e369c468d7459f4d87785be8351, type: 3}
       propertyPath: m_Name
@@ -2518,6 +2529,10 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 167919319}
+    - target: {fileID: 1440913058810898583, guid: 4907c110d986e0e4b8cb2a1249f59b7a, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3191861471629149975, guid: 4907c110d986e0e4b8cb2a1249f59b7a, type: 3}
       propertyPath: m_Pitch
       value: 0.9
@@ -2592,10 +2607,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 1998149556855538139, guid: 4907c110d986e0e4b8cb2a1249f59b7a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2035388121}
+    m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 110865528592120011, guid: 4907c110d986e0e4b8cb2a1249f59b7a, type: 3}
       insertIndex: 7
