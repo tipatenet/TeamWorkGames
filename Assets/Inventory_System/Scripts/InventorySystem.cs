@@ -12,6 +12,7 @@ public class InventorySystem : MonoBehaviour
     public AudioSource source;
     public AudioClip DropSound;
     public AudioClip PickUpSound;
+    [SerializeField] private HandAnimation handAnimation;
 
     //Variables Privées :
     private float targetX;
@@ -43,18 +44,20 @@ public class InventorySystem : MonoBehaviour
     }
     private void Update()
     {
-        PickUpItem();
-        DropItem();
         scroolValue = keySystem.ScrollInventory.y;
         ScroolInventory();
 
         if (keySystem.InteractPressed && canInteract)
         {
+            canInteract = false; // bloque tout de suite
+            PickUpItem();
             StartCoroutine(InteractCooldown());
         }
 
         if (keySystem.DropItemPressed && canDropItem)
         {
+            canDropItem = false; // bloque tout de suite
+            DropItem();
             StartCoroutine(DropItemCooldown());
         }
     }
@@ -64,28 +67,26 @@ public class InventorySystem : MonoBehaviour
     {
         RaycastHit hit = interaction.hitInteract;
 
-        if (keySystem.InteractPressed && canInteract)
+        if (hit.collider != null && hit.collider.tag == "item") // Vérifie si l'objet toucher à le tag item
         {
-            if (hit.collider != null && hit.collider.tag == "item") // Vérifie si l'objet toucher à le tag item
+            Item itemTouch = hit.collider.GetComponent<Item>();
+
+            Item_ScriptableObject itemHit = itemTouch.info;
+
+            if (!inventoryFull()) //Vérifie qu'il y a de la place dans l'inventaire
             {
-                Item itemTouch = hit.collider.GetComponent<Item>();
-
-                Item_ScriptableObject itemHit = itemTouch.info;
-
-                if (!inventoryFull()) //Vérifie qu'il y a de la place dans l'inventaire
+                if (currentInventorySize != 0)
                 {
-                    if (currentInventorySize != 0)
-                    {
-                        selectedIndex = currentInventorySize;
-                        ScroolInventory();
-                    }
-
-                    inventory.Add(itemHit);
-                    currentInventorySize++;
-                    UpdateUI();
-                    Destroy(hit.collider.gameObject);
-                    source.PlayOneShot(PickUpSound);
+                    selectedIndex = currentInventorySize;
+                    ScroolInventory();
                 }
+
+                inventory.Add(itemHit);
+                currentInventorySize++;
+                UpdateUI();
+                Destroy(hit.collider.gameObject);
+                source.PlayOneShot(PickUpSound);
+                handAnimation.PlayPickUpDropAnim();
             }
         }
     }
@@ -93,41 +94,39 @@ public class InventorySystem : MonoBehaviour
     //Fonction qui permet de drop les items
     private void DropItem()
     {
-        if (keySystem.DropItemPressed && canDropItem)
+        if (currentInventorySize != 0)
         {
-            if(currentInventorySize != 0)
+            Item_ScriptableObject itemToDrop = inventory[selectedIndex];
+            inventory.RemoveAt(selectedIndex);
+            currentInventorySize--;
+
+            if (currentInventorySize <= 0)
+                selectedIndex = 0;
+            else
+                selectedIndex = Mathf.Clamp(selectedIndex, 0, currentInventorySize - 1);
+
+            UpdateUI();
+            ScroolInventory();
+            interaction.IsInteractive(false);
+            Vector3 dropPosition;
+            RaycastHit hitWall;
+
+            Physics.Raycast(interaction.cameraPosition, interaction.cameraRotation, out hitWall, distanceHitWall);
+            if (hitWall.collider)
             {
-                Item_ScriptableObject itemToDrop = inventory[selectedIndex];
-                inventory.RemoveAt(selectedIndex);
-                currentInventorySize--;
-
-                if (currentInventorySize <= 0)
-                    selectedIndex = 0;
-                else
-                    selectedIndex = Mathf.Clamp(selectedIndex, 0, currentInventorySize - 1);
-
-                UpdateUI();
-                ScroolInventory();
-                interaction.IsInteractive(false);
-                Vector3 dropPosition;
-                RaycastHit hitWall;
-
-                Physics.Raycast(interaction.cameraPosition,interaction.cameraRotation, out hitWall, distanceHitWall);
-                if (hitWall.collider)
-                {
-                    dropPosition = interaction.cameraPosition + interaction.cam.transform.forward * 0.45f;
-                }
-                else
-                {
-                    dropPosition = interaction.cameraPosition + interaction.cam.transform.forward * dropDistance;
-                }
-                GameObject droppedObj = Instantiate(itemToDrop.goItem, dropPosition, Quaternion.identity);
-
-                Rigidbody rb = droppedObj.GetComponent<Rigidbody>();
-                if (rb != null)
-                    rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
-                source.PlayOneShot(DropSound);
+                dropPosition = interaction.cameraPosition + interaction.cam.transform.forward * 0.45f;
             }
+            else
+            {
+                dropPosition = interaction.cameraPosition + interaction.cam.transform.forward * dropDistance;
+            }
+            GameObject droppedObj = Instantiate(itemToDrop.goItem, dropPosition, Quaternion.identity);
+
+            Rigidbody rb = droppedObj.GetComponent<Rigidbody>();
+            if (rb != null)
+                rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
+            source.PlayOneShot(DropSound);
+            handAnimation.PlayPickUpDropAnim();
         }
     }
 
@@ -187,14 +186,12 @@ public class InventorySystem : MonoBehaviour
     //Les coolDown pour les inputs :
     IEnumerator InteractCooldown()
     {
-        canInteract = false;
         yield return new WaitForSeconds(cooldownTime);
         canInteract = true;
     }
 
     IEnumerator DropItemCooldown()
     {
-        canDropItem = false;
         yield return new WaitForSeconds(cooldownTime);
         canDropItem = true;
     }
