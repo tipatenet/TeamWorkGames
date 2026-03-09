@@ -6,6 +6,7 @@ public class HandAnimation : MonoBehaviour
     //Variables Visible dans l'inspector :
     [SerializeField] private InventorySystem inventory;
     [SerializeField] private Transform holdItemPos;
+    [SerializeField] private PlayerController player;
 
     //Variables Privées :
     private Animator anim;
@@ -22,12 +23,18 @@ public class HandAnimation : MonoBehaviour
         anim.SetTrigger("GrabbingItem");
     }
 
+    private void Update()
+    {
+        RuningAnimation();
+    }
+
     public void HoldAnimation()
     {
         if (inventory.currentInventorySize > 0)
         {
             RemoveItemHold();
             anim.SetBool("ItemInHand", true);
+            anim.runtimeAnimatorController = inventory.inventory[inventory.selectedIndex].animatorOverride;
             GameObject go = Instantiate(inventory.inventory[inventory.selectedIndex].goItem);
             go.transform.SetParent(holdItemPos);
             go.transform.localPosition = Vector3.zero + inventory.inventory[inventory.selectedIndex].holdPositionOffset;
@@ -43,10 +50,15 @@ public class HandAnimation : MonoBehaviour
         }
     }
 
-    public void RemoveItemHold()
+    private void RemoveItemHold()
     {
         if(objectHold)
         Destroy(holdItemPos.GetChild(0).gameObject);
         objectHold = false;
+    }
+
+    private void RuningAnimation()
+    {
+        anim.SetFloat("Speed", player.rb.linearVelocity.magnitude);
     }
 }

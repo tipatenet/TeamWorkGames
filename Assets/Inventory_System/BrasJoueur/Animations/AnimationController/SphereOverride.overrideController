@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SphereOverride
+  m_Controller: {fileID: 9100000, guid: 1ed6c48230169f349a232e605d3257b9, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: -1126190637916881650, guid: 286dff90bd2caa941a1be0b1bee69016, type: 3}
+    m_OverrideClip: {fileID: -1126190637916881650, guid: 286dff90bd2caa941a1be0b1bee69016, type: 3}
+  - m_OriginalClip: {fileID: 5117889177875808539, guid: 2e7f27ba758a00e46af276e01ea0ffe6, type: 3}
+    m_OverrideClip: {fileID: 7366368995058382031, guid: 9db181d0923845940af0e0ad2da2193d, type: 3}
