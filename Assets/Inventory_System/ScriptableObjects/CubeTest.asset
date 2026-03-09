@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: CubeTest
   m_EditorClassIdentifier: Assembly-CSharp::Item_ScriptableObject
   item_Name: Cube
-  overParticle: {fileID: 1269317910098620064, guid: a5d5d1532ca91ff42a8826b0b1d083c8, type: 3}
-  particlePositionY: 0.2
-  particleScale: {x: 0.2, y: 0.2, z: 0.2}
   icon: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
   goItem: {fileID: 3919394019970707039, guid: 769ba790ff5e5c24b864e1a8cbca2c22, type: 3}
+  animatorOverride: {fileID: 0}
+  holdPositionOffset: {x: 0.08, y: -0.0973, z: 0.0452}

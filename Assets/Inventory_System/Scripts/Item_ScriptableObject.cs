@@ -10,4 +10,6 @@ public class Item_ScriptableObject : ScriptableObject
     public string item_Name;
     public Sprite icon;
     public GameObject goItem;
+    public AnimatorOverrideController animatorOverride;
+    public Vector3 holdPositionOffset;
 }

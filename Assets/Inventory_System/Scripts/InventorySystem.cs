@@ -16,7 +16,7 @@ public class InventorySystem : MonoBehaviour
 
     //Variables Privées :
     private float targetX;
-    private float cooldownTime = 0.3f;
+    private float cooldownTime = 1.2f;
     private bool canInteract = true;
     private UnityEngine.UI.Image currentIcon;
     private bool canDropItem = true;
@@ -86,7 +86,9 @@ public class InventorySystem : MonoBehaviour
                 UpdateUI();
                 Destroy(hit.collider.gameObject);
                 source.PlayOneShot(PickUpSound);
+                //Ajout des mains
                 handAnimation.PlayPickUpDropAnim();
+                handAnimation.HoldAnimation();
             }
         }
     }
@@ -126,7 +128,9 @@ public class InventorySystem : MonoBehaviour
             if (rb != null)
                 rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
             source.PlayOneShot(DropSound);
+            //Ajout des mains
             handAnimation.PlayPickUpDropAnim();
+            handAnimation.HoldAnimation();
         }
     }
 
@@ -168,9 +172,17 @@ public class InventorySystem : MonoBehaviour
             if (scroolValue > 0)
             {
                 selectedIndex--;
+                //Ajout des mains
+                handAnimation.PlayPickUpDropAnim();
+                handAnimation.HoldAnimation();
             }
             else if (scroolValue < 0 && selectedIndex + 1 < currentInventorySize)
+            {
                 selectedIndex++;
+                //Ajout des mains
+                handAnimation.PlayPickUpDropAnim();
+                handAnimation.HoldAnimation();
+            }
 
             selectedIndex = Mathf.Clamp(selectedIndex, 0, currentInventorySize);
 
