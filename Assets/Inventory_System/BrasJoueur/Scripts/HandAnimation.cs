@@ -30,7 +30,7 @@ public class HandAnimation : MonoBehaviour
 
     public void HoldAnimation()
     {
-        if (inventory.currentInventorySize > 0)
+        if (inventory.currentInventorySize >= 1)
         {
             RemoveItemHold();
             anim.SetBool("ItemInHand", true);
@@ -39,6 +39,7 @@ public class HandAnimation : MonoBehaviour
             go.transform.SetParent(holdItemPos);
             go.transform.localPosition = Vector3.zero + inventory.inventory[inventory.selectedIndex].holdPositionOffset;
             go.transform.localRotation = Quaternion.identity;
+            go.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             go.GetComponent<Collider>().enabled = false;
             go.GetComponent<Rigidbody>().useGravity = false;
             objectHold = true;
