@@ -98,7 +98,6 @@ public class CadenasInteraction : MonoBehaviour
         if (cameraModeActive)
         {
             cursorPoint.gameObject.SetActive(true);
-            Cursor.lockState = CursorLockMode.None;
             if (boxCadenas != null) boxCadenas.enabled = false;
         }
         else
@@ -107,7 +106,6 @@ public class CadenasInteraction : MonoBehaviour
             Mouse.current?.WarpCursorPosition(center);
             cursorPosition = center;
             cursorPoint.position = center;
-            Cursor.lockState = CursorLockMode.Locked;
             if (boxCadenas != null) boxCadenas.enabled = true;
         }
     }
