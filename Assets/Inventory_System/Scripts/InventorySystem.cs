@@ -130,7 +130,6 @@ public class InventorySystem : MonoBehaviour
             source.PlayOneShot(DropSound);
             //Ajout des mains
             handAnimation.HoldAnimation();
-            handAnimation.PlayPickUpDropAnim();
         }
     }
 

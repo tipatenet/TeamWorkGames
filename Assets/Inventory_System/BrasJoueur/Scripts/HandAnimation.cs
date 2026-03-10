@@ -47,6 +47,7 @@ public class HandAnimation : MonoBehaviour
         {
             RemoveItemHold();
             anim.SetBool("ItemInHand", true);
+            PlayPickUpDropAnim();
             anim.runtimeAnimatorController = inventory.inventory[inventory.selectedIndex].animatorOverride;
             GameObject go = Instantiate(inventory.inventory[inventory.selectedIndex].goItem);
             go.transform.SetParent(holdItemPos);
