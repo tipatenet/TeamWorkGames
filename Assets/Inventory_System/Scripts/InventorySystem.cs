@@ -172,6 +172,7 @@ public class InventorySystem : MonoBehaviour
             if (scroolValue > 0)
             {
                 selectedIndex--;
+                selectedIndex = Mathf.Clamp(selectedIndex, 0, currentInventorySize);
                 //Ajout des mains
                 handAnimation.PlayPickUpDropAnim();
                 handAnimation.HoldAnimation();
@@ -179,12 +180,11 @@ public class InventorySystem : MonoBehaviour
             else if (scroolValue < 0 && selectedIndex + 1 < currentInventorySize)
             {
                 selectedIndex++;
+                selectedIndex = Mathf.Clamp(selectedIndex, 0, currentInventorySize);
                 //Ajout des mains
                 handAnimation.PlayPickUpDropAnim();
                 handAnimation.HoldAnimation();
             }
-
-            selectedIndex = Mathf.Clamp(selectedIndex, 0, currentInventorySize);
 
 
             float itemWidth = 100f + 10;

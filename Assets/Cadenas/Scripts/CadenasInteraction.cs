@@ -73,21 +73,23 @@ public class CadenasInteraction : MonoBehaviour
         if (!keySystem.InteractPressed || !canInteract)
             return;
 
-        RaycastHit hit = interact.IsInteractive(false);
-
-        if (hit.collider == null)
-            return;
-
-        GameObject hitObj = hit.collider.gameObject;
-
-        if (!hitObj.CompareTag("cadenas"))
-            return;
-
         if (!cameraModeActive)
-            boxCadenas = hitObj.GetComponent<BoxCollider>();
+        {
+            // Entrée pour ouvrir le cadenas
+            RaycastHit hit = interact.IsInteractive(false);
+            if (hit.collider == null || !hit.collider.CompareTag("cadenas"))
+                return;
 
-        ToggleCameraMode();
-        SwitchCameraPosition(cameraModeActive);
+            boxCadenas = hit.collider.GetComponent<BoxCollider>();
+            ToggleCameraMode();
+            SwitchCameraPosition(cameraModeActive);
+        }
+        else
+        {
+            // Permet de sortir du mode caméra quand on appuie sur Interact
+            ToggleCameraMode();
+            SwitchCameraPosition(cameraModeActive);
+        }
     }
 
 
@@ -114,8 +116,16 @@ public class CadenasInteraction : MonoBehaviour
     {
         keySystem.LockGamePlayForCodeLock(active);
 
-        playerCam.gameObject.SetActive(!active);
         lookCam.gameObject.SetActive(active);
+
+        // Met lookCam au-dessus du playerCam pour le rendu
+        if (active)
+            lookCam.depth = playerCam.depth + 1;
+        else
+            lookCam.depth = playerCam.depth - 1;
+
+        playerCam.GetComponent<AudioListener>().enabled = !active;
+        lookCam.GetComponent<AudioListener>().enabled = active;
 
         StartCoroutine(CameraTransition(active));
     }

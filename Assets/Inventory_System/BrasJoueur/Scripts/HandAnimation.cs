@@ -1,9 +1,14 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using static UnityEditor.Progress;
+using System.Collections;
+using System.Collections.Generic;
 
 public class HandAnimation : MonoBehaviour
 {
     //Variables Visible dans l'inspector :
+    [Header("References Settings")]
     [SerializeField] private InventorySystem inventory;
     [SerializeField] private Transform holdItemPos;
     [SerializeField] private PlayerController player;
@@ -11,16 +16,24 @@ public class HandAnimation : MonoBehaviour
     //Variables Privées :
     private Animator anim;
     private bool objectHold = false;
-
+    private bool isPlayingPickAnim;
+    private float collDownAnim = 1.2f;
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
     }
+
     public void PlayPickUpDropAnim()
     {
+        if (isPlayingPickAnim) return;
+
+        isPlayingPickAnim = true;
+
         anim.ResetTrigger("GrabbingItem");
         anim.SetTrigger("GrabbingItem");
+
+        StartCoroutine(ResetPickAnim());
     }
 
     private void Update()
@@ -61,5 +74,11 @@ public class HandAnimation : MonoBehaviour
     private void RuningAnimation()
     {
         anim.SetFloat("Speed", player.rb.linearVelocity.magnitude);
+    }
+
+    IEnumerator ResetPickAnim()
+    {
+        yield return new WaitForSeconds(collDownAnim);
+        isPlayingPickAnim = false;
     }
 }
