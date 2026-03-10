@@ -129,8 +129,8 @@ public class InventorySystem : MonoBehaviour
                 rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
             source.PlayOneShot(DropSound);
             //Ajout des mains
-            handAnimation.PlayPickUpDropAnim();
             handAnimation.HoldAnimation();
+            handAnimation.PlayPickUpDropAnim();
         }
     }
 

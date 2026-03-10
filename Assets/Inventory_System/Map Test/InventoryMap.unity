@@ -440,6 +440,10 @@ PrefabInstance:
       value: CameraHolder
       objectReference: {fileID: 0}
     - target: {fileID: 5606094458903792390, guid: ed552b68412264e4d8b265ba2487a393, type: 3}
+      propertyPath: field of view
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: 5606094458903792390, guid: ed552b68412264e4d8b265ba2487a393, type: 3}
       propertyPath: near clip plane
       value: 0.01
       objectReference: {fileID: 0}

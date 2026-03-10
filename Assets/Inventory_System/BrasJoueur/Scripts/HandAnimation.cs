@@ -59,8 +59,9 @@ public class HandAnimation : MonoBehaviour
         }
         else
         {
-            RemoveItemHold();
             anim.SetBool("ItemInHand", false);
+            anim.SetTrigger("GrabbingItem");
+            RemoveItemHold();
         }
     }
 
