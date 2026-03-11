@@ -16,5 +16,5 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 7e45f6887bdf4c643952ae0abecd6a2b, type: 3}
   goItem: {fileID: 5601148489952575259, guid: 8f9104c8ff8df36459051b7eb67dc7b6, type: 3}
   animatorOverride: {fileID: 22100000, guid: 2f69a03b3e6953c4ea3cba6be2d29bd9, type: 2}
-  holdPositionOffset: {x: 0.2979248, y: -0.4060926, z: -0.004102965}
+  holdPositionOffset: {x: 0.2979918, y: -0.4060926, z: -0.004102965}
   holdRotation: {x: -0.5161834, y: -0.47916135, z: -0.53763586, w: -0.46358037}
