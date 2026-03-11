@@ -9,6 +9,7 @@ public class InventorySystem : MonoBehaviour
     public int inventoryMaxSize = 10;
     public RectTransform item_Container;
     public float scrollSpeed = 20f;
+    public float cooldownTime = 1f;
     public AudioSource source;
     public AudioClip DropSound;
     public AudioClip PickUpSound;
@@ -16,10 +17,8 @@ public class InventorySystem : MonoBehaviour
 
     //Variables Privées :
     private float targetX;
-    private float cooldownTime = 1.2f;
-    private bool canInteract = true;
+    private bool canPickOrDrop = true;
     private UnityEngine.UI.Image currentIcon;
-    private bool canDropItem = true;
     private Transform cameraTransform;
     private float dropDistance = 1f;
     private float distanceHitWall = 1f;
@@ -47,18 +46,18 @@ public class InventorySystem : MonoBehaviour
         scroolValue = keySystem.ScrollInventory.y;
         ScroolInventory();
 
-        if (keySystem.InteractPressed && canInteract)
+        if (keySystem.InteractPressed && canPickOrDrop)
         {
-            canInteract = false; // bloque tout de suite
+            canPickOrDrop = false; // bloque tout de suite
             PickUpItem();
-            StartCoroutine(InteractCooldown());
+            StartCoroutine(PickOrDropCooldown());
         }
 
-        if (keySystem.DropItemPressed && canDropItem)
+        if (keySystem.DropItemPressed && canPickOrDrop)
         {
-            canDropItem = false; // bloque tout de suite
+            canPickOrDrop = false; // bloque tout de suite
             DropItem();
-            StartCoroutine(DropItemCooldown());
+            StartCoroutine(PickOrDropCooldown());
         }
     }
 
@@ -87,7 +86,7 @@ public class InventorySystem : MonoBehaviour
                 Destroy(hit.collider.gameObject);
                 source.PlayOneShot(PickUpSound);
                 //Ajout des mains
-                handAnimation.PlayPickUpDropAnim();
+                handAnimation.PlayPickAnim();
                 handAnimation.HoldAnimation();
             }
         }
@@ -129,6 +128,7 @@ public class InventorySystem : MonoBehaviour
                 rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
             source.PlayOneShot(DropSound);
             //Ajout des mains
+            handAnimation.PlayDropAnim();
             handAnimation.HoldAnimation();
         }
     }
@@ -175,7 +175,7 @@ public class InventorySystem : MonoBehaviour
                 //Ajout des mains
                 if(currentInventorySize > 1)
                 {
-                    handAnimation.PlayPickUpDropAnim();
+                    handAnimation.PlayDropAnim();
                     handAnimation.HoldAnimation();
                 }
             }
@@ -186,7 +186,7 @@ public class InventorySystem : MonoBehaviour
                 //Ajout des mains
                 if (currentInventorySize > 1)
                 {
-                    handAnimation.PlayPickUpDropAnim();
+                    handAnimation.PlayDropAnim();
                     handAnimation.HoldAnimation();
                 }
             }
@@ -201,15 +201,9 @@ public class InventorySystem : MonoBehaviour
     }
 
     //Les coolDown pour les inputs :
-    IEnumerator InteractCooldown()
+    IEnumerator PickOrDropCooldown()
     {
         yield return new WaitForSeconds(cooldownTime);
-        canInteract = true;
-    }
-
-    IEnumerator DropItemCooldown()
-    {
-        yield return new WaitForSeconds(cooldownTime);
-        canDropItem = true;
+        canPickOrDrop = true;
     }
 }

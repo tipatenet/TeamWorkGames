@@ -16,29 +16,41 @@ public class HandAnimation : MonoBehaviour
     //Variables Privées :
     private Animator anim;
     private bool objectHold = false;
-    private bool isPlayingPickAnim;
-    private float collDownAnim = 1.2f;
+    private bool isPlayingAnim;
+    private float collDownAnim;
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
-    }
+        collDownAnim = inventory.cooldownTime;
+}
 
-    public void PlayPickUpDropAnim()
+    public void PlayPickAnim()
     {
-        if (isPlayingPickAnim) return;
+        if (isPlayingAnim) return;
 
-        isPlayingPickAnim = true;
+        isPlayingAnim = true;
 
-        anim.ResetTrigger("GrabbingItem");
-        anim.SetTrigger("GrabbingItem");
+        anim.ResetTrigger("PickUpItem");
+        anim.SetTrigger("PickUpItem");
 
-        StartCoroutine(ResetPickAnim());
+        StartCoroutine(ResetAnim());
+    }
+    public void PlayDropAnim()
+    {
+        if (isPlayingAnim) return;
+
+        isPlayingAnim = true;
+
+        anim.ResetTrigger("DropItem");
+        anim.SetTrigger("DropItem");
+
+        StartCoroutine(ResetAnim());
     }
 
     private void Update()
     {
-        RuningAnimation();
+        RunningAnimation();
     }
 
     public void HoldAnimation()
@@ -47,7 +59,6 @@ public class HandAnimation : MonoBehaviour
         {
             RemoveItemHold();
             anim.SetBool("ItemInHand", true);
-            PlayPickUpDropAnim();
             anim.runtimeAnimatorController = inventory.inventory[inventory.selectedIndex].animatorOverride;
             GameObject go = Instantiate(inventory.inventory[inventory.selectedIndex].goItem);
             go.transform.SetParent(holdItemPos);
@@ -60,8 +71,10 @@ public class HandAnimation : MonoBehaviour
         }
         else
         {
+            if(inventory.currentInventorySize < 1)
             anim.SetBool("ItemInHand", false);
-            anim.SetTrigger("GrabbingItem");
+
+            anim.SetTrigger("DropItem");
             RemoveItemHold();
         }
     }
@@ -73,14 +86,14 @@ public class HandAnimation : MonoBehaviour
         objectHold = false;
     }
 
-    private void RuningAnimation()
+    private void RunningAnimation()
     {
         anim.SetFloat("Speed", player.rb.linearVelocity.magnitude);
     }
 
-    IEnumerator ResetPickAnim()
+    IEnumerator ResetAnim()
     {
         yield return new WaitForSeconds(collDownAnim);
-        isPlayingPickAnim = false;
+        isPlayingAnim = false;
     }
 }
