@@ -52,7 +52,7 @@ public class HandAnimation : MonoBehaviour
             GameObject go = Instantiate(inventory.inventory[inventory.selectedIndex].goItem);
             go.transform.SetParent(holdItemPos);
             go.transform.localPosition = Vector3.zero + inventory.inventory[inventory.selectedIndex].holdPositionOffset;
-            go.transform.localRotation = Quaternion.identity;
+            go.transform.localRotation = inventory.inventory[inventory.selectedIndex].holdRotation;
             go.GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             go.GetComponent<Collider>().enabled = false;
             go.GetComponent<Rigidbody>().useGravity = false;

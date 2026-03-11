@@ -173,16 +173,22 @@ public class InventorySystem : MonoBehaviour
                 selectedIndex--;
                 selectedIndex = Mathf.Clamp(selectedIndex, 0, currentInventorySize);
                 //Ajout des mains
-                handAnimation.PlayPickUpDropAnim();
-                handAnimation.HoldAnimation();
+                if(currentInventorySize > 1)
+                {
+                    handAnimation.PlayPickUpDropAnim();
+                    handAnimation.HoldAnimation();
+                }
             }
             else if (scroolValue < 0 && selectedIndex + 1 < currentInventorySize)
             {
                 selectedIndex++;
                 selectedIndex = Mathf.Clamp(selectedIndex, 0, currentInventorySize);
                 //Ajout des mains
-                handAnimation.PlayPickUpDropAnim();
-                handAnimation.HoldAnimation();
+                if (currentInventorySize > 1)
+                {
+                    handAnimation.PlayPickUpDropAnim();
+                    handAnimation.HoldAnimation();
+                }
             }
 
 

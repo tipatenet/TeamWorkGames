@@ -12,4 +12,5 @@ public class Item_ScriptableObject : ScriptableObject
     public GameObject goItem;
     public AnimatorOverrideController animatorOverride;
     public Vector3 holdPositionOffset;
+    public Quaternion holdRotation;
 }
