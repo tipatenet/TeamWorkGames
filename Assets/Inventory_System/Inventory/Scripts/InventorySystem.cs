@@ -168,29 +168,28 @@ public class InventorySystem : MonoBehaviour
     {
         if (canScroll)
         {
+            int previousIndex = selectedIndex;
+
             if (scroolValue > 0)
             {
                 selectedIndex--;
-                selectedIndex = Mathf.Clamp(selectedIndex, 0, currentInventorySize);
-                //Joue les animations pour les mains
-                if (currentInventorySize > 1)
-                {
-                    handAnimation.PlayDropAnim();
-                    handAnimation.HoldAnimation();
-                }
+                selectedIndex = Mathf.Clamp(selectedIndex, 0, currentInventorySize - 1);
             }
-            else if (scroolValue < 0 && selectedIndex + 1 < currentInventorySize)
+            else if (scroolValue < 0)
             {
                 selectedIndex++;
-                selectedIndex = Mathf.Clamp(selectedIndex, 0, currentInventorySize);
-                //Joue les animations pour les mains
+                selectedIndex = Mathf.Clamp(selectedIndex, 0, currentInventorySize - 1);
+            }
+
+            // Si l'item a changé alors jouer l'animation
+            if (previousIndex != selectedIndex)
+            {
                 if (currentInventorySize > 1)
                 {
                     handAnimation.PlayDropAnim();
                     handAnimation.HoldAnimation();
                 }
             }
-
 
             float itemWidth = 100f + 10;
             targetX = -selectedIndex * itemWidth;
