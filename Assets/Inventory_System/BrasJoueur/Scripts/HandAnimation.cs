@@ -1,9 +1,5 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
-using static UnityEditor.Progress;
 using System.Collections;
-using System.Collections.Generic;
 
 public class HandAnimation : MonoBehaviour
 {
@@ -22,9 +18,12 @@ public class HandAnimation : MonoBehaviour
     private void Awake()
     {
         anim = GetComponent<Animator>();
-        collDownAnim = inventory.cooldownTime;
-}
 
+        //Pour que le colldown des animations soit le meme que celui de l'inventaire
+        collDownAnim = inventory.cooldownTime;
+    }
+
+    //Permet de jouez l'animation pour récuperer l'item
     public void PlayPickAnim()
     {
         if (isPlayingAnim) return;
@@ -36,6 +35,8 @@ public class HandAnimation : MonoBehaviour
 
         StartCoroutine(ResetAnim());
     }
+
+    //Permet de jouez l'animation pour jeter l'item
     public void PlayDropAnim()
     {
         if (isPlayingAnim) return;
@@ -53,20 +54,27 @@ public class HandAnimation : MonoBehaviour
         RunningAnimation();
     }
 
+    //Permet de jouez l'animation pour tenir l'item
     public void HoldAnimation()
     {
         if (inventory.currentInventorySize >= 1)
         {
             RemoveItemHold();
-            anim.SetBool("ItemInHand", true);
+            anim.SetBool("ItemInHand", true); //Permet d'activer l'animation
             anim.runtimeAnimatorController = inventory.inventory[inventory.selectedIndex].animatorOverride;
             GameObject go = Instantiate(inventory.inventory[inventory.selectedIndex].goItem);
             go.transform.SetParent(holdItemPos);
             go.transform.localPosition = Vector3.zero + inventory.inventory[inventory.selectedIndex].holdPositionOffset;
             go.transform.localRotation = inventory.inventory[inventory.selectedIndex].holdRotation;
+
+            //Enleve l'ombre projeter de l'objet en main
             go.GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            //Desactiver sont collider pour éviter q'il soit bloquer par un mur ou autres
             go.GetComponent<Collider>().enabled = false;
+
+            //Desactive la gravité de l'objet
             go.GetComponent<Rigidbody>().useGravity = false;
+
             objectHold = true;
         }
         else
@@ -79,6 +87,7 @@ public class HandAnimation : MonoBehaviour
         }
     }
 
+    //Permet de supprimer l'item en main
     private void RemoveItemHold()
     {
         if(objectHold)
@@ -86,11 +95,13 @@ public class HandAnimation : MonoBehaviour
         objectHold = false;
     }
 
+    //Permet de changer la vitesse da l'animation en fonction de la vitesse du joueur
     private void RunningAnimation()
     {
         anim.SetFloat("Speed", player.rb.linearVelocity.magnitude);
     }
 
+    //Fonction colldown pour éviter de jouer plusieurs animations en meme temps
     IEnumerator ResetAnim()
     {
         yield return new WaitForSeconds(collDownAnim);

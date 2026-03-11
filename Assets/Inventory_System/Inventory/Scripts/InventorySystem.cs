@@ -85,7 +85,7 @@ public class InventorySystem : MonoBehaviour
                 UpdateUI();
                 Destroy(hit.collider.gameObject);
                 source.PlayOneShot(PickUpSound);
-                //Ajout des mains
+                //Joue les animations pour les mains
                 handAnimation.PlayPickAnim();
                 handAnimation.HoldAnimation();
             }
@@ -127,7 +127,7 @@ public class InventorySystem : MonoBehaviour
             if (rb != null)
                 rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
             source.PlayOneShot(DropSound);
-            //Ajout des mains
+            //Joue les animations pour les mains
             handAnimation.PlayDropAnim();
             handAnimation.HoldAnimation();
         }
@@ -172,8 +172,8 @@ public class InventorySystem : MonoBehaviour
             {
                 selectedIndex--;
                 selectedIndex = Mathf.Clamp(selectedIndex, 0, currentInventorySize);
-                //Ajout des mains
-                if(currentInventorySize > 1)
+                //Joue les animations pour les mains
+                if (currentInventorySize > 1)
                 {
                     handAnimation.PlayDropAnim();
                     handAnimation.HoldAnimation();
@@ -183,7 +183,7 @@ public class InventorySystem : MonoBehaviour
             {
                 selectedIndex++;
                 selectedIndex = Mathf.Clamp(selectedIndex, 0, currentInventorySize);
-                //Ajout des mains
+                //Joue les animations pour les mains
                 if (currentInventorySize > 1)
                 {
                     handAnimation.PlayDropAnim();
@@ -200,7 +200,7 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
-    //Les coolDown pour les inputs :
+    //Colldown pour pick up et drop item
     IEnumerator PickOrDropCooldown()
     {
         yield return new WaitForSeconds(cooldownTime);
