@@ -7,10 +7,11 @@ public class InspactItem : MonoBehaviour
 {
     //Variables Publique :
     public GameObject holdPosition;
+    public HandAnimation handAnim;
 
     //Variables Privées :
     private bool canInspact = true;
-    private float cooldownTime = 1f;
+    private float cooldownTime;
     private GameObject go;
     public bool isInspact = false;
     private float rotationSpeed = 10f;
@@ -25,6 +26,7 @@ public class InspactItem : MonoBehaviour
         inventory = GetComponent<InventorySystem>();
         keySystem = GetComponent<PlayerInputHandler>();
         interact = GetComponent<Interact>();
+        cooldownTime = handAnim.collDownAnim;
     }
 
     private void Update()
@@ -71,6 +73,7 @@ public class InspactItem : MonoBehaviour
                 InstantiateItem();
                 isInspact = true;
                 interact.stopRaycast = true;
+                handAnim.InspactItem(true);
                 keySystem.LockGameplayInputs(true);
             }
             else
@@ -78,6 +81,7 @@ public class InspactItem : MonoBehaviour
                 Destroy(go);
                 isInspact = false;
                 interact.stopRaycast = false;
+                handAnim.InspactItem(false);
                 keySystem.LockGameplayInputs(false);
             }
         }

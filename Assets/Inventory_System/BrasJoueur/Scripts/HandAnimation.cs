@@ -8,12 +8,12 @@ public class HandAnimation : MonoBehaviour
     [SerializeField] private InventorySystem inventory;
     [SerializeField] private Transform holdItemPos;
     [SerializeField] private PlayerController player;
+    public float collDownAnim;
 
     //Variables Privées :
     private Animator anim;
     private bool objectHold = false;
     private bool isPlayingAnim;
-    private float collDownAnim;
 
     private void Awake()
     {
@@ -99,6 +99,18 @@ public class HandAnimation : MonoBehaviour
     private void RunningAnimation()
     {
         anim.SetFloat("Speed", player.rb.linearVelocity.magnitude);
+    }
+
+    public void InspactItem(bool inspact)
+    {
+        if (inspact)
+        {
+            anim.SetBool("ItemInHand", false);
+        }
+        else
+        {
+            anim.SetBool("ItemInHand", true);
+        }
     }
 
     //Fonction colldown pour éviter de jouer plusieurs animations en meme temps
