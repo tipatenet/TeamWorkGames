@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
     float horizontalInput;
     float verticalInput;
 
-    Vector3 moveDirection;
+    public Vector3 moveDirection;
 
     public Rigidbody rb;
 
