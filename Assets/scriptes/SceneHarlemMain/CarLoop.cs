@@ -15,7 +15,7 @@ public class CarLoop : MonoBehaviour
     public float waypointThreshold = 0.5f;
 
     [Header("Détection obstacle")]
-    public float detectionDistance = 5f;
+    public float detectionDistance = 8f;
     public LayerMask obstacleLayer;
     public LayerMask carLayer;
 
@@ -35,31 +35,11 @@ public class CarLoop : MonoBehaviour
     void Update()
     {
         CheckForObstacle();
-
-        if (!isStopped)
-            MoveTowardsWaypoint();
+        MoveTowardsWaypoint();
     }
 
     void CheckForObstacle()
     {
-        LayerMask combined = obstacleLayer | carLayer;
-
-        RaycastHit[] hits = Physics.SphereCastAll(
-            transform.position + transform.forward * 2f,
-            1.5f,
-            transform.forward,
-            detectionDistance,
-            combined
-        );
-
-        isStopped = false;
-        foreach (RaycastHit hit in hits)
-        {
-            if (hit.collider.gameObject == gameObject) continue;
-            isStopped = true;
-            break;
-        }
-
         Debug.DrawRay(transform.position, transform.forward * detectionDistance,
             isStopped ? Color.red : Color.green);
     }
@@ -71,10 +51,43 @@ public class CarLoop : MonoBehaviour
         Transform target = currentLane[currentWaypointIndex];
         Vector3 direction = (target.position - transform.position).normalized;
 
+        // Calcule la vitesse en fonction de la distance à l'obstacle
+        float currentSpeed = speed;
+        isStopped = false;
+
+        RaycastHit[] hits = Physics.SphereCastAll(
+            transform.position + transform.forward * 0.8f,
+            1.5f,
+            transform.forward,
+            detectionDistance,
+            obstacleLayer | carLayer
+        );
+
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider.transform.IsChildOf(transform)) continue;
+            if (hit.collider.gameObject == gameObject) continue;
+
+            // Distance réelle entre les deux objets
+            float realDistance = Vector3.Distance(transform.position, hit.collider.transform.position);
+            float ratio = Mathf.Clamp01((realDistance - 2f) / detectionDistance);
+            // 2f = distance minimale souhaitée entre les voitures
+
+            currentSpeed = speed * ratio;
+
+            if (currentSpeed < 0.05f)
+            {
+                currentSpeed = 0f;
+                isStopped = true;
+            }
+
+            break;
+        }
+
         transform.position = Vector3.MoveTowards(
             transform.position,
             target.position,
-            speed * Time.deltaTime
+            currentSpeed * Time.deltaTime
         );
 
         if (direction != Vector3.zero)
@@ -83,7 +96,6 @@ public class CarLoop : MonoBehaviour
         if (Vector3.Distance(transform.position, target.position) < waypointThreshold)
         {
             currentWaypointIndex++;
-
             if (currentWaypointIndex >= currentLane.Length)
                 SwitchLane();
         }
