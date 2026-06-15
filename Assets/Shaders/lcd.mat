@@ -37,11 +37,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _EmissionStrength: 6.63
-    - _FlickerSpeed: 5
+    - _EmissionStrength: 20
+    - _FlickerSpeed: 4
     - _ScanTiling: 10
     m_Colors:
     - _BaseColor: {r: 0, g: 0.049999982, b: 0.049999982, a: 1}
-    - _EmissionColor: {r: 0, g: 1, b: 0.6, a: 1}
+    - _EmissionColor: {r: 0, g: 0.63529414, b: 0.6, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
