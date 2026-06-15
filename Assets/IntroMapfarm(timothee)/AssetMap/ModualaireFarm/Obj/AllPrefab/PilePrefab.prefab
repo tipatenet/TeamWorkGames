@@ -58,7 +58,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: c37e2b95d3c2c9049bcf708cde4d4fb0, type: 2}
     - target: {fileID: 919132149155446097, guid: ed434d80c5cf9654d9ae6d76b677bafb, type: 3}
       propertyPath: m_Name
-      value: Unity HD Render Pipeline (Metallic Standard)
+      value: PilePrefab
       objectReference: {fileID: 0}
     - target: {fileID: 2153285657681416691, guid: ed434d80c5cf9654d9ae6d76b677bafb, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -67,5 +67,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ed434d80c5cf9654d9ae6d76b677bafb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3982147481909607031}
   m_SourcePrefab: {fileID: 100100000, guid: ed434d80c5cf9654d9ae6d76b677bafb, type: 3}
+--- !u!1 &7631805237888322456 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ed434d80c5cf9654d9ae6d76b677bafb, type: 3}
+  m_PrefabInstance: {fileID: 7289348384316569289}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &3982147481909607031
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7631805237888322456}
+  m_Material: {fileID: 13400000, guid: 1f2b9b9a3189e694a8995adc4c89af20, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0000002, y: 1.9999995, z: 12.499998}
+  m_Center: {x: 0.00000035762787, y: 0, z: 6.249999}
