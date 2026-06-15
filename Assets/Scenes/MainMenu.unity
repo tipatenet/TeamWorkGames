@@ -810,6 +810,7 @@ GameObject:
   - component: {fileID: 239009604}
   - component: {fileID: 239009603}
   - component: {fileID: 239009602}
+  - component: {fileID: 239009606}
   m_Layer: 5
   m_Name: Button3
   m_TagString: Untagged
@@ -893,6 +894,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 572614056}
+        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &239009603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -931,6 +944,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 239009600}
   m_CullTransparentMesh: 1
+--- !u!114 &239009606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 239009600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe2207806a9fc2247b13378bc737f1d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverHighlight
+  targetObject: {fileID: 325544230}
 --- !u!1 &240069481
 GameObject:
   m_ObjectHideFlags: 0
@@ -1183,6 +1209,7 @@ GameObject:
   - component: {fileID: 325544228}
   - component: {fileID: 325544227}
   - component: {fileID: 325544226}
+  - component: {fileID: 325544230}
   m_Layer: 0
   m_Name: BOUTON 1
   m_TagString: Untagged
@@ -1285,6 +1312,25 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 325544224}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &325544230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 325544224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb40ce606288b66409f25d2b47bbb02d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hoverable
+  overParticlePrefab: {fileID: 0}
+  particleOffsetY: 0.5
+  particleScale: {x: 1, y: 1, z: 1}
+  objectRenderer: {fileID: 325544227}
+  hoverColor: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 1}
+  emissionIntensity: 2
+  currentParticle: {fileID: 0}
 --- !u!1 &532852720
 GameObject:
   m_ObjectHideFlags: 0
@@ -1577,7 +1623,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &543039554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1706,6 +1752,7 @@ GameObject:
   m_Component:
   - component: {fileID: 572614054}
   - component: {fileID: 572614053}
+  - component: {fileID: 572614056}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -1825,6 +1872,103 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &572614056
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 572614052}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: e88a6449f9d19ff43b9960409b161194, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.3
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!4 &572966801 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4268249684430754348, guid: 55a5d7d0665c1e94c82d32ebc66dc890, type: 3}
@@ -2191,7 +2335,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &788646771
 AudioListener:
   m_ObjectHideFlags: 0
@@ -3130,6 +3274,7 @@ GameObject:
   - component: {fileID: 1119727795}
   - component: {fileID: 1119727794}
   - component: {fileID: 1119727793}
+  - component: {fileID: 1119727797}
   m_Layer: 0
   m_Name: BOUTON 3
   m_TagString: Untagged
@@ -3232,6 +3377,25 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1119727791}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1119727797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1119727791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb40ce606288b66409f25d2b47bbb02d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hoverable
+  overParticlePrefab: {fileID: 0}
+  particleOffsetY: 0.5
+  particleScale: {x: 1, y: 1, z: 1}
+  objectRenderer: {fileID: 1119727794}
+  hoverColor: {r: 0.7254902, g: 0.7254902, b: 0.7254902, a: 1}
+  emissionIntensity: 2
+  currentParticle: {fileID: 0}
 --- !u!1 &1121372568
 GameObject:
   m_ObjectHideFlags: 0
@@ -3793,6 +3957,7 @@ GameObject:
   - component: {fileID: 1315489736}
   - component: {fileID: 1315489735}
   - component: {fileID: 1315489734}
+  - component: {fileID: 1315489738}
   m_Layer: 5
   m_Name: Button2
   m_TagString: Untagged
@@ -3876,6 +4041,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 572614056}
+        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1315489735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3914,6 +4091,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1315489732}
   m_CullTransparentMesh: 1
+--- !u!114 &1315489738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1315489732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe2207806a9fc2247b13378bc737f1d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverHighlight
+  targetObject: {fileID: 1390577642}
 --- !u!1 &1350693655
 GameObject:
   m_ObjectHideFlags: 0
@@ -4038,6 +4228,7 @@ GameObject:
   - component: {fileID: 1390577640}
   - component: {fileID: 1390577639}
   - component: {fileID: 1390577638}
+  - component: {fileID: 1390577642}
   m_Layer: 0
   m_Name: BOUTON 2
   m_TagString: Untagged
@@ -4109,7 +4300,6 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
-  - {fileID: 2100000, guid: 9e5c2501cc427b34daa59f785d2892c2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4141,6 +4331,25 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1390577636}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1390577642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1390577636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb40ce606288b66409f25d2b47bbb02d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hoverable
+  overParticlePrefab: {fileID: 0}
+  particleOffsetY: 0.5
+  particleScale: {x: 1, y: 1, z: 1}
+  objectRenderer: {fileID: 1390577639}
+  hoverColor: {r: 0.7254902, g: 0.7254902, b: 0.7254902, a: 1}
+  emissionIntensity: 2
+  currentParticle: {fileID: 0}
 --- !u!1 &1532854973
 GameObject:
   m_ObjectHideFlags: 0
@@ -4872,7 +5081,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 40e69315dc8bd0b45be8bf7143248fba, type: 2}
+  - {fileID: 2100000, guid: 0acfc71c325c54b92add0b07097b6c57, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5058,6 +5267,7 @@ GameObject:
   - component: {fileID: 1951170688}
   - component: {fileID: 1951170687}
   - component: {fileID: 1951170686}
+  - component: {fileID: 1951170690}
   m_Layer: 5
   m_Name: Button1
   m_TagString: Untagged
@@ -5141,6 +5351,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 572614056}
+        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1951170687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5179,6 +5401,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1951170684}
   m_CullTransparentMesh: 1
+--- !u!114 &1951170690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1951170684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe2207806a9fc2247b13378bc737f1d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverHighlight
+  targetObject: {fileID: 1119727797}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
