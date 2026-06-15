@@ -188,7 +188,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 2
-  m_Camera: {fileID: 788646772}
+  m_Camera: {fileID: 543039556}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -2286,6 +2286,7 @@ GameObject:
   - component: {fileID: 1128996362}
   - component: {fileID: 1128996364}
   - component: {fileID: 1128996363}
+  - component: {fileID: 1128996365}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -2414,6 +2415,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1128996361}
   m_CullTransparentMesh: 1
+--- !u!114 &1128996365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128996361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f21c90334f4ceb34e8cf241439cedb2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  text: {fileID: 1128996363}
+  fadeDuration: 0.8
+  minAlpha: 0
+  maxAlpha: 1
 --- !u!1 &1147096464
 GameObject:
   m_ObjectHideFlags: 0
