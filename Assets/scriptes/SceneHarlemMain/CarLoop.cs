@@ -20,10 +20,15 @@ public class CarLoop : MonoBehaviour
     public LayerMask obstacleLayer;
     public LayerMask carLayer;
 
+    [Header("Audio")]
+    [Tooltip("Glisse le composant AudioSource de la voiture ici")]
+    public AudioSource stopAudioSource;
+
     private Transform[] currentLane;
     private int currentWaypointIndex;
     private bool onLaneA;
     private bool isStopped = false;
+    private bool wasStoppedLastFrame = false; // Permet de savoir si le son joue déjà
 
     void Start()
     {
@@ -31,11 +36,18 @@ public class CarLoop : MonoBehaviour
         currentLane = onLaneA ? waypointsLaneA : waypointsLaneB;
         currentWaypointIndex = Mathf.Clamp(startWaypointIndex, 0, currentLane.Length - 1);
         transform.position = currentLane[currentWaypointIndex].position;
+
+        // Sécurité : si la case est vide dans l'inspecteur, on cherche l'AudioSource sur l'objet
+        if (stopAudioSource == null)
+        {
+            stopAudioSource = GetComponent<AudioSource>();
+        }
     }
 
     void Update()
     {
         MoveTowardsWaypoint();
+        HandleAudio();
 
         // Le rayon de debug change de couleur si la voiture détecte un obstacle et freine/s'arrête
         Debug.DrawRay(transform.position + Vector3.up * 0.5f, transform.forward * detectionDistance,
@@ -113,6 +125,32 @@ public class CarLoop : MonoBehaviour
             if (currentWaypointIndex >= currentLane.Length)
                 SwitchLane();
         }
+    }
+
+    // Gestion du son d'arrêt
+    void HandleAudio()
+    {
+        if (stopAudioSource == null) return;
+
+        // Si la voiture vient de s'arrêter à cette frame
+        if (isStopped && !wasStoppedLastFrame)
+        {
+            if (!stopAudioSource.isPlaying)
+            {
+                stopAudioSource.Play();
+            }
+        }
+        // Si la voiture vient de redémarrer à cette frame
+        else if (!isStopped && wasStoppedLastFrame)
+        {
+            if (stopAudioSource.isPlaying)
+            {
+                stopAudioSource.Stop();
+            }
+        }
+
+        // Sauvegarde de l'état pour la frame suivante
+        wasStoppedLastFrame = isStopped;
     }
 
     void SwitchLane()
