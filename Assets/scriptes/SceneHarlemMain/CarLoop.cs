@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CarLoop : MonoBehaviour
 {
@@ -6,16 +6,17 @@ public class CarLoop : MonoBehaviour
     public Transform[] waypointsLaneA;
     public Transform[] waypointsLaneB;
 
-    [Header("D�part")]
+    [Header("Départ")]
     public bool startOnLaneA = true;
     public int startWaypointIndex = 0;
 
-    [Header("Param�tres")]
+    [Header("Paramètres")]
     public float speed = 10f;
     public float waypointThreshold = 0.5f;
 
-    [Header("D�tection obstacle")]
-    public float detectionDistance = 8f;
+    [Header("Détection obstacle")]
+    public float detectionDistance = 15f;
+    public float minDistance = 3f; // Espace minimum entre les voitures
     public LayerMask obstacleLayer;
     public LayerMask carLayer;
 
@@ -34,13 +35,10 @@ public class CarLoop : MonoBehaviour
 
     void Update()
     {
-        CheckForObstacle();
         MoveTowardsWaypoint();
-    }
 
-    void CheckForObstacle()
-    {
-        Debug.DrawRay(transform.position, transform.forward * detectionDistance,
+        // Le rayon de debug change de couleur si la voiture détecte un obstacle et freine/s'arrête
+        Debug.DrawRay(transform.position + Vector3.up * 0.5f, transform.forward * detectionDistance,
             isStopped ? Color.red : Color.green);
     }
 
@@ -51,48 +49,64 @@ public class CarLoop : MonoBehaviour
         Transform target = currentLane[currentWaypointIndex];
         Vector3 direction = (target.position - transform.position).normalized;
 
-        // Calcule la vitesse en fonction de la distance � l'obstacle
         float currentSpeed = speed;
         isStopped = false;
 
+        // Détection large devant (légèrement surélevée pour éviter le sol)
+        Vector3 origin = transform.position + Vector3.up * 0.5f;
         RaycastHit[] hits = Physics.SphereCastAll(
-            transform.position + transform.forward * 0.8f,
-            1.5f,
+            origin,
+            1.5f, // Rayon de la sphère de détection
             transform.forward,
             detectionDistance,
             obstacleLayer | carLayer
         );
 
+        float closestDistance = Mathf.Infinity;
+
         foreach (RaycastHit hit in hits)
         {
-            if (hit.collider.transform.IsChildOf(transform)) continue;
-            if (hit.collider.gameObject == gameObject) continue;
+            // Ignore son propre collider et ses propres enfants
+            if (hit.collider.gameObject == gameObject || hit.collider.transform.IsChildOf(transform))
+                continue;
 
-            // Distance r�elle entre les deux objets
-            float realDistance = Vector3.Distance(transform.position, hit.collider.transform.position);
-            float ratio = Mathf.Clamp01((realDistance - 2f) / detectionDistance);
-            // 2f = distance minimale souhait�e entre les voitures
+            // Utilisation de la distance d'impact du point de contact (plus précis)
+            if (hit.distance < closestDistance)
+                closestDistance = hit.distance;
+        }
 
-            currentSpeed = speed * ratio;
-
-            if (currentSpeed < 0.05f)
+        if (closestDistance < Mathf.Infinity)
+        {
+            if (closestDistance <= minDistance)
             {
+                // Trop proche → arrêt total
                 currentSpeed = 0f;
                 isStopped = true;
             }
-
-            break;
+            else
+            {
+                // Ralentissement progressif entre detectionDistance et minDistance
+                float ratio = Mathf.Clamp01((closestDistance - minDistance) / (detectionDistance - minDistance));
+                currentSpeed = speed * ratio;
+            }
         }
 
+        // Déplacement
         transform.position = Vector3.MoveTowards(
             transform.position,
             target.position,
             currentSpeed * Time.deltaTime
         );
 
+        // Rotation fluide uniquement sur l'axe Y (évite que la voiture ne plonge en avant/arrière)
         if (direction != Vector3.zero)
-            transform.rotation = Quaternion.LookRotation(direction);
+        {
+            direction.y = 0;
+            if (direction != Vector3.zero)
+                transform.rotation = Quaternion.LookRotation(direction);
+        }
 
+        // Changement de waypoint
         if (Vector3.Distance(transform.position, target.position) < waypointThreshold)
         {
             currentWaypointIndex++;
@@ -106,6 +120,5 @@ public class CarLoop : MonoBehaviour
         onLaneA = !onLaneA;
         currentLane = onLaneA ? waypointsLaneA : waypointsLaneB;
         currentWaypointIndex = 0;
-        transform.position = currentLane[0].position;
     }
 }
