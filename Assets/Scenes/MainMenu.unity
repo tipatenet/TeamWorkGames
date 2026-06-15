@@ -546,7 +546,7 @@ GameObject:
   - component: {fileID: 227418946}
   - component: {fileID: 227418945}
   m_Layer: 0
-  m_Name: w
+  m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -561,7 +561,7 @@ Transform:
   m_GameObject: {fileID: 227418943}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0112, y: 1.685, z: 0.6935}
+  m_LocalPosition: {x: -0.018, y: 1.685, z: 0.6935}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1117,10 +1117,10 @@ Light:
   serializedVersion: 12
   m_Type: 0
   m_Color: {r: 1, g: 0.85761005, b: 0.4660377, a: 1}
-  m_Intensity: 1672
-  m_Range: 659.7686
-  m_SpotAngle: 71.506516
-  m_InnerSpotAngle: 36.63259
+  m_Intensity: 5482.3
+  m_Range: 729.16
+  m_SpotAngle: 104.654655
+  m_InnerSpotAngle: 84.6974
   m_CookieSize2D: {x: 0.5, y: 0.5}
   m_Shadows:
     m_Type: 2
@@ -1325,8 +1325,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Start game
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 241c6acceca8b844baad6cbcf60cefc7, type: 2}
+  m_sharedMaterial: {fileID: -699112959996641730, guid: 241c6acceca8b844baad6cbcf60cefc7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1726,7 +1726,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: cfb81621a147bea48973db50ff1ee31e, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -4354,8 +4354,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 40.68
+  m_fontSizeBase: 40.68
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4992,10 +4992,10 @@ Light:
   serializedVersion: 12
   m_Type: 0
   m_Color: {r: 1, g: 0.85761005, b: 0.4660377, a: 1}
-  m_Intensity: 1672
-  m_Range: 659.7686
-  m_SpotAngle: 71.506516
-  m_InnerSpotAngle: 36.63259
+  m_Intensity: 5482.3
+  m_Range: 729.16
+  m_SpotAngle: 104.654655
+  m_InnerSpotAngle: 84.6974
   m_CookieSize2D: {x: 0.5, y: 0.5}
   m_Shadows:
     m_Type: 2
