@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 651717123757968996}
   - component: {fileID: 7460799739522947688}
   - component: {fileID: 3191861471629149975}
+  - component: {fileID: 1968491525111292158}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -97,6 +98,7 @@ MonoBehaviour:
   Grounded: 0
   maxSlopAngle: 40
   orientation: {fileID: 1998149556855538139}
+  moveDirection: {x: 0, y: 0, z: 0}
   rb: {fileID: 4684986954725443035}
 --- !u!114 &8095631672690336976
 MonoBehaviour:
@@ -163,6 +165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InspactItem
   holdPosition: {fileID: 0}
+  handAnim: {fileID: 0}
   isInspact: 0
 --- !u!114 &7000977612909722851
 MonoBehaviour:
@@ -317,6 +320,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1968491525111292158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110865528592120011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6b2318aec8af3d47a0839f6f32513ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::playerFootSteps
+  footStepSFX: {fileID: 8300000, guid: 7ae2fb9ee724bb449aaeb6558797e828, type: 3}
+  footStepInterval: 0.35
+  footStepVolume: 0.1
 --- !u!1 &1338083155402797279
 GameObject:
   m_ObjectHideFlags: 0
