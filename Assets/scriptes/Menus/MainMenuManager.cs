@@ -130,7 +130,6 @@ public class MainMenuManager : MonoBehaviour
         switch (currentState)
         {
             case states.Start:
-                Debug.Log("Start selected");
                 break;
             case states.Settings:
                 EnterSettings();
@@ -152,7 +151,6 @@ public class MainMenuManager : MonoBehaviour
 
     public void ExitSettings()
     {
-        Debug.Log("cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc");
         if (!canInteract) return;
         if (currentState != states.inSettings) return;
 
@@ -258,19 +256,19 @@ public class MainMenuManager : MonoBehaviour
         switch (currentState)
         {
             case states.Start:
-                text.text = "Start";
+                text.text = "Commencer";
                 break;
             case states.Settings:
-                text.text = "Settings";
+                text.text = "Paramètres";
                 break;
             case states.quit:
-                text.text = "Quit";
+                text.text = "Quitter";
                 break;
             case states.Default:
-                text.text = "Start";
+                text.text = "Commencer";
                 break;
             case states.inSettings:
-                text.text = "Settings";
+                text.text = "Paramètres";
                 break;
         }
     }
