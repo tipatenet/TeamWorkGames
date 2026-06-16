@@ -52,11 +52,26 @@ public class MainMenuManager : MonoBehaviour
 
     private void Update()
     {
-        // Si on est sur Default et qu'une touche quelconque est pressee, on passe sur Start
-        if (currentState == states.Default && canInteract && Input.anyKeyDown)
+        // Si on est sur Default, seule une touche clavier (hors echap) ou un clic souris fait entrer dans le menu
+        if (currentState == states.Default && canInteract && IsAnyValidMenuEntryInput())
         {
             EnterMenu();
+            return;
         }
+
+        // Si on appuie sur Echap et qu'on n'est pas deja en Default, on y retourne
+        if (currentState != states.Default && canInteract && Input.GetKeyDown(KeyCode.Escape))
+        {
+            GoToDefault();
+        }
+    }
+
+    private bool IsAnyValidMenuEntryInput()
+    {
+        // anyKeyDown detecte aussi les clics souris, donc on l'utilise mais on exclut Echap explicitement
+        if (Input.GetKeyDown(KeyCode.Escape)) return false;
+
+        return Input.anyKeyDown;
     }
 
     public void EnterMenu()
@@ -151,6 +166,7 @@ public class MainMenuManager : MonoBehaviour
         if (!canInteract) return;
 
         currentState = states.Default;
+        UpdateText();
         UpdateDefaultCanvas();
         SwitchCamera(GetCameraForState(currentState), true);
     }
