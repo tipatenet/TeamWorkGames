@@ -2895,12 +2895,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   treePrefabs:
-  - {fileID: 878723033}
-  - {fileID: 709420398}
+  - {fileID: 3440325462532658267, guid: 2f18845e3acb67b4ea4eeddacd930ef6, type: 3}
+  - {fileID: 3440325462532658267, guid: 4e5f43364f81bc04ca841e9d9ac7ecb7, type: 3}
   treeCount: 500
   roadWidth: 11.22
   spreadDistance: 400
-  minOffsetFromRoad: 6
+  minOffsetFromRoad: 15
   maxOffsetFromRoad: 134
   moveSpeed: 50
 --- !u!4 &980443094
