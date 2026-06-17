@@ -40,11 +40,11 @@ public class EnigmeEngrainages : MonoBehaviour
             link.isLocked = !VerifyCode();
     }
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(transform.position, SphereInteract);
-    }
+    //void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.yellow;
+    //    Gizmos.DrawSphere(transform.position, SphereInteract);
+    //}
 
     void RotateEngrainage()
     {
