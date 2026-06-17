@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: dfb3c43666f2fe74cb3ed3d0fd83ab1a
+timeCreated: 1554236938
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 24756
+  packageName: Builders Torch
+  packageVersion: 1.1
+  assetPath: Assets/BuildersTorch/PBR_BuildersTorchExampleScene.unity
+  uploadId: 303566

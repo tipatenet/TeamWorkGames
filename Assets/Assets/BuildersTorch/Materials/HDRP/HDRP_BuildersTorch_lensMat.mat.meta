@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: fb27bdb45ebb9144d8b74ab9f4f165e4
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 24756
+  packageName: Builders Torch
+  packageVersion: 1.1
+  assetPath: Assets/BuildersTorch/Materials/HDRP/HDRP_BuildersTorch_lensMat.mat
+  uploadId: 303566
