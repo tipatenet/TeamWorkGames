@@ -20,6 +20,11 @@ public class BlinkingText : MonoBehaviour
         StartCoroutine(Blink());
     }
 
+    private void OnEnable()
+    {
+        StartCoroutine(Blink());
+    }
+
     private IEnumerator Blink()
     {
         while (true)
