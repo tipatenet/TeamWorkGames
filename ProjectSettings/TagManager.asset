@@ -16,6 +16,7 @@ TagManager:
   - Code2
   - Code4
   - canBeOpen
+  - Ladder
   layers:
   - Default
   - TransparentFX
@@ -27,7 +28,7 @@ TagManager:
   - Player
   - interactive
   - Car
-  - 
+  - Ladder
   - 
   - 
   - 
