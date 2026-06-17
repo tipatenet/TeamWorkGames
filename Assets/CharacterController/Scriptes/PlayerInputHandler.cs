@@ -28,6 +28,9 @@ public class PlayerInputHandler : MonoBehaviour
 
     public bool ClickInteract { get; private set; }
 
+    //Pose touche :
+    public System.Action OnPosePressed;
+
 
     private PlayerInputActions inputActions;
 
@@ -72,7 +75,8 @@ public class PlayerInputHandler : MonoBehaviour
         inputActions.Player.Click.performed += ctx => ClickInteract = true;
         inputActions.Player.Click.canceled += ctx => ClickInteract = false;
 
-
+        //pose
+        inputActions.Player.Pose.performed += ctx => OnPosePressed?.Invoke();
 
         //Définis Axis
 
@@ -108,7 +112,29 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.RotateItem.Disable();
         }
     }
-
+    public void LockGameplayInputsForPose(bool locked)
+    {
+        if (locked)
+        {
+            inputActions.Player.Move.Disable();
+            inputActions.Player.Look.Disable();
+            inputActions.Player.Jump.Disable();
+            inputActions.Player.Scroll.Disable();
+            inputActions.Player.Interact.Disable();
+            inputActions.Player.DropItem.Disable();
+            inputActions.Player.RotateItem.Disable();
+        }
+        else
+        {
+            inputActions.Player.Move.Enable();
+            inputActions.Player.Look.Enable();
+            inputActions.Player.Jump.Enable();
+            inputActions.Player.Scroll.Enable();
+            inputActions.Player.Interact.Enable();
+            inputActions.Player.DropItem.Enable();
+            inputActions.Player.RotateItem.Enable();
+        }
+    }
     public void LockGamePlayForCodeLock(bool locked)
     {
         if (locked)
