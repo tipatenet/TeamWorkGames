@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 486967e4c6c5ad443befd8020457cec3, type: 3}
-  m_Name: IndiceEnExt
+  m_Name: IndiceEn4dents
   m_EditorClassIdentifier: Assembly-CSharp::Item_ScriptableObject
-  item_Name: Indice Engrenage Exterieur
+  item_Name: Indice Engrenage4 dents
   icon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  goItem: {fileID: 3488208227312855756, guid: de87bbf003e12f445ac92852d4566178, type: 3}
+  goItem: {fileID: 3488208227312855756, guid: 097883fc0ea6e2b49968fa05f4cc5761, type: 3}
   animatorOverride: {fileID: 22100000, guid: 3268d5d2ee8953543a4987f59a66d824, type: 2}
   holdPositionOffset: {x: 0, y: 0, z: 0}
   holdRotation: {x: 0, y: 0, z: 0, w: 0}

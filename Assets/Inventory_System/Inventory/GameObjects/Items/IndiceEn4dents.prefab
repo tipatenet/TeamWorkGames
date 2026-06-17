@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6947787809618871966}
   - component: {fileID: -8930175061613392848}
   m_Layer: 0
-  m_Name: IndiceEnExt
+  m_Name: IndiceEn4dents
   m_TagString: item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70,7 +70,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4e9f6088c730fc4408ca5bc14a6403e2, type: 2}
+  - {fileID: 2100000, guid: ad0ca9e845ffb3c41a30fb5a21a46d72, type: 2}
   - {fileID: 2100000, guid: a691889a4a608be4f8e1af1e31ae4689, type: 2}
   - {fileID: 2100000, guid: a691889a4a608be4f8e1af1e31ae4689, type: 2}
   m_StaticBatchInfo:
@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e15d926bfd2c4bf4684f9e9dc48eef23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  info: {fileID: 11400000, guid: d04287b64282ff947a30e4ab76898e1f, type: 2}
+  info: {fileID: 11400000, guid: ded35c56a00a2f2458b966cc97918e7a, type: 2}
 --- !u!114 &-8930175061613392848
 MonoBehaviour:
   m_ObjectHideFlags: 0
