@@ -19,6 +19,7 @@ public class Opening_System : MonoBehaviour
     public AudioSource source;
     public AudioClip openSound;
     public AudioClip closeSound;
+    public bool isLocked = false;
 
     [Header("L'object à t'il un code")]
     public CadenasInteraction cadenasInteraction = null;
@@ -33,7 +34,7 @@ public class Opening_System : MonoBehaviour
     {
         if (canBeOpened())
         {
-            if (!isOpen)
+            if (!isOpen && !isLocked)
             {
                 if (!isMoving)
                 {

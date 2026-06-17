@@ -21,6 +21,8 @@ public class EnigmeEngrainages : MonoBehaviour
     public int currentNum1 = 0;
     public int currentNum2 = 0;
     public int currentNum3 = 0;
+    [Header("Objet relié")]
+    public Opening_System link;
 
     void Start()
     {
@@ -33,6 +35,9 @@ public class EnigmeEngrainages : MonoBehaviour
 
         if (input.InteractPressed && canInteract)
             StartCoroutine(InteractCooldown());
+
+        if(link != null)
+            link.isLocked = !VerifyCode();
     }
 
     void OnDrawGizmos()
