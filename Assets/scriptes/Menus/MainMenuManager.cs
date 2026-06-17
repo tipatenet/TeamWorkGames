@@ -7,7 +7,9 @@ using UnityEngine.UI;
 
 public class MainMenuManager : MonoBehaviour
 {
-    private enum states { Start, Settings, quit, Default, inSettings };
+
+
+    private enum states { Start, Settings, quit, Default, inSettings, saveSelect };
     public TMP_Text text;
 
     [SerializeField]
@@ -33,6 +35,14 @@ public class MainMenuManager : MonoBehaviour
 
     // Stocke les positions/rotations d'origine de chaque camera
     private Dictionary<Camera, (Vector3 pos, Quaternion rot)> originalTransforms;
+
+    public GameObject SaveUI;
+
+    public SaveSlotMenu SaveSlotMenu;
+
+    public int saveSlotIndex = 0; // Index du slot de sauvegarde à utiliser
+
+    public GameObject cursor1, cursor2, cursor3;
 
     private void Start()
     {
@@ -60,9 +70,13 @@ public class MainMenuManager : MonoBehaviour
         }
 
         // Si on appuie sur Echap et qu'on n'est pas deja en Default, on y retourne
-        if (currentState != states.Default && canInteract && Input.GetKeyDown(KeyCode.Escape))
+        if (currentState != states.Default && canInteract && Input.GetKeyDown(KeyCode.Escape) && currentState != states.saveSelect)
         {
             GoToDefault();
+        }
+        else if (currentState != states.Default && canInteract && Input.GetKeyDown(KeyCode.Escape) && currentState == states.saveSelect)
+        {
+            ExitSaveSelect();
         }
     }
 
@@ -101,6 +115,17 @@ public class MainMenuManager : MonoBehaviour
         {
             currentState = states.Start;
         }
+        else if (currentState == states.saveSelect)
+        {
+            if (saveSlotIndex == 2)
+            {
+                saveSlotIndex = 0;
+            }
+            else
+            {
+                saveSlotIndex += 1;
+            }
+        }
         UpdateText();
         SwitchCamera(GetCameraForState(currentState), true);
     }
@@ -121,6 +146,17 @@ public class MainMenuManager : MonoBehaviour
         {
             currentState = states.Settings;
         }
+        else if (currentState == states.saveSelect)
+        {
+            if(saveSlotIndex == 0)
+            {
+                saveSlotIndex = 2;
+            }
+            else
+            {
+                saveSlotIndex -= 1;
+            }
+        }
         UpdateText();
         SwitchCamera(GetCameraForState(currentState), true);
     }
@@ -130,6 +166,8 @@ public class MainMenuManager : MonoBehaviour
         switch (currentState)
         {
             case states.Start:
+                EnterSaveSelect();
+                UpdateText();
                 break;
             case states.Settings:
                 EnterSettings();
@@ -137,6 +175,9 @@ public class MainMenuManager : MonoBehaviour
             case states.quit:
                 Application.Quit();
                 break;
+            case states.saveSelect:
+               SaveSlotMenu.OnSlotClicked(saveSlotIndex);
+               break;
         }
     }
 
@@ -159,6 +200,24 @@ public class MainMenuManager : MonoBehaviour
         SwitchCamera(GetCameraForState(currentState), true);
     }
 
+    public void EnterSaveSelect()
+    {
+        if (!canInteract) return;
+
+        if (currentState != states.Start) return;
+
+        currentState = states.saveSelect;
+    }
+
+    public void ExitSaveSelect()
+    {
+        if (!canInteract) return;
+        if (currentState != states.saveSelect) return;
+
+        currentState = states.Start;
+        UpdateText();
+    }
+
     public void GoToDefault()
     {
         if (!canInteract) return;
@@ -176,6 +235,7 @@ public class MainMenuManager : MonoBehaviour
             case states.Start:
             case states.Settings:
             case states.quit:
+            case states.saveSelect:
                 return MenuCamera;
             case states.inSettings:
                 return SettingsCamera;
@@ -256,19 +316,52 @@ public class MainMenuManager : MonoBehaviour
         switch (currentState)
         {
             case states.Start:
+                text.gameObject.SetActive(true);
+                SaveUI.SetActive(false);
                 text.text = "Commencer";
                 break;
             case states.Settings:
+                text.gameObject.SetActive(true);
+                SaveUI.SetActive(false);
                 text.text = "Paramètres";
                 break;
             case states.quit:
+                text.gameObject.SetActive(true);
+                SaveUI.SetActive(false);
                 text.text = "Quitter";
                 break;
             case states.Default:
+                text.gameObject.SetActive(true);
+                SaveUI.SetActive(false);
                 text.text = "Commencer";
                 break;
             case states.inSettings:
+                SaveUI.SetActive(false);
+                text.gameObject.SetActive(true);
                 text.text = "Paramètres";
+                break;
+            case states.saveSelect:
+                text.gameObject.SetActive(false);
+                SaveUI.SetActive(true);
+                break;
+        }
+
+        switch (saveSlotIndex)
+        {
+            case 0:
+                cursor1.SetActive(true);
+                cursor2.SetActive(false);
+                cursor3.SetActive(false);
+                break;
+            case 1:
+                cursor1.SetActive(false); 
+                cursor2.SetActive(true);
+                cursor3.SetActive(false);
+                break;
+            case 2:
+                cursor1.SetActive(false);
+                cursor2.SetActive(false);
+                cursor3.SetActive(true);
                 break;
         }
     }
