@@ -54,9 +54,4 @@ public class SettingsMenu : MonoBehaviour
         Screen.fullScreen = isFullScreen;
     }
 
-    public void ActionQuit()
-    {
-        // Quit the application (Faire repaser au menu principal)
-        Application.Quit();
-    }
 }

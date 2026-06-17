@@ -1,20 +1,23 @@
 using System.Collections;
 using UnityEngine;
 
-public class playerFootSteps : MonoBehaviour
+[RequireComponent(typeof(AudioSource))]
+public class PlayerFootSteps : MonoBehaviour
 {
-
-
     public AudioClip footStepSFX;
 
-    public float footStepInterval;
-    public float footStepVolume;
+    public float footStepInterval = 0.5f;
+    [Range(0f, 1f)]
+    public float footStepVolume = 1f;
 
     private PlayerController playerController;
+    private AudioSource audioSource;
 
     void Start()
     {
         playerController = GetComponent<PlayerController>();
+        audioSource = GetComponent<AudioSource>();
+
         StartCoroutine(PlayFootSteps());
     }
 
@@ -22,9 +25,10 @@ public class playerFootSteps : MonoBehaviour
     {
         while (true)
         {
-            if (playerController.moveDirection.magnitude > 0.1f && playerController.Grounded)
+            if (playerController.moveDirection.magnitude > 0.1f &&
+                playerController.Grounded)
             {
-                AudioManager.instance.PlaySFX(footStepSFX, footStepVolume);
+                audioSource.PlayOneShot(footStepSFX, footStepVolume);
             }
 
             yield return new WaitForSeconds(footStepInterval);

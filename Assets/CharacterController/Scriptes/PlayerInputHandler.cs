@@ -146,6 +146,7 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.Interact.Enable();
             inputActions.Player.DropItem.Disable();
             inputActions.Player.RotateItem.Disable();
+            inputActions.Player.Pose.Disable();
         }
         else
         {
@@ -156,6 +157,8 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.Interact.Enable();
             inputActions.Player.DropItem.Enable();
             inputActions.Player.RotateItem.Enable();
+            inputActions.Player.Pose.Enable();
+
         }
     }
 }
