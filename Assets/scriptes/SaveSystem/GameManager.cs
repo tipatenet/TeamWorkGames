@@ -31,30 +31,40 @@ public class GameManager : MonoBehaviour
             isEmpty = false
         };
         SaveManager.Save(slot, currentSaveData);
-        SceneManager.LoadScene(startingSceneName);
+        SceneTransitionManager.Instance.GoToScene(startingSceneName, savePlayerState: false);
     }
 
     public void LoadGame(int slot)
     {
         currentSlot = slot;
         currentSaveData = SaveManager.Load(slot);
-        SceneManager.LoadScene(currentSaveData.sceneName);
+        SceneTransitionManager.Instance.GoToScene(currentSaveData.sceneName, savePlayerState: false);
     }
 
-    public void SaveCurrentGame()
+    public void ReturnToMainMenu()
+    {
+        SceneTransitionManager.Instance.GoToScene("MainMenu", savePlayerState: true);
+        currentSlot = -1;
+    }
+
+    public void SaveCurrentGame(string overrideSceneName = null)
     {
         if (currentSlot < 0) return;
 
         GameObject player = GameObject.FindGameObjectWithTag("Playere");
-        if (player != null)
+        if (player == null)
         {
-            Vector3 pos = player.transform.position;
-            currentSaveData.posX = pos.x;
-            currentSaveData.posY = pos.y;
-            currentSaveData.posZ = pos.z;
+            Debug.LogError("Player introuvable via tag 'Playere' !");
+            return;
         }
 
-        currentSaveData.sceneName = SceneManager.GetActiveScene().name;
+        Vector3 pos = player.transform.position;
+        currentSaveData.posX = pos.x;
+        currentSaveData.posY = pos.y;
+        currentSaveData.posZ = pos.z;
+
+        // Si on transite vers une nouvelle scène, on enregistre la cible plutôt que la scène active actuelle
+        currentSaveData.sceneName = overrideSceneName ?? SceneManager.GetActiveScene().name;
 
         InventorySystem inv = player.GetComponent<InventorySystem>();
         if (inv != null)
@@ -62,7 +72,7 @@ public class GameManager : MonoBehaviour
             currentSaveData.inventoryItemIDs.Clear();
             foreach (var item in inv.inventory)
             {
-                currentSaveData.inventoryItemIDs.Add(item.itemID); // À adapter selon ton champ réel
+                currentSaveData.inventoryItemIDs.Add(item.itemID);
             }
         }
 

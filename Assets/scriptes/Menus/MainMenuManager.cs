@@ -9,7 +9,7 @@ public class MainMenuManager : MonoBehaviour
 {
 
 
-    private enum states { Start, Settings, quit, Default, inSettings, saveSelect };
+    private enum states { Start, Settings, quit, Default, inSettings, saveSelect, konamiCode};
     public TMP_Text text;
 
     [SerializeField]
@@ -20,6 +20,21 @@ public class MainMenuManager : MonoBehaviour
 
     [SerializeField]
     private Camera SettingsCamera;
+
+    [SerializeField]
+    private Camera KonamiCamera;
+
+    [SerializeField]
+    private List<KeyCode> konamiSequence = new List<KeyCode>
+{
+    KeyCode.UpArrow, KeyCode.UpArrow,
+    KeyCode.DownArrow, KeyCode.DownArrow,
+    KeyCode.LeftArrow, KeyCode.RightArrow,
+    KeyCode.LeftArrow, KeyCode.RightArrow,
+    KeyCode.B, KeyCode.A
+};
+    [SerializeField]
+    private int konamiProgress = 0;
 
     [SerializeField]
     private GameObject defaultCanvas;
@@ -51,7 +66,8 @@ public class MainMenuManager : MonoBehaviour
         {
             { defaultCamera, (defaultCamera.transform.position, defaultCamera.transform.rotation) },
             { MenuCamera, (MenuCamera.transform.position, MenuCamera.transform.rotation) },
-            { SettingsCamera, (SettingsCamera.transform.position, SettingsCamera.transform.rotation) }
+            { SettingsCamera, (SettingsCamera.transform.position, SettingsCamera.transform.rotation) },
+            { KonamiCamera, (KonamiCamera.transform.position, KonamiCamera.transform.rotation) }
         };
 
         currentActiveCamera = defaultCamera;
@@ -62,6 +78,8 @@ public class MainMenuManager : MonoBehaviour
 
     private void Update()
     {
+        CheckKonamiCode();
+
         // Si on est sur Default, seule une touche clavier (hors echap) ou un clic souris fait entrer dans le menu
         if (currentState == states.Default && canInteract && IsAnyValidMenuEntryInput())
         {
@@ -70,13 +88,39 @@ public class MainMenuManager : MonoBehaviour
         }
 
         // Si on appuie sur Echap et qu'on n'est pas deja en Default, on y retourne
-        if (currentState != states.Default && canInteract && Input.GetKeyDown(KeyCode.Escape) && currentState != states.saveSelect)
+        if (currentState != states.Default && canInteract && Input.GetKeyDown(KeyCode.Escape) && currentState != states.saveSelect && currentState != states.konamiCode)
         {
             GoToDefault();
         }
         else if (currentState != states.Default && canInteract && Input.GetKeyDown(KeyCode.Escape) && currentState == states.saveSelect)
         {
             ExitSaveSelect();
+        }
+        else if (currentState == states.konamiCode && canInteract && Input.GetKeyDown(KeyCode.Escape))
+        {
+            ExitKonamiCode();
+        }
+    }
+
+    private void CheckKonamiCode()
+    {
+        if (currentState == states.konamiCode) return;
+
+        KeyCode expectedKey = konamiSequence[konamiProgress];
+
+        if (Input.GetKeyDown(expectedKey))
+        {
+            konamiProgress++;
+
+            if (konamiProgress >= konamiSequence.Count)
+            {
+                konamiProgress = 0;
+                EnterKonamiCode();
+            }
+        }
+        else if (Input.anyKeyDown)
+        {
+            konamiProgress = (Input.GetKeyDown(konamiSequence[0])) ? 1 : 0;
         }
     }
 
@@ -218,6 +262,23 @@ public class MainMenuManager : MonoBehaviour
         UpdateText();
     }
 
+    public void EnterKonamiCode()
+    {
+        currentState = states.konamiCode;
+        UpdateText();
+        SwitchCamera(GetCameraForState(currentState), true);
+    }
+
+    public void ExitKonamiCode()
+    {
+        if (!canInteract) return;
+        if (currentState != states.konamiCode) return;
+
+        currentState = states.Default;
+        UpdateText();
+        UpdateDefaultCanvas();
+        SwitchCamera(GetCameraForState(currentState), true);
+    }
     public void GoToDefault()
     {
         if (!canInteract) return;
@@ -239,6 +300,8 @@ public class MainMenuManager : MonoBehaviour
                 return MenuCamera;
             case states.inSettings:
                 return SettingsCamera;
+            case states.konamiCode:
+                return KonamiCamera;
             case states.Default:
                 return defaultCamera;
             default:
@@ -343,6 +406,10 @@ public class MainMenuManager : MonoBehaviour
             case states.saveSelect:
                 text.gameObject.SetActive(false);
                 SaveUI.SetActive(true);
+                break;
+            case states.konamiCode:
+                text.gameObject.SetActive(false);
+                SaveUI.SetActive(false);
                 break;
         }
 

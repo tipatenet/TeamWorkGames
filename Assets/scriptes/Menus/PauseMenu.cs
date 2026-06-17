@@ -59,4 +59,9 @@ public class PauseMenu : MonoBehaviour
     {
         GameManager.Instance.SaveCurrentGame();
     }
+
+    public void SaveAndQuitGame()
+    {
+        GameManager.Instance.ReturnToMainMenu();
+    }
 }
