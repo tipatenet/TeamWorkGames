@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 486967e4c6c5ad443befd8020457cec3, type: 3}
   m_Name: Carton
   m_EditorClassIdentifier: Assembly-CSharp::Item_ScriptableObject
+  itemID: 1
   item_Name: Carton
   icon: {fileID: 21300000, guid: 7e45f6887bdf4c643952ae0abecd6a2b, type: 3}
   goItem: {fileID: 5601148489952575259, guid: 8f9104c8ff8df36459051b7eb67dc7b6, type: 3}

@@ -12,5 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 486967e4c6c5ad443befd8020457cec3, type: 3}
   m_Name: ItemVide
   m_EditorClassIdentifier: Assembly-CSharp::Item_ScriptableObject
+  itemID: 0
   item_Name: 
-  item_Object: {fileID: 0}
+  icon: {fileID: 0}
+  goItem: {fileID: 0}
+  animatorOverride: {fileID: 0}
+  holdPositionOffset: {x: 0, y: 0, z: 0}
+  holdRotation: {x: 0, y: 0, z: 0, w: 0}

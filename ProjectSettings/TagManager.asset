@@ -16,6 +16,7 @@ TagManager:
   - Code2
   - Code4
   - canBeOpen
+  - Playere
   layers:
   - Default
   - TransparentFX

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 486967e4c6c5ad443befd8020457cec3, type: 3}
   m_Name: SphereTest
   m_EditorClassIdentifier: Assembly-CSharp::Item_ScriptableObject
+  itemID: 3
   item_Name: Sphere
   icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   goItem: {fileID: 8942597928326112320, guid: 16f92ec0d59a1f1408929f231a12c26c, type: 3}

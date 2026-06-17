@@ -7,6 +7,7 @@ using UnityEngine;
 //Si oui attention à changer pour chacun des items !!!
 public class Item_ScriptableObject : ScriptableObject
 {
+    public string itemID;
     public string item_Name;
     public Sprite icon;
     public GameObject goItem;

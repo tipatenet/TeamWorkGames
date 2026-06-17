@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 486967e4c6c5ad443befd8020457cec3, type: 3}
   m_Name: CubeTest
   m_EditorClassIdentifier: Assembly-CSharp::Item_ScriptableObject
+  itemID: 2
   item_Name: Cube
   icon: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
   goItem: {fileID: 3919394019970707039, guid: 769ba790ff5e5c24b864e1a8cbca2c22, type: 3}

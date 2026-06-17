@@ -50,7 +50,13 @@ public class PauseMenu : MonoBehaviour
 
     public void ActionQuit()
     {
+        SaveGame();
         // Quit the application (Faire repaser au menu principal)
         Application.Quit();
+    }
+
+    public void SaveGame()
+    {
+        GameManager.Instance.SaveCurrentGame();
     }
 }

@@ -41,7 +41,7 @@ public class InventorySystem : MonoBehaviour
         keySystem = GetComponent<PlayerInputHandler>();
         source = this.gameObject.GetComponent<AudioSource>();
     }
-    private void Update()
+    public void Update()
     {
         scroolValue = keySystem.ScrollInventory.y;
         ScroolInventory();
@@ -134,7 +134,7 @@ public class InventorySystem : MonoBehaviour
     }
 
     //Fonction qui permet d'actualisée l'UI du canvas
-    private void UpdateUI()
+    public void UpdateUI()
     {
         for(int i = 0; i < currentInventorySize; i++)
         {
