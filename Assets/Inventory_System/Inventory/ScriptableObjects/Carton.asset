@@ -18,3 +18,5 @@ MonoBehaviour:
   animatorOverride: {fileID: 22100000, guid: 2f69a03b3e6953c4ea3cba6be2d29bd9, type: 2}
   holdPositionOffset: {x: 0.2979918, y: -0.4060926, z: -0.004102965}
   holdRotation: {x: -0.5161834, y: -0.47916135, z: -0.53763586, w: -0.46358037}
+  item_scaleFactor: 0.4
+  item_scaleInspactFactor: 0.4

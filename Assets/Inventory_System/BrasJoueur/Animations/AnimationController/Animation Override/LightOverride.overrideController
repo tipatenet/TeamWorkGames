@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: LightOverride
+  m_Controller: {fileID: 9100000, guid: 1ed6c48230169f349a232e605d3257b9, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: -1126190637916881650, guid: 286dff90bd2caa941a1be0b1bee69016, type: 3}
+    m_OverrideClip: {fileID: -1126190637916881650, guid: 286dff90bd2caa941a1be0b1bee69016, type: 3}
+  - m_OriginalClip: {fileID: -7763118060525130765, guid: ce33c47f556626b40a248e05e67189a5, type: 3}
+    m_OverrideClip: {fileID: -1126190637916881650, guid: 286dff90bd2caa941a1be0b1bee69016, type: 3}
+  - m_OriginalClip: {fileID: 5117889177875808539, guid: 2e7f27ba758a00e46af276e01ea0ffe6, type: 3}
+    m_OverrideClip: {fileID: -8841095165456421254, guid: a3d47589a660e004fa638ae4128f5c21, type: 3}
+  - m_OriginalClip: {fileID: -8841095165456421254, guid: a954a171c8005cc47a4add188c60345b, type: 3}
+    m_OverrideClip: {fileID: 6935155364162784659, guid: a954a171c8005cc47a4add188c60345b, type: 3}

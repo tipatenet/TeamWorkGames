@@ -39,6 +39,7 @@ public class InspactItem : MonoBehaviour
     public void InstantiateItem()
     {
         go = Instantiate(inventory.inventory[inventory.selectedIndex].goItem, holdPosition.transform.position, Quaternion.identity);
+        go.transform.localScale = go.transform.localScale * inventory.inventory[inventory.selectedIndex].item_scaleInspactFactor;
         go.transform.SetParent(holdPosition.transform);
         go.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         go.GetComponent<Rigidbody>().useGravity = false;

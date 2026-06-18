@@ -10,11 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 486967e4c6c5ad443befd8020457cec3, type: 3}
-  m_Name: Torch
+  m_Name: Light
   m_EditorClassIdentifier: Assembly-CSharp::Item_ScriptableObject
   item_Name: Torch Light
   icon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   goItem: {fileID: 3843111734896376954, guid: 854aca1d871b4aa48ab54d4ab003e89c, type: 3}
-  animatorOverride: {fileID: 22100000, guid: 3268d5d2ee8953543a4987f59a66d824, type: 2}
-  holdPositionOffset: {x: 0, y: 0, z: 0}
-  holdRotation: {x: 0, y: 0, z: 0, w: 0}
+  animatorOverride: {fileID: 22100000, guid: 42ed3e1962e36f346a806bcb2839d865, type: 2}
+  holdPositionOffset: {x: 0.1169446, y: -0.08019098, z: 0.06173325}
+  holdRotation: {x: -0.06911329, y: -0.37916812, z: -0.039221734, w: 0.92190915}
+  item_scaleFactor: 0.5
+  item_scaleInspactFactor: 1
