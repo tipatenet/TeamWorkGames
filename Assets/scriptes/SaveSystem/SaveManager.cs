@@ -10,7 +10,6 @@ public static class SaveManager
 
     public static void Save(int slot, SaveData data)
     {
-        data.isEmpty = false;
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(GetPath(slot), json);
     }

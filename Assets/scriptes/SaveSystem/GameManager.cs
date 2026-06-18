@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
             posX = 0,
             posY = 0,
             posZ = 0,
-            isEmpty = false
+            isEmpty = true
         };
         SaveManager.Save(slot, currentSaveData);
         SceneTransitionManager.Instance.GoToScene(startingSceneName, savePlayerState: false);
@@ -84,6 +84,7 @@ public class GameManager : MonoBehaviour
         }
 
         SaveManager.Save(currentSlot, currentSaveData);
+        currentSaveData.isEmpty = false;
     }
     public void RegisterPickedUpItem(string uniqueID)
     {

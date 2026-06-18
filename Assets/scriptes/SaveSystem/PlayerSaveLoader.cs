@@ -21,33 +21,51 @@ public class PlayerSaveLoader : MonoBehaviour
 
     void ApplyLoadedData()
     {
-        Debug.Log("ApplyLoadedData appelé");
-
-        if (GameManager.Instance == null)
-        {
-            Debug.LogError("GameManager.Instance est NULL");
+        if (GameManager.Instance == null || GameManager.Instance.currentSaveData == null)
             return;
-        }
-
-        if (GameManager.Instance.currentSaveData == null)
-        {
-            Debug.LogError("currentSaveData est NULL");
-            return;
-        }
 
         SaveData data = GameManager.Instance.currentSaveData;
-        Debug.Log($"Position à charger : {data.posX}, {data.posY}, {data.posZ}, scène : {data.sceneName}, items : {data.inventoryItemIDs.Count}");
+
+        string currentSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+
+        Debug.Log($"[SPAWN] data.isEmpty = {data.isEmpty}, data.sceneName = '{data.sceneName}', currentSceneName = '{currentSceneName}'");
+
+        Vector3 targetPosition;
+
+        bool useSpawnPoint = data.isEmpty || data.sceneName != currentSceneName;
+
+        Debug.Log($"[SPAWN] useSpawnPoint = {useSpawnPoint}");
+
+        if (useSpawnPoint)
+        {
+            targetPosition = GetSpawnPointPosition();
+            Debug.Log($"[SPAWN] Position du SpawnPoint utilisée : {targetPosition}");
+
+            data.isEmpty = false;
+
+            if (GameManager.Instance.currentSlot >= 0)
+            {
+                SaveManager.Save(GameManager.Instance.currentSlot, data);
+            }
+        }
+        else
+        {
+            targetPosition = new Vector3(data.posX, data.posY, data.posZ);
+            Debug.Log($"[SPAWN] Position sauvegardée utilisée : {targetPosition}");
+        }
 
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.linearVelocity = Vector3.zero; // reset la vélocité accumulée
-            rb.position = new Vector3(data.posX, data.posY, data.posZ);
-            rb.transform.position = new Vector3(data.posX, data.posY, data.posZ); // double sécurité
+            rb.linearVelocity = Vector3.zero;
+            rb.position = targetPosition;
+            rb.transform.position = targetPosition;
+            Debug.Log($"[SPAWN] Position appliquée via Rigidbody : {rb.position}");
         }
         else
         {
-            transform.position = new Vector3(data.posX, data.posY, data.posZ);
+            transform.position = targetPosition;
+            Debug.Log($"[SPAWN] Position appliquée via transform : {transform.position}");
         }
 
         InventorySystem inv = GetComponent<InventorySystem>();
@@ -72,24 +90,24 @@ public class PlayerSaveLoader : MonoBehaviour
             inv.selectedIndex = Mathf.Clamp(inv.selectedIndex, 0, Mathf.Max(0, inv.currentInventorySize - 1));
             inv.UpdateUI();
 
-            Debug.Log($"[LOAD] currentInventorySize = {inv.currentInventorySize}, selectedIndex = {inv.selectedIndex}");
-
             HandAnimation handAnim = GameObject.FindGameObjectWithTag("Hand")?.GetComponent<HandAnimation>();
-
-            if (handAnim == null)
+            if (handAnim != null)
             {
-                Debug.LogError("[LOAD] HandAnimation introuvable sur l'objet taggé 'Hand' !");
-            }
-            else
-            {
-                Debug.Log("[LOAD] Appel de HoldAnimation()");
                 handAnim.HoldAnimation();
-                Debug.Log("[LOAD] HoldAnimation() terminé");
             }
         }
-        else
+    }
+
+    private Vector3 GetSpawnPointPosition()
+    {
+        GameObject spawnPoint = GameObject.FindGameObjectWithTag("SpawnPoint");
+
+        if (spawnPoint != null)
         {
-            Debug.LogError("[LOAD] InventorySystem introuvable !");
+            return spawnPoint.transform.position;
         }
+
+        Debug.LogWarning("Aucun SpawnPoint trouvé dans cette scène, position par défaut (0,0,0) utilisée.");
+        return Vector3.zero;
     }
 }

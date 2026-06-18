@@ -18,6 +18,7 @@ TagManager:
   - canBeOpen
   - Playere
   - Hand
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX
