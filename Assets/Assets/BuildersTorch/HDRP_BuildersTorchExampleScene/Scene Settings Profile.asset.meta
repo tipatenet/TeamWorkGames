@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c3b288b7fc42a564dab4cde2f605023d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 24756
+  packageName: Builders Torch
+  packageVersion: 1.1
+  assetPath: Assets/BuildersTorch/HDRP_BuildersTorchExampleScene/Scene Settings Profile.asset
+  uploadId: 303566

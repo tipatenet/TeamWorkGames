@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 2dfe63d54b200124f90bc59b6b09377c
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 24756
+  packageName: Builders Torch
+  packageVersion: 1.1
+  assetPath: Assets/BuildersTorch/Prefabs/BuildersTorch_HDRP_Yellow.prefab
+  uploadId: 303566

@@ -51,10 +51,10 @@ public class GameManager : MonoBehaviour
     {
         if (currentSlot < 0) return;
 
-        GameObject player = GameObject.FindGameObjectWithTag("Playere");
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player == null)
         {
-            Debug.LogError("Player introuvable via tag 'Playere' !");
+            Debug.LogError("Player introuvable via tag 'Player' !");
             return;
         }
 

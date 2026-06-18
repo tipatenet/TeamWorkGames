@@ -14,4 +14,6 @@ public class Item_ScriptableObject : ScriptableObject
     public AnimatorOverrideController animatorOverride;
     public Vector3 holdPositionOffset;
     public Quaternion holdRotation;
+    public float item_scaleFactor = 1f;
+    public float item_scaleInspactFactor = 1f;
 }

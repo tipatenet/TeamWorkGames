@@ -6949,7 +6949,7 @@ MonoBehaviour:
   - slotLabel: {fileID: 1814950757}
   - slotLabel: {fileID: 1210421397}
   - slotLabel: {fileID: 1002194623}
-  newGameStartingScene: MAINTESTINGSCENE
+  newGameStartingScene: MapIntro_Timop
 --- !u!1001 &1285030560
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 1339178316c76404687366c224671518
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 24756
+  packageName: Builders Torch
+  packageVersion: 1.1
+  assetPath: Assets/BuildersTorch/Materials/HDRP_Sky.mat
+  uploadId: 303566

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 409d7e4944454054e94d460c32368391
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 24756
+  packageName: Builders Torch
+  packageVersion: 1.1
+  assetPath: Assets/BuildersTorch/HDRP_BuildersTorchExampleScene.unity
+  uploadId: 303566

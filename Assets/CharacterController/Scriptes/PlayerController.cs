@@ -98,7 +98,8 @@ public class PlayerController : MonoBehaviour
 
             if(rb.linearVelocity.y > 0)
             {
-                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+                //Attention si valeur est trop haute problème pour les éscaliers (reduit 40)
+                rb.AddForce(Vector3.down * 40f, ForceMode.Force);
             }
         }
 
@@ -133,13 +134,9 @@ public class PlayerController : MonoBehaviour
 
         else
         {
-            Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-
-            //limit speed
-            if (flatVel.magnitude > moveSpeed)
+            if (rb.linearVelocity.magnitude > moveSpeed)
             {
-                Vector3 limitedVel = flatVel.normalized * moveSpeed;
-                rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
+                rb.linearVelocity = rb.linearVelocity.normalized * moveSpeed;
             }
         }
 

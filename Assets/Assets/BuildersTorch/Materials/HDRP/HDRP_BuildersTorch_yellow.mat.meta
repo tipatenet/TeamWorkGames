@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 68eb9c1d86cf6164ab512553a54274d6
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 24756
+  packageName: Builders Torch
+  packageVersion: 1.1
+  assetPath: Assets/BuildersTorch/Materials/HDRP/HDRP_BuildersTorch_yellow.mat
+  uploadId: 303566

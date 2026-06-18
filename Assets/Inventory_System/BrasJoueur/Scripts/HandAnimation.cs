@@ -66,6 +66,7 @@ public class HandAnimation : MonoBehaviour
             go.transform.SetParent(holdItemPos);
             go.transform.localPosition = Vector3.zero + inventory.inventory[inventory.selectedIndex].holdPositionOffset;
             go.transform.localRotation = inventory.inventory[inventory.selectedIndex].holdRotation;
+            go.transform.localScale = go.transform.localScale * inventory.inventory[inventory.selectedIndex].item_scaleFactor;
 
             //Enleve l'ombre projeter de l'objet en main
             go.GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;

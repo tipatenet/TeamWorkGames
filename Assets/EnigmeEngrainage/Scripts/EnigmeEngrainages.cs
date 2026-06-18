@@ -21,6 +21,8 @@ public class EnigmeEngrainages : MonoBehaviour
     public int currentNum1 = 0;
     public int currentNum2 = 0;
     public int currentNum3 = 0;
+    [Header("Objet relié")]
+    public Opening_System link;
 
     void Start()
     {
@@ -33,6 +35,9 @@ public class EnigmeEngrainages : MonoBehaviour
 
         if (input.InteractPressed && canInteract)
             StartCoroutine(InteractCooldown());
+
+        if(link != null)
+            link.isLocked = !VerifyCode();
     }
 
     void OnDrawGizmos()
@@ -47,27 +52,31 @@ public class EnigmeEngrainages : MonoBehaviour
         {
             if (input.InteractPressed && canInteract)
             {
-                if (interactScript.IsInteractive(false).transform.gameObject.tag == "ext")
+                RaycastHit hit = interactScript.IsInteractive(false);
+
+                if (hit.collider == null) return; // rien touché
+
+                GameObject target = hit.transform.gameObject;
+
+                if (target.CompareTag("ext"))
                 {
                     iTween.RotateAdd(EngrainageExt, new Vector3(0, 0, 60), 2f);
                     IncrementeExt(6, ref currentNum1);
-                    VerifyCode();
-                    source.PlayOneShot(RotationSound);
                 }
-                else if (interactScript.IsInteractive(false).transform.gameObject.tag == "mid")
+                else if (target.CompareTag("mid"))
                 {
                     iTween.RotateAdd(EngrainageMid, new Vector3(0, 0, 90), 2f);
                     IncrementeExt(4, ref currentNum2);
-                    VerifyCode();
-                    source.PlayOneShot(RotationSound);
                 }
-                else if (interactScript.IsInteractive(false).transform.gameObject.tag == "centre")
+                else if (target.CompareTag("centre"))
                 {
                     iTween.RotateAdd(EngrainageCentre, new Vector3(0, 0, 180), 2f);
                     IncrementeExt(2, ref currentNum3);
-                    VerifyCode();
-                    source.PlayOneShot(RotationSound);
                 }
+                else return;
+
+                VerifyCode();
+                source.PlayOneShot(RotationSound);
             }
         }
     }

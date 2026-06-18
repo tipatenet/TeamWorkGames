@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 1fe46fe01a9e05846af8d3882503f5c8
+timeCreated: 1554237195
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 24756
+  packageName: Builders Torch
+  packageVersion: 1.1
+  assetPath: Assets/BuildersTorch/Materials/PBR/PBR_Grey.mat
+  uploadId: 303566
