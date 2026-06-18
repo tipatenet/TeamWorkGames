@@ -63,14 +63,33 @@ public class PlayerSaveLoader : MonoBehaviour
                     inv.inventory.Add(itemAsset);
             }
 
-            // Restaure aussi les uniqueIDs sauvegardés (voir point 6 ci-dessous)
             foreach (string uid in data.inventoryUniqueIDs)
             {
                 inv.inventoryUniqueIDs.Add(uid);
             }
 
             inv.currentInventorySize = inv.inventory.Count;
+            inv.selectedIndex = Mathf.Clamp(inv.selectedIndex, 0, Mathf.Max(0, inv.currentInventorySize - 1));
             inv.UpdateUI();
+
+            Debug.Log($"[LOAD] currentInventorySize = {inv.currentInventorySize}, selectedIndex = {inv.selectedIndex}");
+
+            HandAnimation handAnim = GameObject.FindGameObjectWithTag("Hand")?.GetComponent<HandAnimation>();
+
+            if (handAnim == null)
+            {
+                Debug.LogError("[LOAD] HandAnimation introuvable sur l'objet taggé 'Hand' !");
+            }
+            else
+            {
+                Debug.Log("[LOAD] Appel de HoldAnimation()");
+                handAnim.HoldAnimation();
+                Debug.Log("[LOAD] HoldAnimation() terminé");
+            }
+        }
+        else
+        {
+            Debug.LogError("[LOAD] InventorySystem introuvable !");
         }
     }
 }

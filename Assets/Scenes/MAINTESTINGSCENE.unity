@@ -2303,6 +2303,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1329379228664818, guid: ea54b2608f2590b4aa3c275e9c781b7c, type: 3}
+      propertyPath: m_TagString
+      value: Hand
+      objectReference: {fileID: 0}
     - target: {fileID: 2886989085416051256, guid: ea54b2608f2590b4aa3c275e9c781b7c, type: 3}
       propertyPath: player
       value: 
@@ -2870,19 +2874,19 @@ SceneRoots:
   - {fileID: 1040314585}
   - {fileID: 172686587}
   - {fileID: 1026790823}
+  - {fileID: 1096071051}
+  - {fileID: 831036277}
+  - {fileID: 1263709645}
   - {fileID: 66185962}
   - {fileID: 837244178}
   - {fileID: 254207221}
   - {fileID: 1525489894}
   - {fileID: 1619674569}
-  - {fileID: 1096071051}
-  - {fileID: 831036277}
   - {fileID: 319143772}
   - {fileID: 1683372303}
   - {fileID: 439711207}
   - {fileID: 1442706458}
   - {fileID: 186584177}
-  - {fileID: 1263709645}
   - {fileID: 1871906535}
   - {fileID: 726621991}
   - {fileID: 1450942178}

@@ -17,6 +17,7 @@ TagManager:
   - Code4
   - canBeOpen
   - Playere
+  - Hand
   layers:
   - Default
   - TransparentFX
