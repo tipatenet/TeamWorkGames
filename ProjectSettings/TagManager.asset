@@ -17,6 +17,7 @@ TagManager:
   - Code4
   - canBeOpen
   - Ladder
+  - radio
   layers:
   - Default
   - TransparentFX
