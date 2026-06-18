@@ -54,20 +54,23 @@ public class PlayerSaveLoader : MonoBehaviour
         if (inv != null)
         {
             inv.inventory.Clear();
+            inv.inventoryUniqueIDs.Clear();
+
             foreach (string id in data.inventoryItemIDs)
             {
                 Item_ScriptableObject itemAsset = ItemDatabase.Instance.GetItemByID(id);
                 if (itemAsset != null)
                     inv.inventory.Add(itemAsset);
             }
-            inv.currentInventorySize = inv.inventory.Count; // important, sinon UpdateUI ne boucle pas correctement
-            inv.UpdateUI(); // <-- l'appel manquant
 
-            Debug.Log($"Inventaire chargé : {inv.inventory.Count} items");
-        }
-        else
-        {
-            Debug.LogError("InventorySystem introuvable sur ce GameObject");
+            // Restaure aussi les uniqueIDs sauvegardés (voir point 6 ci-dessous)
+            foreach (string uid in data.inventoryUniqueIDs)
+            {
+                inv.inventoryUniqueIDs.Add(uid);
+            }
+
+            inv.currentInventorySize = inv.inventory.Count;
+            inv.UpdateUI();
         }
     }
 }

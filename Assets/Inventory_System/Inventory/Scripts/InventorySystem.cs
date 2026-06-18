@@ -32,6 +32,7 @@ public class InventorySystem : MonoBehaviour
     public int selectedIndex = 0;
     public int currentInventorySize = 0;
     public List<Item_ScriptableObject> inventory;
+    public List<string> inventoryUniqueIDs = new List<string>(); // Nouveau : trace l'instance d'origine
 
 
     private void Start()
@@ -66,13 +67,12 @@ public class InventorySystem : MonoBehaviour
     {
         RaycastHit hit = interaction.hitInteract;
 
-        if (hit.collider != null && hit.collider.tag == "item") // Vérifie si l'objet toucher à le tag item
+        if (hit.collider != null && hit.collider.tag == "item")
         {
             Item itemTouch = hit.collider.GetComponent<Item>();
-
             Item_ScriptableObject itemHit = itemTouch.info;
 
-            if (!inventoryFull()) //Vérifie qu'il y a de la place dans l'inventaire
+            if (!inventoryFull())
             {
                 if (currentInventorySize != 0)
                 {
@@ -81,11 +81,14 @@ public class InventorySystem : MonoBehaviour
                 }
 
                 inventory.Add(itemHit);
+                inventoryUniqueIDs.Add(itemTouch.uniqueID); // Ajouté en parallèle
                 currentInventorySize++;
                 UpdateUI();
+
+                GameManager.Instance.RegisterPickedUpItem(itemTouch.uniqueID);
+
                 Destroy(hit.collider.gameObject);
                 source.PlayOneShot(PickUpSound);
-                //Joue les animations pour les mains
                 handAnimation.PlayPickAnim();
                 handAnimation.HoldAnimation();
             }
@@ -98,7 +101,10 @@ public class InventorySystem : MonoBehaviour
         if (currentInventorySize != 0)
         {
             Item_ScriptableObject itemToDrop = inventory[selectedIndex];
+            string uniqueIDToDrop = inventoryUniqueIDs[selectedIndex];
+
             inventory.RemoveAt(selectedIndex);
+            inventoryUniqueIDs.RemoveAt(selectedIndex); // Retiré en parallèle, même index
             currentInventorySize--;
 
             if (currentInventorySize <= 0)
@@ -126,8 +132,11 @@ public class InventorySystem : MonoBehaviour
             Rigidbody rb = droppedObj.GetComponent<Rigidbody>();
             if (rb != null)
                 rb.constraints &= ~RigidbodyConstraints.FreezePositionY;
+
+            // L'item original redevient "non ramassé" : il réapparaîtra à sa position d'origine au prochain chargement
+            GameManager.Instance.UnregisterPickedUpItem(uniqueIDToDrop);
+
             source.PlayOneShot(DropSound);
-            //Joue les animations pour les mains
             handAnimation.PlayDropAnim();
             handAnimation.HoldAnimation();
         }

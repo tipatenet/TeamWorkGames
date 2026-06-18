@@ -70,12 +70,52 @@ public class GameManager : MonoBehaviour
         if (inv != null)
         {
             currentSaveData.inventoryItemIDs.Clear();
+            currentSaveData.inventoryUniqueIDs.Clear();
+
             foreach (var item in inv.inventory)
             {
                 currentSaveData.inventoryItemIDs.Add(item.itemID);
             }
+
+            foreach (var uid in inv.inventoryUniqueIDs)
+            {
+                currentSaveData.inventoryUniqueIDs.Add(uid);
+            }
         }
 
         SaveManager.Save(currentSlot, currentSaveData);
+    }
+    public void RegisterPickedUpItem(string uniqueID)
+    {
+        string currentScene = SceneManager.GetActiveScene().name;
+
+        ScenePickupData sceneData = currentSaveData.pickedUpItemsByScene
+            .Find(s => s.sceneName == currentScene);
+
+        if (sceneData == null)
+        {
+            sceneData = new ScenePickupData { sceneName = currentScene };
+            currentSaveData.pickedUpItemsByScene.Add(sceneData);
+        }
+
+        if (!sceneData.pickedUpUniqueIDs.Contains(uniqueID))
+        {
+            sceneData.pickedUpUniqueIDs.Add(uniqueID);
+        }
+    }
+
+    public void UnregisterPickedUpItem(string uniqueID)
+    {
+        string currentScene = SceneManager.GetActiveScene().name;
+
+        // Cherche dans TOUTES les scènes, pas seulement l'active, au cas où l'item viendrait d'ailleurs
+        foreach (var sceneData in currentSaveData.pickedUpItemsByScene)
+        {
+            if (sceneData.pickedUpUniqueIDs.Contains(uniqueID))
+            {
+                sceneData.pickedUpUniqueIDs.Remove(uniqueID);
+                return;
+            }
+        }
     }
 }
