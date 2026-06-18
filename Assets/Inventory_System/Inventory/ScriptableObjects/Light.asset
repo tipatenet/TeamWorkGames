@@ -20,4 +20,4 @@ MonoBehaviour:
   holdPositionOffset: {x: 0.1169446, y: -0.08019098, z: 0.06173325}
   holdRotation: {x: -0.06911329, y: -0.37916812, z: -0.039221734, w: 0.92190915}
   item_scaleFactor: 0.5
-  item_scaleInspactFactor: 1
+  item_scaleInspactFactor: 0.5

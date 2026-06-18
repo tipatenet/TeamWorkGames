@@ -913,10 +913,6 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 1206560599}
-    - target: {fileID: 3191861471629149975, guid: 002275a7651d7e7428eaf7192bbd086c, type: 3}
-      propertyPath: OutputAudioMixerGroup
-      value: 
-      objectReference: {fileID: 24300002, guid: b1487a0a5e2a1f44099e7c8d5003377a, type: 2}
     - target: {fileID: 5517342126431416756, guid: 002275a7651d7e7428eaf7192bbd086c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 56.77
