@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: IndiceEn4dents
   m_EditorClassIdentifier: Assembly-CSharp::Item_ScriptableObject
   itemID: 4
-  item_Name: Indice Engrenage4 dents
+  item_Name: Indice de Papy #1
   icon: {fileID: 21300000, guid: 6780023b132833c49be5370c839bc54c, type: 3}
   goItem: {fileID: 3488208227312855756, guid: 097883fc0ea6e2b49968fa05f4cc5761, type: 3}
   animatorOverride: {fileID: 22100000, guid: 7bceb6fbf22781940980b1231ba250bb, type: 2}

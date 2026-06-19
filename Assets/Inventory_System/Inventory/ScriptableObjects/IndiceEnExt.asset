@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: IndiceEnExt
   m_EditorClassIdentifier: Assembly-CSharp::Item_ScriptableObject
   itemID: 5
-  item_Name: Indice Engrenage Exterieur
+  item_Name: Indice de Papy #2
   icon: {fileID: 21300000, guid: 6780023b132833c49be5370c839bc54c, type: 3}
   goItem: {fileID: 3488208227312855756, guid: de87bbf003e12f445ac92852d4566178, type: 3}
   animatorOverride: {fileID: 22100000, guid: 7bceb6fbf22781940980b1231ba250bb, type: 2}

@@ -14,6 +14,7 @@ public class InventorySystem : MonoBehaviour
     public AudioClip DropSound;
     public AudioClip PickUpSound;
     [SerializeField] private HandAnimation handAnimation;
+    public Text textNameZone;
 
     //Variables Privées :
     private float targetX;
@@ -150,10 +151,13 @@ public class InventorySystem : MonoBehaviour
             currentIcon = item_Container.GetChild(i).GetComponent<UnityEngine.UI.Image>();
             currentIcon.sprite = inventory[i].icon;
             currentIcon.enabled = true;
+            textNameZone.text = "";
+            textNameZone.text = inventory[i].item_Name;
         }
         if(currentInventorySize == 0)
         {
             item_Container.GetChild(0).GetComponent<UnityEngine.UI.Image>().enabled = false;
+            textNameZone.text = "";
         }
         else
         {
@@ -197,6 +201,8 @@ public class InventorySystem : MonoBehaviour
                 {
                     handAnimation.PlayDropAnim();
                     handAnimation.HoldAnimation();
+                    textNameZone.text = "";
+                    textNameZone.text = inventory[selectedIndex].item_Name;
                 }
             }
 
