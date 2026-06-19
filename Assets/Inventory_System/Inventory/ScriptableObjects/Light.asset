@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Item_ScriptableObject
   itemID: 7
   item_Name: Torch Light
-  icon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  icon: {fileID: 21300000, guid: 291df1c2c22d91e4586679a911dd8b87, type: 3}
   goItem: {fileID: 3843111734896376954, guid: 854aca1d871b4aa48ab54d4ab003e89c, type: 3}
   animatorOverride: {fileID: 22100000, guid: 42ed3e1962e36f346a806bcb2839d865, type: 2}
   holdPositionOffset: {x: 0.1169446, y: -0.08019098, z: 0.06173325}

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Item_ScriptableObject
   itemID: 8
   item_Name: Saxophone de papy
-  icon: {fileID: 21300000, guid: 7e45f6887bdf4c643952ae0abecd6a2b, type: 3}
+  icon: {fileID: 21300000, guid: 262965890e40e7a4cbc759708de8ed46, type: 3}
   goItem: {fileID: 473943397275339312, guid: 60ec115e9ea5d5948b1aaf21615fdb2c, type: 3}
   animatorOverride: {fileID: 22100000, guid: 76c7783eb87f9ed40bb04ef311068fd9, type: 2}
   holdPositionOffset: {x: 0.08393942, y: -0.190098, z: 0.01897769}

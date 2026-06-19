@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Item_ScriptableObject
   itemID: 4
   item_Name: Indice Engrenage4 dents
-  icon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  icon: {fileID: 21300000, guid: 6780023b132833c49be5370c839bc54c, type: 3}
   goItem: {fileID: 3488208227312855756, guid: 097883fc0ea6e2b49968fa05f4cc5761, type: 3}
   animatorOverride: {fileID: 22100000, guid: 7bceb6fbf22781940980b1231ba250bb, type: 2}
   holdPositionOffset: {x: 0.2853146, y: -0.1878602, z: 0.1404452}

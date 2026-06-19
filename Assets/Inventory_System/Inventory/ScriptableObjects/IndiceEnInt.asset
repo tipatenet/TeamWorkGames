@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Item_ScriptableObject
   itemID: 6
   item_Name: Indice Engrenage Interieur
-  icon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  icon: {fileID: 21300000, guid: 6780023b132833c49be5370c839bc54c, type: 3}
   goItem: {fileID: 3488208227312855756, guid: e7ccefba609fb5f46b81178589c34c52, type: 3}
   animatorOverride: {fileID: 22100000, guid: 7bceb6fbf22781940980b1231ba250bb, type: 2}
   holdPositionOffset: {x: 0.2853146, y: -0.1878602, z: 0.1404452}
