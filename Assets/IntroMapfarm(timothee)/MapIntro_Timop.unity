@@ -2822,7 +2822,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TextTuto
   TaskValid: 0
-  text: Press "F" to Open
+  text: "Appuyez sur la touche \xAB F \xBB pour ouvrir"
 --- !u!1001 &297510678
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11541,6 +11541,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prop_Exterior_Chimney
       objectReference: {fileID: 0}
+    - target: {fileID: 6834383366240858724, guid: d351689a7050e2c40bcd09d3e0fb6538, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 384325a9442b1be40857e8ad2541f587, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15105,8 +15109,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 12
   m_Type: 0
-  m_Color: {r: 0.6745098, g: 0.6036061, b: 0.5372549, a: 1}
-  m_Intensity: 10.14
+  m_Color: {r: 0.69182384, g: 0.51392627, b: 0.34591183, a: 1}
+  m_Intensity: 1.31
   m_Range: 4.18
   m_SpotAngle: 46.058495
   m_InnerSpotAngle: 37.860577
@@ -15169,7 +15173,7 @@ Transform:
   m_GameObject: {fileID: 1269943525}
   serializedVersion: 2
   m_LocalRotation: {x: 0.99977803, y: -0, z: -0, w: -0.021070475}
-  m_LocalPosition: {x: 34.889, y: 2.872, z: 46.44}
+  m_LocalPosition: {x: 34.889, y: 2.872, z: 46.682}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -16594,7 +16598,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TextTuto
   TaskValid: 0
-  text: Press "Space" to jump
+  text: "Appuyez sur la touche \xAB Espace \xBB pour sauter"
 --- !u!114 &1408559389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17706,6 +17710,14 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -8664483742924719815, guid: b8fe2388c3af4e24f9eb0fd76da99d83, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 384325a9442b1be40857e8ad2541f587, type: 2}
+    - target: {fileID: -8664483742924719815, guid: b8fe2388c3af4e24f9eb0fd76da99d83, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d94032f50aaf3d2478b471fc954172b9, type: 2}
     - target: {fileID: -2493944151710641531, guid: b8fe2388c3af4e24f9eb0fd76da99d83, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.062037487
@@ -26017,7 +26029,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TextTuto
   TaskValid: 0
-  text: Press "F" to pickUp and "G" to drop
+  text: "Appuyez sur la touche \xAB F \xBB pour ramasser et sur la touche \xAB G
+    \xBB pour l\xE2cher"
 --- !u!114 &2064084771
 MonoBehaviour:
   m_ObjectHideFlags: 0

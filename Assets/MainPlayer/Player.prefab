@@ -55,8 +55,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 110865528592120011}
   serializedVersion: 5
-  m_Mass: 0.8
-  m_LinearDamping: 0
+  m_Mass: 1
+  m_LinearDamping: 1
   m_AngularDamping: 1
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -88,7 +88,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   moveSpeed: 2.7
   groundDrag: 6.5
-  jumpForce: 5
+  jumpForce: 25
   jumpCooldown: 0.5
   airMultiplier: 0.4
   jumpKey: 32
