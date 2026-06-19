@@ -157,6 +157,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
   info: {fileID: 11400000, guid: d04287b64282ff947a30e4ab76898e1f, type: 2}
+  uniqueID: 155eb247-13c5-4646-878b-b7aaad78780a
+  originalPosition: {x: 0, y: 0, z: 0}
+  originalRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &-8930175061613392848
 MonoBehaviour:
   m_ObjectHideFlags: 0
