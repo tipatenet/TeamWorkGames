@@ -9,18 +9,21 @@ public class EnigmeEngrainages : MonoBehaviour
     public GameObject EngrainageExt;
     public GameObject EngrainageMid;
     public GameObject EngrainageCentre;
+    [Header("Code")]
     public int codeNum1;
     public int codeNum2;
     public int codeNum3;
     public float SphereInteract = 3f;
     public LayerMask Player;
+    [Header("Sons")]
     public AudioSource source;
     public AudioClip RotationSound;
+    public AudioClip success;
     bool canInteract = true;
     private float cooldownTime = 2f;
-    public int currentNum1 = 0;
-    public int currentNum2 = 0;
-    public int currentNum3 = 0;
+    private int currentNum1 = 0;
+    private int currentNum2 = 0;
+    private int currentNum3 = 0;
     [Header("Objet relié")]
     public Opening_System link;
 
@@ -75,8 +78,9 @@ public class EnigmeEngrainages : MonoBehaviour
                 }
                 else return;
 
-                VerifyCode();
                 source.PlayOneShot(RotationSound);
+                if (VerifyCode())
+                    source.PlayOneShot(success);
             }
         }
     }
@@ -118,7 +122,6 @@ public class EnigmeEngrainages : MonoBehaviour
             {
                 if(currentNum3 == codeNum3)
                 {
-                    print("Code bon");
                     return true;
                 }
             }
