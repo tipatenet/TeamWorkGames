@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 694959256945687471}
   - component: {fileID: 3332675316128485221}
   m_Layer: 0
-  m_Name: PostitsCodePapi
+  m_Name: PostitsAttentionPapy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26,13 +26,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3837338439462858416}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.25465184, y: -0.684988, z: -0.63198173, w: -0.25795922}
-  m_LocalPosition: {x: 0.259, y: 1.935, z: 0.374}
-  m_LocalScale: {x: 0.2727272, y: 0.27272725, z: 0.27272722}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 36.069, y: 5.304326, z: 39.31521}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -89.98, y: 0, z: -193.574}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &694959256945687471
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -66,8 +66,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f5933c546bf8a474780a9507373cb472, type: 2}
-  - {fileID: 2100000, guid: 7f39a83e45320574688e1a5e461e5218, type: 2}
+  - {fileID: 2100000, guid: b882be7fa5943cb4988835bb8a952ade, type: 2}
+  - {fileID: 2100000, guid: 25e4c6a04995903408bbe407f08380e5, type: 2}
   - {fileID: 2100000, guid: 25e4c6a04995903408bbe407f08380e5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0

@@ -133,6 +133,7 @@ MonoBehaviour:
   DropSound: {fileID: 8300000, guid: a47399f893d699645b1c2c1ef8e7c99f, type: 3}
   PickUpSound: {fileID: 8300000, guid: aaaa5490780f8a349a277334723ac2c3, type: 3}
   handAnimation: {fileID: 0}
+  textNameZone: {fileID: 0}
   selectedIndex: 0
   currentInventorySize: 0
   inventory: []
