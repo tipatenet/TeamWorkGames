@@ -77,7 +77,7 @@ public class InventorySystem : MonoBehaviour
             {
                 if (currentInventorySize != 0)
                 {
-                    selectedIndex = currentInventorySize;
+                    selectedIndex = currentInventorySize - 1;
                     ScroolInventory();
                 }
 
@@ -87,6 +87,10 @@ public class InventorySystem : MonoBehaviour
                 UpdateUI();
 
                 GameManager.Instance.RegisterPickedUpItem(itemTouch.uniqueID);
+
+                // Désactive l'UI d'interaction au moment du ramassage
+                HoverManager hoverManager = GetComponent<HoverManager>();
+                if (hoverManager != null) hoverManager.ForceResetUI();
 
                 Destroy(hit.collider.gameObject);
                 source.PlayOneShot(PickUpSound);

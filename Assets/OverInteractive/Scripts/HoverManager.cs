@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using Unity.VisualScripting;
+using UnityEngine;
 
 public class HoverManager : MonoBehaviour
 {
@@ -7,6 +9,9 @@ public class HoverManager : MonoBehaviour
 
     private Hoverable lastHoverable;
     private MaterialPropertyBlock mpb;
+
+    [SerializeField]
+    private GameObject UIInteractIndicator;
 
     void Start()
     {
@@ -31,6 +36,7 @@ public class HoverManager : MonoBehaviour
 
                         lastHoverable = hoverable;
 
+                        if (UIInteractIndicator != null) UIInteractIndicator.SetActive(true);
                         // Renderer
                         Renderer rend = hoverable.objectRenderer != null
                             ? hoverable.objectRenderer
@@ -84,6 +90,8 @@ public class HoverManager : MonoBehaviour
     {
         if (lastHoverable != null)
         {
+            if (UIInteractIndicator != null) UIInteractIndicator.SetActive(false);
+
             Renderer rend = lastHoverable.objectRenderer != null
                 ? lastHoverable.objectRenderer
                 : lastHoverable.GetComponent<Renderer>();
@@ -104,5 +112,11 @@ public class HoverManager : MonoBehaviour
             lastHoverable.OnHoverExit();
             lastHoverable = null;
         }
+    }
+
+    public void ForceResetUI()
+    {
+        if (UIInteractIndicator != null) UIInteractIndicator.SetActive(false);
+        lastHoverable = null;
     }
 }

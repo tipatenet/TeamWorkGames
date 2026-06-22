@@ -8,6 +8,7 @@ public class HandAnimation : MonoBehaviour
     [SerializeField] private InventorySystem inventory;
     [SerializeField] private Transform holdItemPos;
     [SerializeField] private PlayerController player;
+    public GameObject itemInHandUI;
     public float collDownAnim;
 
     //Variables Privées :
@@ -76,15 +77,19 @@ public class HandAnimation : MonoBehaviour
             //Desactive la gravité de l'objet
             go.GetComponent<Rigidbody>().useGravity = false;
 
+            if (itemInHandUI != null) itemInHandUI.SetActive(true);
+
             objectHold = true;
         }
         else
         {
-            if(inventory.currentInventorySize < 1)
-            anim.SetBool("ItemInHand", false);
+            if (inventory.currentInventorySize < 1)
+                anim.SetBool("ItemInHand", false);
 
             anim.SetTrigger("DropItem");
             RemoveItemHold();
+
+            if (itemInHandUI != null) itemInHandUI.SetActive(false);
         }
     }
 
