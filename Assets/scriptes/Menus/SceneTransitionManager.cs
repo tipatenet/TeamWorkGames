@@ -57,4 +57,16 @@ public class SceneTransitionManager : MonoBehaviour
 
         fadeImage.color = new Color(c.r, c.g, c.b, endAlpha);
     }
+
+    public void FadeAndTeleport(System.Action onFadeComplete)
+    {
+        StartCoroutine(FadeTeleportRoutine(onFadeComplete));
+    }
+
+    private IEnumerator FadeTeleportRoutine(System.Action onFadeComplete)
+    {
+        yield return StartCoroutine(Fade(0f, 1f)); // fondu vers noir
+        onFadeComplete?.Invoke();                   // téléporte pendant le noir
+        yield return StartCoroutine(Fade(1f, 0f)); // fondu retour
+    }
 }

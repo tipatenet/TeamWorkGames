@@ -177,4 +177,12 @@ public class PlayerController : MonoBehaviour
     {
         return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
     }
+
+    public void TeleportTo(Vector3 targetPosition)
+    {
+        rb.linearVelocity = Vector3.zero;
+        rb.position = targetPosition;
+        rb.transform.position = targetPosition;
+        Physics.SyncTransforms();
+    }
 }
