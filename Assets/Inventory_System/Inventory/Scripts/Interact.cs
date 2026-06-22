@@ -38,7 +38,10 @@ public class Interact : MonoBehaviour //Sera placer sur le joueur
         if (!stopRaycast)
         {
             Debug.DrawLine(cameraPosition, cameraPosition + cameraRotation * maxDistanceInteract, Color.red);
-            Physics.Raycast(cameraPosition, cameraRotation, out hit, maxDistanceInteract);
+
+            // Ignore le layer Player (layer 7 dans ton projet)
+            int layerMaskIgnorePlayer = ~(1 << 7);
+            Physics.Raycast(cameraPosition, cameraRotation, out hit, maxDistanceInteract, layerMaskIgnorePlayer);
         }
         return hit;
     }
