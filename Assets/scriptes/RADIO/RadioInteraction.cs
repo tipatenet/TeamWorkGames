@@ -133,11 +133,13 @@ public class RadioInteraction : MonoBehaviour
             lookCam.gameObject.SetActive(active);
             lookCam.depth = active ? playerCam.depth + 1 : playerCam.depth - 1;
 
+            // VÉRIFICATION : On s'assure qu'au moins un AudioListener capte le son
             AudioListener playerListener = playerCam.GetComponent<AudioListener>();
             AudioListener lookListener = lookCam.GetComponent<AudioListener>();
 
             if (playerListener != null) playerListener.enabled = !active;
             if (lookListener != null) lookListener.enabled = active;
+            else if (playerListener != null) playerListener.enabled = true; // Sécurité si pas d'écouteur sur lookCam
         }
 
         if (gestionFrequence != null)
@@ -265,7 +267,7 @@ public class RadioInteraction : MonoBehaviour
         }
         else if (tag == "BoutonRadioGauche")
         {
-            gestionFrequence.ChangerFrequence(-pasAUtiliser); // Correction de la typo ici !
+            gestionFrequence.ChangerFrequence(-pasAUtiliser);
         }
     }
 

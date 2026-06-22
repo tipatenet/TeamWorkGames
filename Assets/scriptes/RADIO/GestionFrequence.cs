@@ -7,7 +7,7 @@ public class GestionFrequence : MonoBehaviour
     [Header("Référence vers l'affichage (TextMeshPro)")]
     public TextMeshProUGUI texteFrequence;
 
-    [Header("Réglages de la fréquence")]
+    [Header("Réglages de l'frequency")]
     public float frequenceActuelle = 87.5f;
     public float frequenceACherche = 102.0f;
     public float frequenceMin = 87.5f;
@@ -30,17 +30,16 @@ public class GestionFrequence : MonoBehaviour
     public UnityEvent OnFrequenceTrouvee;
 
     private bool dejaTrouvee = false;
+    private bool radioActivementRegardee = false;
 
     void Start()
     {
         MettreAJourAffichage();
 
-        // Au démarrage, on prépare les boucles mais on s'assure que le volume ou les sources sont gérées
-        if (audioMusique != null) audioMusique.loop = true;
-        if (audioGresillement != null) audioGresillement.loop = true;
+        // On s'assure que les sons jouent en boucle à fond en arrière-plan
+        if (audioMusique != null) { audioMusique.loop = true; audioMusique.mute = false; if (!audioMusique.isPlaying) audioMusique.Play(); }
+        if (audioGresillement != null) { audioGresillement.loop = true; audioGresillement.mute = false; if (!audioGresillement.isPlaying) audioGresillement.Play(); }
 
-        // Par défaut au spawn, on coupe les sources pour éviter tout bruit parasite
-        SetAudioActive(false);
         GererAudioDynamique();
     }
 
@@ -58,24 +57,11 @@ public class GestionFrequence : MonoBehaviour
         }
     }
 
-    // Fonction appelée par le script d'interaction pour allumer/éteindre la radio
+    // Appelée par le script d'interaction
     public void SetAudioActive(bool active)
     {
-        if (audioMusique == null || audioGresillement == null) return;
-
-        if (active)
-        {
-            // Si on passe sur la lookcam, on recalcule le bon volume et on lance la lecture
-            GererAudioDynamique();
-            if (!audioMusique.isPlaying) audioMusique.Play();
-            if (!audioGresillement.isPlaying) audioGresillement.Play();
-        }
-        else
-        {
-            // Si on quitte la lookcam, on stoppe net les sons
-            audioMusique.Stop();
-            audioGresillement.Stop();
-        }
+        radioActivementRegardee = active;
+        GererAudioDynamique();
     }
 
     public void ChangerFrequence(float valeurAjout)
@@ -108,9 +94,18 @@ public class GestionFrequence : MonoBehaviour
     {
         if (audioMusique == null || audioGresillement == null) return;
 
+        // Si le joueur ne regarde pas la radio, le volume est對 0 quoi qu'il arrive
+        if (!radioActivementRegardee && !dejaTrouvee)
+        {
+            audioMusique.volume = 0f;
+            audioGresillement.volume = 0f;
+            return;
+        }
+
         float distance = Mathf.Abs(frequenceActuelle - frequenceACherche);
         float ratioProximite = Mathf.Clamp01(1f - (distance / distanceMaxAudio));
 
+        // Calcul classique du volume linéaire
         audioMusique.volume = Mathf.Lerp(0f, 1f, ratioProximite);
         audioGresillement.volume = Mathf.Lerp(1f, 0.04f, ratioProximite);
     }
