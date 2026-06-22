@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.InputSystem;
 
@@ -41,12 +41,11 @@ public class PlayerInputHandler : MonoBehaviour
         Instance = this;
         inputActions = new PlayerInputActions();
     }
-
     private void OnEnable()
     {
         inputActions.Enable();
 
-        //Définie les valeurs des vecteurs :
+        //DÃ©finie les valeurs des vecteurs :
 
         inputActions.Player.Move.performed += ctx => MoveInput = ctx.ReadValue<Vector2>();
         inputActions.Player.Move.canceled += ctx => MoveInput = Vector2.zero;
@@ -60,7 +59,7 @@ public class PlayerInputHandler : MonoBehaviour
         inputActions.Player.RotateItem.performed += ctx => RotateItemInspact = ctx.ReadValue<Vector2>();
         inputActions.Player.RotateItem.canceled += ctx => RotateItemInspact = Vector2.zero;
 
-        //Définie les valeurs des bool (Pour savoir si la touche est appuyer)
+        //DÃ©finie les valeurs des bool (Pour savoir si la touche est appuyer)
 
         inputActions.Player.Jump.performed += ctx => JumpPressed = true;
         inputActions.Player.Jump.canceled += ctx => JumpPressed = false;
@@ -83,7 +82,7 @@ public class PlayerInputHandler : MonoBehaviour
         //pose
         inputActions.Player.Pose.performed += ctx => OnPosePressed?.Invoke();
 
-        //Définis Axis
+        //DÃ©finis Axis
 
 
     }
@@ -93,7 +92,7 @@ public class PlayerInputHandler : MonoBehaviour
         inputActions.Disable();
     }
 
-    //Attention à compléter à chaque fois que on rajoute un input look les input sauf pour ceux qui doive pas etre look
+    //Attention Ã  complÃ©ter Ã  chaque fois que on rajoute un input look les input sauf pour ceux qui doive pas etre look
     public void LockGameplayInputs(bool locked)
     {
         if (locked)
@@ -175,13 +174,15 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void LockGamePlayForBook(bool locked)
     {
+
         if (locked)
         {
+
             inputActions.Player.Move.Disable();
             inputActions.Player.Look.Enable();
             inputActions.Player.Jump.Disable();
             inputActions.Player.Scroll.Disable();
-            inputActions.Player.Interact.Disable();
+            inputActions.Player.Interact.Enable();
             inputActions.Player.DropItem.Disable();
             inputActions.Player.RotateItem.Disable();
             inputActions.Player.Pose.Disable();
