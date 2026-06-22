@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6980975533247626105}
   - component: {fileID: 941155750815375506}
   - component: {fileID: 6224674102158324891}
-  - component: {fileID: 5550367644340734709}
   m_Layer: 5
   m_Name: CanvasTransition
   m_TagString: Untagged
@@ -85,23 +84,6 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 0
---- !u!114 &5550367644340734709
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 186451192307887124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!1 &6919596951824884979
 GameObject:
   m_ObjectHideFlags: 0
@@ -160,7 +142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -188,6 +170,7 @@ GameObject:
   - component: {fileID: 745723265573597021}
   - component: {fileID: 3651461852248965760}
   - component: {fileID: 1626895210125662682}
+  - component: {fileID: 1671533593091001126}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -230,6 +213,8 @@ MonoBehaviour:
     posY: 0
     posZ: 0
     inventoryItemIDs: []
+    inventoryUniqueIDs: []
+    pickedUpItemsByScene: []
     isEmpty: 1
 --- !u!114 &1626895210125662682
 MonoBehaviour:
@@ -245,3 +230,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   fadeImage: {fileID: 8636552783584479538}
   fadeDuration: 0.5
+--- !u!114 &1671533593091001126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7262035012769602965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fc8a8c130be82047aae25f5ee75f76c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScenePickupLoader
