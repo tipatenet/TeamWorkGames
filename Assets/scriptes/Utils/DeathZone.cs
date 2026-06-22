@@ -25,11 +25,4 @@ public class DeathZone : MonoBehaviour
         });
     }
 
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
-        Gizmos.DrawCube(transform.position, transform.localScale);
-    }
-#endif
 }
