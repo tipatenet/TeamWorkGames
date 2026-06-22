@@ -1,24 +1,26 @@
 using System.Collections;
 using UnityEngine;
 
-/// <summary>
-/// Appuyer sur F près du piano pour s'asseoir / se lever.
-/// Attacher sur props_148. Assigner seatCameraPoint dans l'Inspector.
-/// </summary>
 public class PianoSeat : MonoBehaviour
 {
     [Header("Références")]
-    public Transform seatCameraPoint;       // Empty GameObject positionné face au piano
-    public MonoBehaviour playerController;  // Ton script de mouvement joueur (ex: CharacterController)
-    public GameObject playerBody;           // Le GameObject du joueur (pour le cacher optionnellement)
+    public Transform seatCameraPoint;
+    public MonoBehaviour playerController;
+    public GameObject playerBody;
+    public PlayerInputHandler playerInputHandler;
+
+    [Header("UI à cacher au piano")]
+    public GameObject inventoryUI;      // Glisser ton canvas inventaire ici
+    public GameObject hotbarUI;         // Glisser ta hotbar ici (si séparée)
+    public GameObject[] uisToHide;      // Autres UI à cacher (tableau générique)
 
     [Header("Paramètres")]
     public float interactionRange = 2.5f;
     public KeyCode sitKey = KeyCode.F;
     public float cameraTransitionSpeed = 5f;
 
-    [Header("UI prompt (optionnel)")]
-    public GameObject promptUI;             // Ex: un panel "Appuyer sur F pour s'asseoir"
+    [Header("UI prompt")]
+    public GameObject promptUI;
 
     // --- Privé ---
     private Camera playerCamera;
@@ -28,9 +30,14 @@ public class PianoSeat : MonoBehaviour
     private Transform originalCamParent;
     private bool isTransitioning = false;
 
+    private PianoInteractable pianoInteractable;
+
     void Start()
     {
         playerCamera = Camera.main;
+        pianoInteractable = GetComponent<PianoInteractable>();
+        if (pianoInteractable == null)
+            pianoInteractable = GetComponentInChildren<PianoInteractable>();
     }
 
     void Update()
@@ -38,11 +45,9 @@ public class PianoSeat : MonoBehaviour
         float dist = Vector3.Distance(playerCamera.transform.position, transform.position);
         bool inRange = dist <= interactionRange;
 
-        // Afficher/masquer le prompt
         if (promptUI != null)
             promptUI.SetActive(inRange && !isSeated);
 
-        // Appui sur F
         if (Input.GetKeyDown(sitKey) && !isTransitioning)
         {
             if (!isSeated && inRange)
@@ -52,22 +57,30 @@ public class PianoSeat : MonoBehaviour
         }
     }
 
+    void SetInventoryVisible(bool visible)
+    {
+        if (inventoryUI != null) inventoryUI.SetActive(visible);
+        if (hotbarUI != null) hotbarUI.SetActive(visible);
+        foreach (var ui in uisToHide)
+            if (ui != null) ui.SetActive(visible);
+    }
+
     IEnumerator SitDown()
     {
         isTransitioning = true;
+        playerInputHandler.LockGameplayInputsForPiano(true);
 
-        // Sauvegarder la position/rotation originale de la caméra
         originalCamPos = playerCamera.transform.position;
         originalCamRot = playerCamera.transform.rotation;
         originalCamParent = playerCamera.transform.parent;
 
-        // Désactiver le controller joueur
         if (playerController != null) playerController.enabled = false;
 
-        // Détacher la caméra du joueur pour la déplacer librement
+        // Cacher l'inventaire et les autres UI
+        SetInventoryVisible(false);
+
         playerCamera.transform.SetParent(null);
 
-        // Transition fluide vers le point de vue piano
         float t = 0f;
         while (t < 1f)
         {
@@ -79,26 +92,34 @@ public class PianoSeat : MonoBehaviour
 
         playerCamera.transform.position = seatCameraPoint.position;
         playerCamera.transform.rotation = seatCameraPoint.rotation;
-
-        // Attacher la caméra au point siège (si le piano bouge, la cam suit)
         playerCamera.transform.SetParent(seatCameraPoint);
+
+        // Activer le piano
+        if (pianoInteractable != null)
+            pianoInteractable.isActive = true;
 
         isSeated = true;
         isTransitioning = false;
 
         if (promptUI != null) promptUI.SetActive(false);
-
-        Debug.Log("[PianoSeat] Assis au piano.");
+        Debug.Log("[PianoSeat] Assis. Pointez une touche et appuyez sur E.");
     }
 
     IEnumerator StandUp()
     {
         isTransitioning = true;
+        playerInputHandler.LockGameplayInputsForPiano(false);
 
-        // Détacher la caméra du point siège
+        // Désactiver le piano proprement
+        if (pianoInteractable != null)
+        {
+            pianoInteractable.isActive = false;
+            pianoInteractable.ClearHover();
+            pianoInteractable.ResetSequence();
+        }
+
         playerCamera.transform.SetParent(null);
 
-        // Transition retour vers position originale
         Vector3 fromPos = playerCamera.transform.position;
         Quaternion fromRot = playerCamera.transform.rotation;
 
@@ -111,17 +132,17 @@ public class PianoSeat : MonoBehaviour
             yield return null;
         }
 
-        // Réattacher la caméra au joueur
         playerCamera.transform.SetParent(originalCamParent);
-        playerCamera.transform.localPosition = Vector3.zero; // Ajuste si besoin
+        playerCamera.transform.localPosition = Vector3.zero;
         playerCamera.transform.localRotation = Quaternion.identity;
 
-        // Réactiver le controller joueur
         if (playerController != null) playerController.enabled = true;
+
+        // Remettre l'inventaire visible
+        SetInventoryVisible(true);
 
         isSeated = false;
         isTransitioning = false;
-
         Debug.Log("[PianoSeat] Debout.");
     }
 

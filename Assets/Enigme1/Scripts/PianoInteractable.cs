@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-/// <summary>
-/// Attacher ce script sur le GameObject du piano (props_148).
-/// Le joueur pointe une touche avec la souris et clique pour jouer la note.
-/// Le survol (hover) met en surbrillance la touche pointée.
-/// </summary>
 public class PianoInteractable : MonoBehaviour
 {
     [System.Serializable]
     public class PianoKey
     {
         public string noteName;
-        public KeyCode keyBinding;      // Conservé pour compatibilité, non utilisé en jeu
+        public KeyCode keyBinding; // Optionnel : si tu veux aussi jouer au clavier
         public AudioClip audioClip;
         public GameObject keyObject;
         public Color highlightColor = Color.yellow;
@@ -29,7 +24,8 @@ public class PianoInteractable : MonoBehaviour
 
     [Header("Paramètres d'interaction")]
     public float interactionRange = 3f;
-    public LayerMask pianoLayer;        // Laisser vide = tous les layers
+    public KeyCode playKey = KeyCode.E;
+    public LayerMask pianoLayer;
 
     [Header("Enigme - Partition")]
     public List<string> targetSequence = new List<string>();
@@ -43,20 +39,20 @@ public class PianoInteractable : MonoBehaviour
     private Dictionary<string, PianoKey> keyMap = new Dictionary<string, PianoKey>();
     private Dictionary<GameObject, PianoKey> objectMap = new Dictionary<GameObject, PianoKey>();
 
-    // Suivi de la séquence
     private List<string> playerSequence = new List<string>();
     private bool sequenceActive = false;
     private float sequenceTimer = 0f;
 
-    // Animation des touches
     private Dictionary<GameObject, Vector3> originalPositions = new Dictionary<GameObject, Vector3>();
-
-    // Hover
+    private MaterialPropertyBlock mpb;
     private PianoKey hoveredKey = null;
-    private Color hoveredOriginalColor = Color.white;
+
+    [Header("État du Piano")]
+    public bool isActive = false; // /!\ Doit être mis à TRUE (via ton script de chaise/interaction) pour que le piano s'active
 
     void Start()
     {
+        mpb = new MaterialPropertyBlock();
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
             audioSource = gameObject.AddComponent<AudioSource>();
@@ -77,69 +73,107 @@ public class PianoInteractable : MonoBehaviour
             {
                 objectMap[key.keyObject] = key;
                 originalPositions[key.keyObject] = key.keyObject.transform.localPosition;
+
+                // Pré-activer le mot-clé d'émission sur le matériau partagé pour éviter les bugs
+                var r = key.keyObject.GetComponent<Renderer>();
+                if (r != null && r.sharedMaterial != null)
+                {
+                    r.sharedMaterial.EnableKeyword("_EMISSION");
+                }
             }
         }
     }
 
     void Update()
     {
-        HandleHoverAndClick();
-        HandleSequenceTimer();
+        // Si le joueur n'est pas assis/actif sur le piano, on ne fait rien
+        if (!isActive) return;
+
+        HandleHover();
+
+        // Si on appuie sur la touche d'interaction (E) et qu'on regarde une touche valide
+        if (Input.GetKeyDown(playKey) && hoveredKey != null)
+        {
+            PlayNote(hoveredKey);
+        }
+
+        // Gestion du timer de l'énigme
+        if (sequenceActive)
+        {
+            sequenceTimer -= Time.deltaTime;
+            if (sequenceTimer <= 0f)
+            {
+                Debug.Log("[Piano] Temps écoulé !");
+                FailSequence();
+            }
+        }
     }
 
-    // --- Hover + clic gauche sur une touche du piano ---
-    void HandleHoverAndClick()
+    void HandleHover()
     {
         if (playerCamera == null) return;
 
         PianoKey detectedKey = null;
 
-        if (IsPlayerInRange())
+        // Raycast depuis le centre exact de l'écran (Réticule)
+        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
+        RaycastHit hit;
+
+        bool didHit = (pianoLayer.value != 0)
+            ? Physics.Raycast(ray, out hit, interactionRange, pianoLayer)
+            : Physics.Raycast(ray, out hit, interactionRange);
+
+        if (didHit && hit.collider != null)
         {
-            Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            // Si pianoLayer vaut 0 (rien coché), on raycaste sans filtre de layer
-            bool didHit = (pianoLayer.value != 0)
-                ? Physics.Raycast(ray, out hit, interactionRange, pianoLayer)
-                : Physics.Raycast(ray, out hit, interactionRange);
-
-            if (didHit && objectMap.TryGetValue(hit.collider.gameObject, out PianoKey key))
+            if (objectMap.TryGetValue(hit.collider.gameObject, out PianoKey key))
+            {
                 detectedKey = key;
+            }
         }
 
-        // --- Mise à jour du hover ---
+        // Gestion du changement d'état (Hover Enter / Hover Exit)
         if (detectedKey != hoveredKey)
         {
-            // Retirer highlight de l'ancienne touche
+            // 1. Quitter l'ancienne touche (Reset visuel)
             if (hoveredKey != null && hoveredKey.keyObject != null)
             {
-                var r = hoveredKey.keyObject.GetComponent<Renderer>();
-                if (r != null) r.material.color = hoveredOriginalColor;
+                hoveredKey.keyObject.GetComponent<Hoverable>().OnHoverExit();
+
+                SetKeyEmission(hoveredKey.keyObject, Color.black);
             }
 
             hoveredKey = detectedKey;
 
-            // Appliquer highlight sur la nouvelle touche
+            // 2. Entrer sur la nouvelle touche (Allumage visuel)
             if (hoveredKey != null && hoveredKey.keyObject != null)
             {
-                var r = hoveredKey.keyObject.GetComponent<Renderer>();
-                if (r != null)
-                {
-                    hoveredOriginalColor = r.material.color;
-                    r.material.color = hoveredKey.highlightColor;
-                }
+                hoveredKey.keyObject.GetComponent<Hoverable>().OnHoverEnter();
+                SetKeyEmission(hoveredKey.keyObject, hoveredKey.highlightColor * 2f); // Intensité de 2f
             }
-        }
-
-        // --- Clic gauche = jouer la note ---
-        if (Input.GetMouseButtonDown(0) && hoveredKey != null)
-        {
-            PlayNote(hoveredKey);
         }
     }
 
-    // --- Jouer une note ---
+    // Méthode sécurisée URP utilisant MaterialPropertyBlock pour la couleur d'émission
+    void SetKeyEmission(GameObject keyObj, Color color)
+    {
+        Renderer rend = keyObj.GetComponent<Renderer>();
+        if (rend != null)
+        {
+            rend.GetPropertyBlock(mpb);
+            mpb.SetColor("_EmissionColor", color);
+            rend.SetPropertyBlock(mpb);
+        }
+    }
+
+    public void ClearHover()
+    {
+        if (hoveredKey != null && hoveredKey.keyObject != null)
+        {
+            SetKeyEmission(hoveredKey.keyObject, Color.black);
+        }
+        hoveredKey = null;
+    }
+
     public void PlayNote(PianoKey key)
     {
         if (key == null || key.audioClip == null) return;
@@ -150,8 +184,7 @@ public class PianoInteractable : MonoBehaviour
             StartCoroutine(AnimateKeyPress(key.keyObject));
 
         RecordNoteForSequence(key.noteName);
-
-        Debug.Log($"[Piano] Note jouée : {key.noteName}");
+        Debug.Log($"[Piano] ♪ {key.noteName}");
     }
 
     public void PlayNoteByName(string noteName)
@@ -160,7 +193,6 @@ public class PianoInteractable : MonoBehaviour
             PlayNote(key);
     }
 
-    // --- Gestion de la séquence ---
     void RecordNoteForSequence(string noteName)
     {
         if (targetSequence == null || targetSequence.Count == 0) return;
@@ -173,31 +205,21 @@ public class PianoInteractable : MonoBehaviour
         }
 
         playerSequence.Add(noteName);
-
         int idx = playerSequence.Count - 1;
-        if (idx < targetSequence.Count && playerSequence[idx] != targetSequence[idx])
+
+        // Si la note jouée ne correspond pas à la partition cible
+        if (playerSequence[idx] != targetSequence[idx])
         {
-            Debug.Log("[Piano] Mauvaise note ! Séquence réinitialisée.");
+            Debug.Log("[Piano] ✗ Mauvaise note ! Séquence réinitialisée.");
             FailSequence();
             return;
         }
 
+        // Si toute la séquence est réussie
         if (playerSequence.Count == targetSequence.Count)
         {
-            Debug.Log("[Piano] Séquence correcte !");
+            Debug.Log("[Piano] ✓ Séquence correcte ! Énigme résolue.");
             SuccessSequence();
-        }
-    }
-
-    void HandleSequenceTimer()
-    {
-        if (!sequenceActive) return;
-
-        sequenceTimer -= Time.deltaTime;
-        if (sequenceTimer <= 0f)
-        {
-            Debug.Log("[Piano] Temps écoulé !");
-            FailSequence();
         }
     }
 
@@ -222,25 +244,15 @@ public class PianoInteractable : MonoBehaviour
         sequenceTimer = 0f;
     }
 
-    public void HighlightNoteOnSheet(string noteName, bool highlight)
-    {
-        if (!keyMap.TryGetValue(noteName, out PianoKey key)) return;
-        if (key.keyObject == null) return;
-
-        var renderer = key.keyObject.GetComponent<Renderer>();
-        if (renderer == null) return;
-
-        renderer.material.color = highlight ? key.highlightColor : Color.white;
-    }
-
     IEnumerator AnimateKeyPress(GameObject keyObj)
     {
         if (!originalPositions.TryGetValue(keyObj, out Vector3 original)) yield break;
 
-        float pressDepth = 0.015f;
-        float duration = 0.08f;
+        float pressDepth = 0.01f; // Enfoncement de 1cm
+        float duration = 0.07f;
         Vector3 pressed = original + Vector3.down * pressDepth;
 
+        // Enfoncement
         float t = 0f;
         while (t < 1f)
         {
@@ -249,6 +261,7 @@ public class PianoInteractable : MonoBehaviour
             yield return null;
         }
 
+        // Retour à la position initiale
         t = 0f;
         while (t < 1f)
         {
@@ -256,14 +269,7 @@ public class PianoInteractable : MonoBehaviour
             keyObj.transform.localPosition = Vector3.Lerp(pressed, original, t);
             yield return null;
         }
-
         keyObj.transform.localPosition = original;
-    }
-
-    bool IsPlayerInRange()
-    {
-        if (playerCamera == null) return false;
-        return Vector3.Distance(playerCamera.transform.position, transform.position) <= interactionRange;
     }
 
     void OnDrawGizmosSelected()
