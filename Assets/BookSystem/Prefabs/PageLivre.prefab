@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &2744959619039018689
+--- !u!1001 &8154020506907004689
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,27 +10,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: d890f954a05ec624bb2e3a5c03a923f4, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 0.45999995
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d890f954a05ec624bb2e3a5c03a923f4, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.35714287
+      value: 0.3285714
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d890f954a05ec624bb2e3a5c03a923f4, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.35714287
+      value: 0.3285714
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d890f954a05ec624bb2e3a5c03a923f4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.9242415
+      value: -9.037883
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d890f954a05ec624bb2e3a5c03a923f4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.403
+      value: 0.0003287689
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d890f954a05ec624bb2e3a5c03a923f4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 8.651092
+      value: 8.372764
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d890f954a05ec624bb2e3a5c03a923f4, type: 3}
       propertyPath: m_LocalRotation.w
@@ -64,6 +64,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d890f954a05ec624bb2e3a5c03a923f4, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f3e17d2ba0a066b47a410f58732c56d3, type: 2}
     - target: {fileID: 919132149155446097, guid: d890f954a05ec624bb2e3a5c03a923f4, type: 3}
       propertyPath: m_Name
       value: PageLivre
@@ -74,28 +78,29 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d890f954a05ec624bb2e3a5c03a923f4, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8586839536105626982}
+      addedObject: {fileID: 1968778389711889035}
   m_SourcePrefab: {fileID: 100100000, guid: d890f954a05ec624bb2e3a5c03a923f4, type: 3}
---- !u!1 &3087613278614029200 stripped
+--- !u!1 &9072940854984602176 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d890f954a05ec624bb2e3a5c03a923f4, type: 3}
-  m_PrefabInstance: {fileID: 2744959619039018689}
+  m_PrefabInstance: {fileID: 8154020506907004689}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8586839536105626982
+--- !u!114 &1968778389711889035
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3087613278614029200}
+  m_GameObject: {fileID: 9072940854984602176}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2507f6813b53b924b920bb1c0f30e07f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PageTurner
   turnDuration: 1.5
-  maxCurve: 0.15
+  maxCurve: 0.1
   startRotation: {x: 90, y: 0, z: 0}
   endRotation: {x: -90, y: 0, z: 0}
   foldOriginX: 1
   foldOriginY: 0.33
+  currentState: 0

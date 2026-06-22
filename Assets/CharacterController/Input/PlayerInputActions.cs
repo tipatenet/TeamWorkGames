@@ -181,6 +181,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Open/CloseBook"",
+                    ""type"": ""Button"",
+                    ""id"": ""f262a7e6-b559-43d6-ba75-6d279496111b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -480,6 +489,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Pose"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3995821b-40f7-4a43-be69-844a2359cf55"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Open/CloseBook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -498,6 +518,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_RotateItem = m_Player.FindAction("RotateItem", throwIfNotFound: true);
         m_Player_Click = m_Player.FindAction("Click", throwIfNotFound: true);
         m_Player_Pose = m_Player.FindAction("Pose", throwIfNotFound: true);
+        m_Player_OpenCloseBook = m_Player.FindAction("Open/CloseBook", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -588,6 +609,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_RotateItem;
     private readonly InputAction m_Player_Click;
     private readonly InputAction m_Player_Pose;
+    private readonly InputAction m_Player_OpenCloseBook;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -639,6 +661,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Pose".
         /// </summary>
         public InputAction @Pose => m_Wrapper.m_Player_Pose;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/OpenCloseBook".
+        /// </summary>
+        public InputAction @OpenCloseBook => m_Wrapper.m_Player_OpenCloseBook;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -695,6 +721,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Pose.started += instance.OnPose;
             @Pose.performed += instance.OnPose;
             @Pose.canceled += instance.OnPose;
+            @OpenCloseBook.started += instance.OnOpenCloseBook;
+            @OpenCloseBook.performed += instance.OnOpenCloseBook;
+            @OpenCloseBook.canceled += instance.OnOpenCloseBook;
         }
 
         /// <summary>
@@ -736,6 +765,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Pose.started -= instance.OnPose;
             @Pose.performed -= instance.OnPose;
             @Pose.canceled -= instance.OnPose;
+            @OpenCloseBook.started -= instance.OnOpenCloseBook;
+            @OpenCloseBook.performed -= instance.OnOpenCloseBook;
+            @OpenCloseBook.canceled -= instance.OnOpenCloseBook;
         }
 
         /// <summary>
@@ -846,5 +878,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPose(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Open/CloseBook" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnOpenCloseBook(InputAction.CallbackContext context);
     }
 }

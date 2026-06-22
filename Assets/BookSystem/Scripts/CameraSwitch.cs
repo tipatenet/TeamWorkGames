@@ -12,11 +12,11 @@ public class CameraSwitch : MonoBehaviour
     public Camera playerCamera;
     public Camera bookCamera;
 
-    [Header("Touche de switch")]
-    public KeyCode switchKey = KeyCode.Tab;
+    [Header("Cursor")]
+    public GameObject UIPlayer;
 
     [Header("Mouvement joueur à désactiver")]
-    public MonoBehaviour[] playerScripts;
+    public PlayerInputHandler handler;
 
     [Header("Fondu")]
     public bool  useFade     = true;
@@ -38,7 +38,7 @@ public class CameraSwitch : MonoBehaviour
 
     void Update()
     {
-        if (!_busy && Input.GetKeyDown(switchKey))
+        if (!_busy && handler.OpenCloseBook)
             Switch();
     }
 
@@ -86,15 +86,21 @@ public class CameraSwitch : MonoBehaviour
         CurrentMode = mode;
         bool book = (mode == Mode.Book);
 
-        if (playerCamera != null) playerCamera.gameObject.SetActive(!book);
-        if (bookCamera   != null) bookCamera.gameObject.SetActive(book);
+        if (playerCamera != null)
+        {
+            playerCamera.gameObject.SetActive(!book);
+            handler.LockGamePlayForBook(true);
+            UIPlayer.SetActive(!book);
+        }
+        if (bookCamera != null)
+        {
+            bookCamera.gameObject.SetActive(book);
+            handler.LockGamePlayForBook(false);
+            UIPlayer.SetActive(!book);
+        }
 
         Cursor.visible   = book;
         Cursor.lockState = book ? CursorLockMode.None : CursorLockMode.Locked;
-
-        if (playerScripts != null)
-            foreach (var s in playerScripts)
-                if (s != null) s.enabled = !book;
     }
 
     // -----------------------------------------------------------

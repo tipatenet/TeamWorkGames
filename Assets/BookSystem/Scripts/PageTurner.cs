@@ -12,10 +12,8 @@ public class PageTurner : MonoBehaviour
     public Vector3 endRotation = new Vector3(-180f, 0f, 0f);
 
     [Header("Fold Pivot (0 = left/bottom, 1 = right/top)")]
-    [Range(0f, 1f)]
-    public float foldOriginX = 1f;   // 0 = gauche (reliure), 1 = droite
-    [Range(0f, 1f)]
-    public float foldOriginY = 0f;   // 0 = bas, 1 = haut
+    [Range(0f, 1f)] public float foldOriginX = 1f;
+    [Range(0f, 1f)] public float foldOriginY = 0f;
 
     private Mesh mesh;
     private Vector3[] originalVertices;
@@ -27,12 +25,13 @@ public class PageTurner : MonoBehaviour
     private float minX, maxX, width;
     private float minY, maxY, height;
 
-    public enum states { 
-        turn,
-        notTurn
-    };
+    public enum State
+    {
+        NotTurn,
+        Turning
+    }
 
-    public states currentState = states.notTurn;
+    public State currentState = State.NotTurn;
 
     void Start()
     {
@@ -47,7 +46,6 @@ public class PageTurner : MonoBehaviour
             return;
         }
 
-        // bounds X
         minX = maxX = originalVertices[0].x;
         minY = maxY = originalVertices[0].y;
 
@@ -68,7 +66,7 @@ public class PageTurner : MonoBehaviour
 
     void Update()
     {
-        if (!turning) return;
+        if (currentState != State.Turning) return;
 
         timer += Time.deltaTime;
 
@@ -85,16 +83,23 @@ public class PageTurner : MonoBehaviour
 
         if (progress >= 1f)
         {
-            turning = false;
-            transform.localRotation = Quaternion.Euler(endRotation);
-            BendPage(0f, 1f);
+            FinishTurn();
         }
     }
 
     public void TurnPage()
     {
+        if (currentState == State.Turning) return; // anti spam
+
         timer = 0f;
-        turning = true;
+        currentState = State.Turning;
+    }
+
+    void FinishTurn()
+    {
+        currentState = State.NotTurn;
+        transform.localRotation = Quaternion.Euler(endRotation);
+        BendPage(0f, 1f);
     }
 
     void BendPage(float curveAmount, float progress)
@@ -103,33 +108,25 @@ public class PageTurner : MonoBehaviour
         {
             Vector3 v = originalVertices[i];
 
-            // normalisation 0–1
             float tx = (v.x - minX) / width;
             float ty = (v.y - minY) / height;
 
-            // distance au point de pli configurable
             float dx = tx - foldOriginX;
             float dy = ty - foldOriginY;
 
             float dist = Mathf.Sqrt(dx * dx + dy * dy);
 
-            // plus loin du pivot = plus de pli
             float edgeWeight = Mathf.Clamp01(dist);
 
-            // courbure principale type "papier"
             float bend = Mathf.Sin(dist * Mathf.PI) * edgeWeight * curveAmount;
 
-            // roulage pendant rotation
             float roll = Mathf.Sin(progress * Mathf.PI) *
                          edgeWeight * edgeWeight *
                          maxCurve * 0.5f;
 
             Vector3 newVertex = v;
 
-            // courbure verticale
             newVertex.y += bend;
-
-            // déplacement latéral effet page qui se retourne
             newVertex.x -= roll;
 
             vertices[i] = newVertex;
