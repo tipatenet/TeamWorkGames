@@ -8881,7 +8881,7 @@ GameObject:
   - component: {fileID: 505579988}
   - component: {fileID: 505579987}
   m_Layer: 0
-  m_Name: Egnime Tuyau
+  m_Name: Egnime Tuyau NB1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8915,7 +8915,6 @@ MonoBehaviour:
   rotationSound: {fileID: 0}
   successSound: {fileID: 0}
   vapeurBlockage: {fileID: 500189174}
-  link: {fileID: 0}
 --- !u!4 &505579988
 Transform:
   m_ObjectHideFlags: 0
@@ -15592,13 +15591,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 887380385}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 25.27529, y: -1.9128628, z: 10.72103}
   m_LocalScale: {x: 0.12778606, y: 0.12778606, z: 0.12778606}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 505579988}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!114 &887380390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27072,13 +27071,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1390147729}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 26.415304, y: -1.9128628, z: 10.72103}
   m_LocalScale: {x: 0.12778606, y: 0.12778606, z: 0.12778606}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 505579988}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!114 &1390147734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28919,13 +28918,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1480427265}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 27.753317, y: -1.9128628, z: 10.72103}
   m_LocalScale: {x: 0.12778606, y: 0.12778606, z: 0.12778606}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 505579988}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!114 &1480427270
 MonoBehaviour:
   m_ObjectHideFlags: 0

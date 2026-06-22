@@ -12,7 +12,7 @@ public class EnigmeTuyaux : MonoBehaviour
     public GameObject tuyau2;
     public GameObject tuyau3;
 
-    [Header("Solution (0 = position initiale, 1 = 90°, 2 = 180°, 3 = 270°)")]
+    [Header("Solution (0 = 0°, 1 = 45°, 2 = 90°, 3 = 135°, 4 = 180°, 5 = 225°, 6 = 270°, 7 = 315°)")]
     public int solutionTuyau1 = 1;
     public int solutionTuyau2 = 2;
     public int solutionTuyau3 = 3;
@@ -28,7 +28,6 @@ public class EnigmeTuyaux : MonoBehaviour
 
     [Header("Objets reliés")]
     public GameObject vapeurBlockage;  // la vapeur qui bloque le passage
-    public Opening_System link;        // optionnel, comme dans l'engrenage
 
     private bool canInteract = true;
     private float cooldownTime = 0.6f;
@@ -116,9 +115,10 @@ public class EnigmeTuyaux : MonoBehaviour
 
     void RotateTuyau(GameObject tuyau, ref int currentPos)
     {
-        currentPos = (currentPos + 1) % 4;
+        currentPos = (currentPos + 1) % 8;
 
-        StartCoroutine(SmoothRotate(tuyau, new Vector3(0, 0, 90), 0.2f));
+        StartCoroutine(SmoothRotate(tuyau, new Vector3(0, 0, 45), 0.2f));
+        if (VerifyCode()) OnEnigmeResolue();
     }
 
     IEnumerator SmoothRotate(GameObject obj, Vector3 rotation, float duration)
@@ -151,18 +151,11 @@ public class EnigmeTuyaux : MonoBehaviour
 
     void OnEnigmeResolue()
     {
+        if (enigmeResolue) return;
         enigmeResolue = true;
         source.PlayOneShot(successSound);
 
         // Désactive la vapeur
-        if (vapeurBlockage != null)
-            StartCoroutine(DisableVapeurDelayed(1.5f));
-    }
-
-    IEnumerator DisableVapeurDelayed(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-
         if (vapeurBlockage != null)
             vapeurBlockage.SetActive(false);
     }
