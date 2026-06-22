@@ -1790,6 +1790,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba503195086a18479dfdc1c99113e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GestionFrequence
+  texteFrequence: {fileID: 0}
+  frequenceActuelle: 87.5
+  frequenceACherche: 100
+  pas: 0.1
+  frequenceMin: 87.5
+  frequenceMax: 108
+  tolerance: 0.01
+  OnFrequenceTrouvee:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &84270986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13293,11 +13303,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3828068470096251881, guid: 8f405fcc79aad6442b9dcccaca5d5d4e, type: 3}
   m_PrefabInstance: {fileID: 470138411}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &470984531 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3351107634038123682, guid: e061c3c2929a4ff4ea6e1fcc179c3f99, type: 3}
-  m_PrefabInstance: {fileID: 622375884}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &471814571
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13513,6 +13518,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01447b160b9aeef459134eb1d5dce415, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarLoop
+  waypointsLaneA: []
+  waypointsLaneB: []
+  startOnLaneA: 1
+  startWaypointIndex: 0
+  speed: 10
+  waypointThreshold: 0.5
+  detectionDistance: 15
+  minDistance: 3
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  carLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  stopAudioSource: {fileID: 0}
 --- !u!4 &476877716 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3239481311355110186, guid: 52e3f6297379ffa48954392c6d79ef4e, type: 3}
@@ -13624,7 +13644,7 @@ AudioSource:
   m_GameObject: {fileID: 476877714}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: b1487a0a5e2a1f44099e7c8d5003377a, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 68780787e5f852c41957060f204abac6, type: 3}
   m_PlayOnAwake: 1
@@ -15810,18 +15830,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 155730607}
     m_Modifications:
     - target: {fileID: 2723083551288423960, guid: e061c3c2929a4ff4ea6e1fcc179c3f99, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 2723083551288423960, guid: e061c3c2929a4ff4ea6e1fcc179c3f99, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 2723083551288423960, guid: e061c3c2929a4ff4ea6e1fcc179c3f99, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 2723083551288423960, guid: e061c3c2929a4ff4ea6e1fcc179c3f99, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.3576593
       objectReference: {fileID: 0}
@@ -15868,137 +15876,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3351107634038123682, guid: e061c3c2929a4ff4ea6e1fcc179c3f99, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 622375886}
-    - targetCorrespondingSourceObject: {fileID: 3351107634038123682, guid: e061c3c2929a4ff4ea6e1fcc179c3f99, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 622375887}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e061c3c2929a4ff4ea6e1fcc179c3f99, type: 3}
 --- !u!4 &622375885 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2723083551288423960, guid: e061c3c2929a4ff4ea6e1fcc179c3f99, type: 3}
   m_PrefabInstance: {fileID: 622375884}
   m_PrefabAsset: {fileID: 0}
---- !u!82 &622375886
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 470984531}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 050ebc7f3de3dd3479cc5f4fcaf67334, type: 3}
-  m_PlayOnAwake: 1
-  m_Volume: 0.8
-  m_Pitch: 1
-  Loop: 1
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 100
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 2.5
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!65 &622375887
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 470984531}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &622564121 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: aa5471ee75c0fdb4c907314540abf88f, type: 3}
@@ -16293,6 +16177,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01447b160b9aeef459134eb1d5dce415, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarLoop
+  waypointsLaneA: []
+  waypointsLaneB: []
+  startOnLaneA: 1
+  startWaypointIndex: 0
+  speed: 10
+  waypointThreshold: 0.5
+  detectionDistance: 15
+  minDistance: 3
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  carLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  stopAudioSource: {fileID: 0}
 --- !u!1001 &631415739
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21531,11 +21430,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &1006353570 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7035193621582100787, guid: 2a3a5cfe03b8d4745bd77dae5a5f5774, type: 3}
-  m_PrefabInstance: {fileID: 1734808306}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1012902644
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22795,7 +22689,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 9675b8ed251b4eb42af5c6982bd768fc, type: 3}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 0.7
   m_Pitch: 1
@@ -23670,6 +23564,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba503195086a18479dfdc1c99113e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GestionFrequence
+  texteFrequence: {fileID: 0}
+  frequenceActuelle: 87.5
+  frequenceACherche: 100
+  pas: 0.1
+  frequenceMin: 87.5
+  frequenceMax: 108
+  tolerance: 0.01
+  OnFrequenceTrouvee:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1126133043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31682,6 +31586,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba503195086a18479dfdc1c99113e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GestionFrequence
+  texteFrequence: {fileID: 0}
+  frequenceActuelle: 87.5
+  frequenceACherche: 100
+  pas: 0.1
+  frequenceMin: 87.5
+  frequenceMax: 108
+  tolerance: 0.01
+  OnFrequenceTrouvee:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1625075601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33199,18 +33113,6 @@ PrefabInstance:
       value: BlackWalnutTree_Autumn01 (6)
       objectReference: {fileID: 0}
     - target: {fileID: 7703926131011806089, guid: 2a3a5cfe03b8d4745bd77dae5a5f5774, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 7703926131011806089, guid: 2a3a5cfe03b8d4745bd77dae5a5f5774, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 7703926131011806089, guid: 2a3a5cfe03b8d4745bd77dae5a5f5774, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 7703926131011806089, guid: 2a3a5cfe03b8d4745bd77dae5a5f5774, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.3576555
       objectReference: {fileID: 0}
@@ -33253,137 +33155,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7035193621582100787, guid: 2a3a5cfe03b8d4745bd77dae5a5f5774, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1734808308}
-    - targetCorrespondingSourceObject: {fileID: 7035193621582100787, guid: 2a3a5cfe03b8d4745bd77dae5a5f5774, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1734808309}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a3a5cfe03b8d4745bd77dae5a5f5774, type: 3}
 --- !u!4 &1734808307 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7703926131011806089, guid: 2a3a5cfe03b8d4745bd77dae5a5f5774, type: 3}
   m_PrefabInstance: {fileID: 1734808306}
   m_PrefabAsset: {fileID: 0}
---- !u!82 &1734808308
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1006353570}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 050ebc7f3de3dd3479cc5f4fcaf67334, type: 3}
-  m_PlayOnAwake: 1
-  m_Volume: 0.8
-  m_Pitch: 1
-  Loop: 1
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 100
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 2.5
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!65 &1734808309
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1006353570}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1736480813
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35307,6 +35085,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba503195086a18479dfdc1c99113e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GestionFrequence
+  texteFrequence: {fileID: 0}
+  frequenceActuelle: 87.5
+  frequenceACherche: 100
+  pas: 0.1
+  frequenceMin: 87.5
+  frequenceMax: 108
+  tolerance: 0.01
+  OnFrequenceTrouvee:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &1839960040
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38191,6 +37979,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01447b160b9aeef459134eb1d5dce415, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarLoop
+  waypointsLaneA: []
+  waypointsLaneB: []
+  startOnLaneA: 1
+  startWaypointIndex: 0
+  speed: 10
+  waypointThreshold: 0.5
+  detectionDistance: 15
+  minDistance: 3
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  carLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  stopAudioSource: {fileID: 0}
 --- !u!4 &2015752669 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3239481311355110186, guid: 52e3f6297379ffa48954392c6d79ef4e, type: 3}
@@ -38205,7 +38008,7 @@ AudioSource:
   m_GameObject: {fileID: 2015752667}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: b1487a0a5e2a1f44099e7c8d5003377a, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 1b9d58ecc92deed40a61b7eecdf88d3d, type: 3}
   m_PlayOnAwake: 0
@@ -38302,7 +38105,7 @@ AudioSource:
   m_GameObject: {fileID: 2015752667}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: b1487a0a5e2a1f44099e7c8d5003377a, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 68780787e5f852c41957060f204abac6, type: 3}
   m_PlayOnAwake: 1
@@ -39083,6 +38886,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3e7d7f31ce7ea448a6577dd482f0972, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RadioInteraction
+  interactRadius: 2
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  transitionTime: 1
+  maxDistanceInteract: 2
+  cursorSpeed: 800
+  keySystem: {fileID: 0}
+  interact: {fileID: 0}
+  lookCam: {fileID: 0}
+  playerCam: {fileID: 0}
+  cursorPoint: {fileID: 0}
+  gestionFrequence: {fileID: 0}
 --- !u!65 &2074954430
 BoxCollider:
   m_ObjectHideFlags: 0
