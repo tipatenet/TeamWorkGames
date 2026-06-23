@@ -1,6 +1,9 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class RadioInteraction : MonoBehaviour
 {
@@ -8,28 +11,44 @@ public class RadioInteraction : MonoBehaviour
     public float interactRadius = 2f;
     public LayerMask playerLayer;
     public float transitionTime = 1f;
-    public float maxDistanceInteract = 2f;
-    public float cursorSpeed = 800f;
 
     [Header("Références Caméras & UI")]
     public PlayerInputHandler keySystem;
     public Interact interact;
-    public Camera lookCam;     // Caméra fixe dédiée à la radio
-    public Camera playerCam;   // Caméra principale du joueur
-    public RectTransform cursorPoint; // Le point UI du curseur
+    public Camera lookCam;
+    public Camera playerCam;
+    public RectTransform cursorPoint;
 
     [Header("Référence Radio")]
-    public GestionFrequence gestionFrequence; // Ton script de gestion de fréquence
+    public GestionFrequence gestionFrequence;
+
+    [Header("Canvas de la Radio")]
+    public GraphicRaycaster graphicRaycaster;
 
     private bool canInteract = true;
     private bool cameraModeActive = false;
     private Vector2 cursorPosition;
     private BoxCollider boxRadio;
+    private Coroutine transitionCoroutine;
+
+    // Variables d'Appui Long & Clics unitaires
+    private float holdTimer = 0f;
+    private float nextTickTimer = 0f;
+    private bool isHoldingButton = false;
+    private bool dejaCliqueCeCoupCi = false;
+    private string currentHeldTag = "";
+
+    [Header("Paramètres Appui Long")]
+    public float tempsAvantAppuiLong = 0.4f;
+    public float vitesseDefilementLong = 0.08f;
 
     void Start()
     {
-        // Centre le curseur au démarrage
-        cursorPosition = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        boxRadio = GetComponent<BoxCollider>();
+        if (boxRadio == null)
+        {
+            Debug.LogError($"[RadioInteraction] Il manque un BoxCollider sur l'objet {gameObject.name} pour détecter l'interaction initiale !");
+        }
     }
 
     void Update()
@@ -37,7 +56,23 @@ public class RadioInteraction : MonoBehaviour
         if (IsPlayerInRange())
         {
             HandleInteraction();
-            ClickRadioButtons();
+
+            if (cameraModeActive)
+            {
+                // SÉCURITÉ ABSOLUE : Force le curseur à rester visible et déverrouillé à chaque frame
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+
+                if (canInteract)
+                {
+                    UpdateCursor();
+                    ClickRadioButtons();
+                }
+            }
+        }
+        else if (cameraModeActive)
+        {
+            ToggleCameraMode(false);
         }
     }
 
@@ -49,140 +84,191 @@ public class RadioInteraction : MonoBehaviour
 
     private void HandleInteraction()
     {
-        if (!keySystem.InteractPressed || !canInteract)
+        if (keySystem == null || !keySystem.InteractPressed || !canInteract)
             return;
 
         if (!cameraModeActive)
         {
-            // Entrée en mode Zoom
+            if (interact == null) return;
             RaycastHit hit = interact.IsInteractive(false);
-            if (hit.collider == null || !hit.collider.CompareTag("radio"))
+
+            if (hit.collider == null || (hit.collider != boxRadio && !hit.collider.CompareTag("radio")))
                 return;
 
-            boxRadio = hit.collider.GetComponent<BoxCollider>();
-            ToggleCameraMode();
-            SwitchCameraPosition(cameraModeActive);
+            ToggleCameraMode(true);
         }
         else
         {
-            // Sortie du mode Zoom
-            ToggleCameraMode();
-            SwitchCameraPosition(cameraModeActive);
+            ToggleCameraMode(false);
         }
     }
 
-    private void ToggleCameraMode()
+    private void ToggleCameraMode(bool active)
     {
-        cameraModeActive = !cameraModeActive;
+        cameraModeActive = active;
+        isHoldingButton = false;
+        dejaCliqueCeCoupCi = false;
+        currentHeldTag = "";
 
         if (cameraModeActive)
         {
-            cursorPoint.gameObject.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            if (cursorPoint != null) cursorPoint.gameObject.SetActive(true);
             if (boxRadio != null) boxRadio.enabled = false;
         }
         else
         {
-            Vector2 center = new Vector2(Screen.width / 2f, Screen.height / 2f);
-            Mouse.current?.WarpCursorPosition(center);
-            cursorPosition = center;
-            cursorPoint.position = center;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            if (cursorPoint != null) cursorPoint.gameObject.SetActive(false);
             if (boxRadio != null) boxRadio.enabled = true;
         }
+
+        SwitchCameraPosition(cameraModeActive);
     }
 
     private void SwitchCameraPosition(bool active)
     {
-        // Réutilise la fonction du cadenas pour bloquer le joueur mais garder le look/clic
-        keySystem.LockGamePlayForCodeLock(active);
+        if (keySystem != null) keySystem.LockGamePlayForCodeLock(active);
 
-        lookCam.gameObject.SetActive(active);
+        if (lookCam != null && playerCam != null)
+        {
+            lookCam.gameObject.SetActive(active);
+            lookCam.depth = active ? playerCam.depth + 1 : playerCam.depth - 1;
 
-        if (active)
-            lookCam.depth = playerCam.depth + 1;
-        else
-            lookCam.depth = playerCam.depth - 1;
+            AudioListener playerListener = playerCam.GetComponent<AudioListener>();
+            AudioListener lookListener = lookCam.GetComponent<AudioListener>();
 
-        playerCam.GetComponent<AudioListener>().enabled = !active;
-        lookCam.GetComponent<AudioListener>().enabled = active;
+            if (playerListener != null) playerListener.enabled = !active;
+            if (lookListener != null) lookListener.enabled = active;
+        }
 
-        StartCoroutine(CameraTransition(active));
+        if (gestionFrequence != null)
+        {
+            gestionFrequence.SetAudioActive(active);
+        }
+
+        if (transitionCoroutine != null) StopCoroutine(transitionCoroutine);
+        transitionCoroutine = StartCoroutine(CameraTransition(active));
     }
 
     private IEnumerator CameraTransition(bool active)
     {
         canInteract = false;
 
-        Vector3 targetPos = active ? lookCam.transform.position : playerCam.transform.position;
-        Vector3 targetRot = active ? lookCam.transform.eulerAngles : playerCam.transform.eulerAngles;
-
-        if (active)
+        if (lookCam != null && playerCam != null)
         {
-            lookCam.transform.position = playerCam.transform.position;
-            lookCam.transform.eulerAngles = playerCam.transform.eulerAngles;
-        }
+            Vector3 startPos = active ? playerCam.transform.position : lookCam.transform.position;
+            Quaternion startRot = active ? playerCam.transform.rotation : lookCam.transform.rotation;
 
-        iTween.MoveTo(lookCam.gameObject, targetPos, transitionTime);
-        iTween.RotateTo(lookCam.gameObject, targetRot, transitionTime * 1.5f);
+            Vector3 targetPos = active ? lookCam.transform.position : playerCam.transform.position;
+            Quaternion targetRot = active ? lookCam.transform.rotation : playerCam.transform.rotation;
 
-        yield return new WaitForSeconds(transitionTime);
-        canInteract = true;
-    }
-
-    private void ClickRadioButtons()
-    {
-        if (!cameraModeActive) return;
-
-        UpdateCursor();
-
-        // Envoie un Raycast depuis la caméra zoomée vers la position du curseur custom
-        Ray ray = lookCam.ScreenPointToRay(cursorPosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, maxDistanceInteract))
-        {
-            // Si on clique
-            if (keySystem.ClickInteract && canInteract)
+            if (active)
             {
-                // Vérifie si l'objet cliqué possède un tag spécifique pour les boutons de la radio
-                if (hit.transform.CompareTag("BoutonRadioDroite"))
-                {
-                    gestionFrequence.AugmenterFrequence();
-                    StartCoroutine(InteractionCooldown());
-                }
-                else if (hit.transform.CompareTag("BoutonRadioGauche"))
-                {
-                    gestionFrequence.DiminuerFrequence();
-                    StartCoroutine(InteractionCooldown());
-                }
+                lookCam.transform.position = startPos;
+                lookCam.transform.rotation = startRot;
             }
+
+            float elapsedTime = 0f;
+            while (elapsedTime < transitionTime)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsedTime / transitionTime);
+                float tSmoothed = Mathf.SmoothStep(0f, 1f, t);
+
+                lookCam.transform.position = Vector3.Lerp(startPos, targetPos, tSmoothed);
+                lookCam.transform.rotation = Quaternion.Lerp(startRot, targetRot, tSmoothed);
+                yield return null;
+            }
+
+            lookCam.transform.position = targetPos;
+            lookCam.transform.rotation = targetRot;
         }
+
+        canInteract = true;
     }
 
     private void UpdateCursor()
     {
         if (Mouse.current != null)
         {
-            Vector2 mouseDelta = Mouse.current.delta.ReadValue();
-            cursorPosition += mouseDelta;
+            cursorPosition = Mouse.current.position.ReadValue();
+        }
+    }
+
+    private void ClickRadioButtons()
+    {
+        if (keySystem == null || graphicRaycaster == null) return;
+
+        // 1. Détection du clic initial (Unitaire)
+        if (keySystem.ClickInteract)
+        {
+            if (!dejaCliqueCeCoupCi && !isHoldingButton)
+            {
+                PointerEventData pointerData = new PointerEventData(EventSystem.current) { position = cursorPosition };
+                List<RaycastResult> results = new List<RaycastResult>();
+                graphicRaycaster.Raycast(pointerData, results);
+
+                foreach (RaycastResult result in results)
+                {
+                    string objTag = result.gameObject.tag;
+                    if (objTag == "BoutonRadioDroite" || objTag == "BoutonRadioGauche")
+                    {
+                        isHoldingButton = true;
+                        dejaCliqueCeCoupCi = true;
+                        currentHeldTag = objTag;
+                        holdTimer = 0f;
+                        nextTickTimer = 0f;
+
+                        AppliquerActionBouton(currentHeldTag, false);
+                        break;
+                    }
+                }
+            }
         }
 
-        cursorPosition += keySystem.LookInput * cursorSpeed * Time.deltaTime;
+        // 2. Gestion du maintien continu (Appui long)
+        if (isHoldingButton && keySystem.ClickInteract)
+        {
+            holdTimer += Time.deltaTime;
 
-        cursorPosition.x = Mathf.Clamp(cursorPosition.x, 0, Screen.width);
-        cursorPosition.y = Mathf.Clamp(cursorPosition.y, 0, Screen.height);
+            if (holdTimer >= tempsAvantAppuiLong)
+            {
+                nextTickTimer += Time.deltaTime;
+                if (nextTickTimer >= vitesseDefilementLong)
+                {
+                    nextTickTimer = 0f;
+                    AppliquerActionBouton(currentHeldTag, true);
+                }
+            }
+        }
 
-        if (cursorPoint != null)
-            cursorPoint.position = cursorPosition;
+        // 3. Relâchement complet de la touche de clic
+        if (!keySystem.ClickInteract)
+        {
+            isHoldingButton = false;
+            dejaCliqueCeCoupCi = false;
+            currentHeldTag = "";
+            holdTimer = 0f;
+            nextTickTimer = 0f;
+        }
     }
 
-    private IEnumerator InteractionCooldown()
+    private void AppliquerActionBouton(string tag, bool isLongPress)
     {
-        canInteract = false;
-        yield return new WaitForSeconds(0.2f); // Cooldown rapide pour pouvoir cliquer à la suite confortablement
-        canInteract = true;
-    }
+        if (gestionFrequence == null) return;
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawSphere(transform.position, interactRadius);
+        float pasAUtiliser = isLongPress ? 0.2f : 0.1f;
+
+        if (tag == "BoutonRadioDroite")
+        {
+            gestionFrequence.ChangerFrequence(pasAUtiliser);
+        }
+        else if (tag == "BoutonRadioGauche")
+        {
+            gestionFrequence.ChangerFrequence(-pasAUtiliser);
+        }
     }
 }
