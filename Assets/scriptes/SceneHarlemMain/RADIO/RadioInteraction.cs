@@ -11,7 +11,6 @@ public class RadioInteraction : MonoBehaviour
     public float interactRadius = 2f;
     public LayerMask playerLayer;
     public float transitionTime = 1f;
-    public float cursorSpeed = 800f;
 
     [Header("Références Caméras & UI")]
     public PlayerInputHandler keySystem;
@@ -32,16 +31,18 @@ public class RadioInteraction : MonoBehaviour
     private BoxCollider boxRadio;
     private Coroutine transitionCoroutine;
 
+    // Variables pour la gestion de l'appui long
     private float holdTimer = 0f;
     private float nextTickTimer = 0f;
     private bool isHoldingButton = false;
     private string currentHeldTag = "";
-    private const float TIME_TO_HOLD = 0.4f;
-    private const float TICK_RATE_HOLD = 0.1f;
+
+    [Header("Paramètres Appui Long")]
+    public float tempsAvantAppuiLong = 0.4f; // Temps à attendre avant de défiler vite
+    public float vitesseDefilementLong = 0.08f; // Intervalle entre chaque incrément rapide
 
     void Start()
     {
-        cursorPosition = new Vector2(Screen.width / 2f, Screen.height / 2f);
         boxRadio = GetComponent<BoxCollider>();
     }
 
@@ -59,7 +60,7 @@ public class RadioInteraction : MonoBehaviour
         }
         else if (cameraModeActive)
         {
-            ForceExitRadioMode();
+            ToggleCameraMode(false);
         }
     }
 
@@ -101,22 +102,13 @@ public class RadioInteraction : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-
-            Vector2 center = new Vector2(Screen.width / 2f, Screen.height / 2f);
-            cursorPosition = center;
-            if (cursorPoint != null)
-            {
-                cursorPoint.gameObject.SetActive(true);
-                cursorPoint.position = center;
-            }
-
+            if (cursorPoint != null) cursorPoint.gameObject.SetActive(true);
             if (boxRadio != null) boxRadio.enabled = false;
         }
         else
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-
             if (cursorPoint != null) cursorPoint.gameObject.SetActive(false);
             if (boxRadio != null) boxRadio.enabled = true;
         }
@@ -133,13 +125,11 @@ public class RadioInteraction : MonoBehaviour
             lookCam.gameObject.SetActive(active);
             lookCam.depth = active ? playerCam.depth + 1 : playerCam.depth - 1;
 
-            // VÉRIFICATION : On s'assure qu'au moins un AudioListener capte le son
             AudioListener playerListener = playerCam.GetComponent<AudioListener>();
             AudioListener lookListener = lookCam.GetComponent<AudioListener>();
 
             if (playerListener != null) playerListener.enabled = !active;
             if (lookListener != null) lookListener.enabled = active;
-            else if (playerListener != null) playerListener.enabled = true; // Sécurité si pas d'écouteur sur lookCam
         }
 
         if (gestionFrequence != null)
@@ -157,16 +147,16 @@ public class RadioInteraction : MonoBehaviour
 
         if (lookCam != null && playerCam != null)
         {
-            Vector3 startPos = lookCam.transform.position;
-            Quaternion startRot = lookCam.transform.rotation;
+            Vector3 startPos = active ? playerCam.transform.position : lookCam.transform.position;
+            Quaternion startRot = active ? playerCam.transform.rotation : lookCam.transform.rotation;
 
             Vector3 targetPos = active ? lookCam.transform.position : playerCam.transform.position;
             Quaternion targetRot = active ? lookCam.transform.rotation : playerCam.transform.rotation;
 
             if (active)
             {
-                startPos = playerCam.transform.position;
-                startRot = playerCam.transform.rotation;
+                lookCam.transform.position = startPos;
+                lookCam.transform.rotation = startRot;
             }
 
             float elapsedTime = 0f;
@@ -194,23 +184,13 @@ public class RadioInteraction : MonoBehaviour
         {
             cursorPosition = Mouse.current.position.ReadValue();
         }
-
-        if (keySystem != null)
-        {
-            cursorPosition += keySystem.LookInput * cursorSpeed * Time.deltaTime;
-        }
-
-        cursorPosition.x = Mathf.Clamp(cursorPosition.x, 0, Screen.width);
-        cursorPosition.y = Mathf.Clamp(cursorPosition.y, 0, Screen.height);
-
-        if (cursorPoint != null)
-            cursorPoint.position = cursorPosition;
     }
 
     private void ClickRadioButtons()
     {
         if (keySystem == null || graphicRaycaster == null) return;
 
+        // 1. Détection du premier clic (Instantone)
         if (keySystem.ClickInteract && !isHoldingButton)
         {
             PointerEventData pointerData = new PointerEventData(EventSystem.current) { position = cursorPosition };
@@ -219,33 +199,39 @@ public class RadioInteraction : MonoBehaviour
 
             foreach (RaycastResult result in results)
             {
-                string tag = result.gameObject.tag;
-                if (tag == "BoutonRadioDroite" || tag == "BoutonRadioGauche")
+                string objTag = result.gameObject.tag;
+                if (objTag == "BoutonRadioDroite" || objTag == "BoutonRadioGauche")
                 {
                     isHoldingButton = true;
-                    currentHeldTag = tag;
+                    currentHeldTag = objTag;
                     holdTimer = 0f;
+                    nextTickTimer = 0f;
+
+                    // Premier clic unitaire (pas de 0.1 MHz)
                     AppliquerActionBouton(currentHeldTag, false);
                     break;
                 }
             }
         }
 
+        // 2. Gestion du maintien enfoncé (Appui long)
         if (isHoldingButton && keySystem.ClickInteract)
         {
             holdTimer += Time.deltaTime;
 
-            if (holdTimer >= TIME_TO_HOLD)
+            if (holdTimer >= tempsAvantAppuiLong)
             {
                 nextTickTimer += Time.deltaTime;
-                if (nextTickTimer >= TICK_RATE_HOLD)
+                if (nextTickTimer >= vitesseDefilementLong)
                 {
                     nextTickTimer = 0f;
+                    // Mode rapide activé (pas de 0.2 MHz)
                     AppliquerActionBouton(currentHeldTag, true);
                 }
             }
         }
 
+        // 3. Relâchement du bouton
         if (!keySystem.ClickInteract && isHoldingButton)
         {
             isHoldingButton = false;
@@ -259,7 +245,8 @@ public class RadioInteraction : MonoBehaviour
     {
         if (gestionFrequence == null) return;
 
-        float pasAUtiliser = isLongPress ? 0.3f : 0.1f;
+        // Si appui long, on avance de 0.2, sinon de 0.1 à chaque clic unitaire
+        float pasAUtiliser = isLongPress ? 0.2f : 0.1f;
 
         if (tag == "BoutonRadioDroite")
         {
@@ -268,30 +255,6 @@ public class RadioInteraction : MonoBehaviour
         else if (tag == "BoutonRadioGauche")
         {
             gestionFrequence.ChangerFrequence(-pasAUtiliser);
-        }
-    }
-
-    private void ForceExitRadioMode()
-    {
-        cameraModeActive = false;
-        canInteract = true;
-        isHoldingButton = false;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        if (cursorPoint != null) cursorPoint.gameObject.SetActive(false);
-        if (boxRadio != null) boxRadio.enabled = true;
-        if (keySystem != null) keySystem.LockGamePlayForCodeLock(false);
-        if (lookCam != null) lookCam.gameObject.SetActive(false);
-
-        if (gestionFrequence != null)
-        {
-            gestionFrequence.SetAudioActive(false);
-        }
-
-        if (playerCam != null)
-        {
-            AudioListener playerListener = playerCam.GetComponent<AudioListener>();
-            if (playerListener != null) playerListener.enabled = true;
         }
     }
 }

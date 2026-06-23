@@ -19,6 +19,10 @@ TagManager:
   - Playere
   - Hand
   - SpawnPoint
+  - Ladder
+  - radio
+  - BoutonRadioDroite
+  - BoutonRadioGauche
   layers:
   - Default
   - TransparentFX
