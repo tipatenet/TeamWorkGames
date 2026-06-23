@@ -28,6 +28,8 @@ public class PlayerInputHandler : MonoBehaviour
 
     public bool ClickInteract { get; private set; }
 
+    public bool BookInteraction { get; private set; }
+
     //Pose touche :
     public System.Action OnPosePressed;
 
@@ -75,6 +77,9 @@ public class PlayerInputHandler : MonoBehaviour
         inputActions.Player.Click.performed += ctx => ClickInteract = true;
         inputActions.Player.Click.canceled += ctx => ClickInteract = false;
 
+        inputActions.Player.Book.canceled += ctx => BookInteraction = false;
+        inputActions.Player.Book.performed += ctx => BookInteraction = true;
+
         //pose
         inputActions.Player.Pose.performed += ctx => OnPosePressed?.Invoke();
 
@@ -100,6 +105,7 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.Interact.Disable();
             inputActions.Player.DropItem.Disable();
             inputActions.Player.RotateItem.Enable();
+            inputActions.Player.Book.Disable();
         }
         else
         {
@@ -110,6 +116,7 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.Interact.Enable();
             inputActions.Player.DropItem.Enable();
             inputActions.Player.RotateItem.Disable();
+            inputActions.Player.Book.Enable();
         }
     }
     public void LockGameplayInputsForPose(bool locked)
@@ -123,6 +130,7 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.Interact.Disable();
             inputActions.Player.DropItem.Disable();
             inputActions.Player.RotateItem.Disable();
+            inputActions.Player.Book.Disable();
         }
         else
         {
@@ -133,6 +141,7 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.Interact.Enable();
             inputActions.Player.DropItem.Enable();
             inputActions.Player.RotateItem.Enable();
+            inputActions.Player.Book.Enable();
         }
     }
     public void LockGamePlayForCodeLock(bool locked)
@@ -147,6 +156,7 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.DropItem.Disable();
             inputActions.Player.RotateItem.Disable();
             inputActions.Player.Pose.Disable();
+            inputActions.Player.Book.Disable();
         }
         else
         {
@@ -158,6 +168,38 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.DropItem.Enable();
             inputActions.Player.RotateItem.Enable();
             inputActions.Player.Pose.Enable();
+            inputActions.Player.Book.Enable();
+
+        }
+    }
+
+    public void LockGamePlayForBook(bool locked)
+    {
+        if (locked)
+        {
+            inputActions.Player.Move.Disable();
+            inputActions.Player.Look.Disable();
+            inputActions.Player.Jump.Disable();
+            inputActions.Player.Scroll.Disable();
+            inputActions.Player.Interact.Disable();
+            inputActions.Player.DropItem.Disable();
+            inputActions.Player.RotateItem.Disable();
+            inputActions.Player.Pose.Disable();
+            inputActions.Player.Book.Enable();
+            inputActions.Player.Click.Enable();
+        }
+        else
+        {
+            inputActions.Player.Move.Enable();
+            inputActions.Player.Look.Enable();
+            inputActions.Player.Jump.Enable();
+            inputActions.Player.Scroll.Enable();
+            inputActions.Player.Interact.Enable();
+            inputActions.Player.DropItem.Enable();
+            inputActions.Player.RotateItem.Enable();
+            inputActions.Player.Pose.Enable();
+            inputActions.Player.Book.Enable();
+            inputActions.Player.Click.Enable();
 
         }
     }

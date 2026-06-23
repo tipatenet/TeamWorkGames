@@ -19,6 +19,8 @@ TagManager:
   - Playere
   - Hand
   - SpawnPoint
+  - boxL
+  - boxR
   layers:
   - Default
   - TransparentFX
