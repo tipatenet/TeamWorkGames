@@ -178,7 +178,7 @@ public class PianoInteractable : MonoBehaviour
 
     void AutoMapKeys()
     {
-        string[] noteNames = { "Do", "Re", "Mi", "Fa", "Sol", "La", "Si" };
+        string[] noteNames = { "La", "Si", "Do", "Re", "Mi", "Fa", "Sol" };
 
         Transform parent = keysParent != null ? keysParent : transform;
         List<Transform> keys = new List<Transform>();
