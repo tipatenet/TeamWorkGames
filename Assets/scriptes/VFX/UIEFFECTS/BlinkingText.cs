@@ -15,11 +15,6 @@ public class BlinkingText : MonoBehaviour
     [SerializeField]
     private float maxAlpha = 1f;
 
-    private void Start()
-    {
-        StartCoroutine(Blink());
-    }
-
     private void OnEnable()
     {
         StartCoroutine(Blink());

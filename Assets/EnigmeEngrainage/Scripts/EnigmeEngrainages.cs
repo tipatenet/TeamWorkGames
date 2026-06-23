@@ -20,7 +20,7 @@ public class EnigmeEngrainages : MonoBehaviour
     public AudioClip RotationSound;
     public AudioClip success;
     bool canInteract = true;
-    private float cooldownTime = 2f;
+    private float cooldownTime = 1f;
     private int currentNum1 = 0;
     private int currentNum2 = 0;
     private int currentNum3 = 0;
@@ -35,9 +35,6 @@ public class EnigmeEngrainages : MonoBehaviour
     void Update()
     {
         RotateEngrainage();
-
-        if (input.InteractPressed && canInteract)
-            StartCoroutine(InteractCooldown());
 
         if(link != null)
             link.isLocked = !VerifyCode();
@@ -63,16 +60,19 @@ public class EnigmeEngrainages : MonoBehaviour
 
                 if (target.CompareTag("ext"))
                 {
+                    StartCoroutine(InteractCooldown());
                     iTween.RotateAdd(EngrainageExt, new Vector3(0, 0, 60), 2f);
                     IncrementeExt(6, ref currentNum1);
                 }
                 else if (target.CompareTag("mid"))
                 {
+                    StartCoroutine(InteractCooldown());
                     iTween.RotateAdd(EngrainageMid, new Vector3(0, 0, 90), 2f);
                     IncrementeExt(4, ref currentNum2);
                 }
                 else if (target.CompareTag("centre"))
                 {
+                    StartCoroutine(InteractCooldown());
                     iTween.RotateAdd(EngrainageCentre, new Vector3(0, 0, 180), 2f);
                     IncrementeExt(2, ref currentNum3);
                 }
