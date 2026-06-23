@@ -84,17 +84,17 @@ public class EnigmeTuyaux : MonoBehaviour
             GameObject target = hit.transform.gameObject;
             bool touched = false;
 
-            if (target.CompareTag("tuyau1"))
+            if (IsTarget(target, tuyau1))
             {
                 RotateTuyau(tuyau1, ref currentPos1);
                 touched = true;
             }
-            else if (target.CompareTag("tuyau2"))
+            else if (IsTarget(target, tuyau2))
             {
                 RotateTuyau(tuyau2, ref currentPos2);
                 touched = true;
             }
-            else if (target.CompareTag("tuyau3"))
+            else if (IsTarget(target, tuyau3))
             {
                 RotateTuyau(tuyau3, ref currentPos3);
                 touched = true;
@@ -141,6 +141,12 @@ public class EnigmeTuyaux : MonoBehaviour
     bool PlayerCanInteract()
     {
         return true;
+    }
+
+    bool IsTarget(GameObject target, GameObject tuyau)
+    {
+        if (tuyau == null) return false;
+        return target == tuyau || target.transform.IsChildOf(tuyau.transform);
     }
     bool VerifyCode()
     {
