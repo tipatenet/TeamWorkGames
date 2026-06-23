@@ -19,6 +19,11 @@ TagManager:
   - Playere
   - Hand
   - SpawnPoint
+  - Ladder
+  - radio
+  - tuyau1
+  - tuyau2
+  - tuyau3
   layers:
   - Default
   - TransparentFX
