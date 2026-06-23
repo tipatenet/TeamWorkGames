@@ -36,9 +36,35 @@ public class GestionFrequence : MonoBehaviour
     {
         MettreAJourAffichage();
 
-        // On lance les audio au démarrage mais on gère leur volume dynamiquement après
-        if (audioMusique != null) { audioMusique.loop = true; audioMusique.mute = false; if (!audioMusique.isPlaying) audioMusique.Play(); }
-        if (audioGresillement != null) { audioGresillement.loop = true; audioGresillement.mute = false; if (!audioGresillement.isPlaying) audioGresillement.Play(); }
+        // Diagnostic audio au démarrage
+        Debug.Log($"[Radio] === DIAGNOSTIC AUDIO ===");
+        Debug.Log($"[Radio] audioMusique: {(audioMusique == null ? "NULL !" : "OK")}");
+        Debug.Log($"[Radio] audioGresillement: {(audioGresillement == null ? "NULL !" : "OK")}");
+
+        if (audioMusique != null)
+        {
+            Debug.Log($"[Radio] Musique - clip: {(audioMusique.clip == null ? "NULL !" : audioMusique.clip.name)}, mute: {audioMusique.mute}, spatialBlend: {audioMusique.spatialBlend}, volume: {audioMusique.volume}");
+            audioMusique.loop = true;
+            audioMusique.mute = false;
+            audioMusique.spatialBlend = 0f; // Force 2D pour garantir que la position ne bloque pas le son
+            if (!audioMusique.isPlaying) audioMusique.Play();
+            Debug.Log($"[Radio] Musique isPlaying après Play(): {audioMusique.isPlaying}");
+        }
+
+        if (audioGresillement != null)
+        {
+            Debug.Log($"[Radio] Grésil - clip: {(audioGresillement.clip == null ? "NULL !" : audioGresillement.clip.name)}, mute: {audioGresillement.mute}, spatialBlend: {audioGresillement.spatialBlend}, volume: {audioGresillement.volume}");
+            audioGresillement.loop = true;
+            audioGresillement.mute = false;
+            audioGresillement.spatialBlend = 0f; // Force 2D
+            if (!audioGresillement.isPlaying) audioGresillement.Play();
+            Debug.Log($"[Radio] Grésil isPlaying après Play(): {audioGresillement.isPlaying}");
+        }
+
+        AudioListener[] listeners = FindObjectsOfType<AudioListener>();
+        int activeListeners = 0;
+        foreach (var l in listeners) if (l.enabled && l.gameObject.activeInHierarchy) activeListeners++;
+        Debug.Log($"[Radio] AudioListeners actifs dans la scène: {activeListeners} (total trouvés: {listeners.Length})");
 
         GererAudioDynamique();
     }
@@ -61,6 +87,7 @@ public class GestionFrequence : MonoBehaviour
     // Cette fonction est appelée par RadioInteraction pour ouvrir/couper le son des caméras
     public void SetAudioActive(bool active)
     {
+        Debug.Log($"[Radio] SetAudioActive({active}) appelé — radioActivementRegardee était: {radioActivementRegardee}");
         radioActivementRegardee = active;
         GererAudioDynamique();
 
@@ -99,7 +126,11 @@ public class GestionFrequence : MonoBehaviour
 
     private void GererAudioDynamique()
     {
-        if (audioMusique == null || audioGresillement == null) return;
+        if (audioMusique == null || audioGresillement == null)
+        {
+            Debug.LogWarning("[Radio] GererAudioDynamique: audioMusique ou audioGresillement est NULL, impossible de jouer le son !");
+            return;
+        }
 
         // REGLE STRICTE : Si on n'est pas sur la LookCam (mode zoom inactif) et que l'énigme n'est pas finie, VOLUME = 0
         if (!radioActivementRegardee && !dejaTrouvee)
@@ -113,9 +144,15 @@ public class GestionFrequence : MonoBehaviour
         float distance = Mathf.Abs(frequenceActuelle - frequenceACherche);
         float ratioProximite = Mathf.Clamp01(1f - (distance / distanceMaxAudio));
 
-        audioMusique.volume = Mathf.Lerp(0f, 1f, ratioProximite);
-        audioGresillement.volume = Mathf.Lerp(1f, 0.04f, ratioProximite);
+        float volMusique = Mathf.Lerp(0f, 1f, ratioProximite);
+        float volGresil = Mathf.Lerp(1f, 0.04f, ratioProximite);
+
+        audioMusique.volume = volMusique;
+        audioGresillement.volume = volGresil;
+
+        Debug.Log($"[Radio] GererAudio — radioActive:{radioActivementRegardee} | freq:{frequenceActuelle} | dist:{distance:F1} | ratio:{ratioProximite:F2} | volMusique:{volMusique:F2} | volGresil:{volGresil:F2} | musiqueIsPlaying:{audioMusique.isPlaying} | gresilIsPlaying:{audioGresillement.isPlaying}");
     }
+
 
     private void VerifierFrequenceImmobilite()
     {
