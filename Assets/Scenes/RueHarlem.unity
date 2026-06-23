@@ -13650,8 +13650,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01447b160b9aeef459134eb1d5dce415, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarLoop
-  waypointsLaneA: []
-  waypointsLaneB: []
+  waypointsLaneA:
+  - {fileID: 950676227}
+  - {fileID: 1321149252}
+  waypointsLaneB:
+  - {fileID: 1541720092}
+  - {fileID: 262020406}
   startOnLaneA: 1
   startWaypointIndex: 0
   speed: 10
@@ -13660,10 +13664,10 @@ MonoBehaviour:
   minDistance: 3
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   carLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   stopAudioSource: {fileID: 0}
 --- !u!4 &476877716 stripped
 Transform:
@@ -16446,8 +16450,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01447b160b9aeef459134eb1d5dce415, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarLoop
-  waypointsLaneA: []
-  waypointsLaneB: []
+  waypointsLaneA:
+  - {fileID: 1653883681}
+  - {fileID: 1234530984}
+  waypointsLaneB:
+  - {fileID: 565109083}
+  - {fileID: 226039223}
   startOnLaneA: 1
   startWaypointIndex: 0
   speed: 10
@@ -16456,10 +16464,10 @@ MonoBehaviour:
   minDistance: 3
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   carLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1536
   stopAudioSource: {fileID: 0}
 --- !u!1001 &631415739
 PrefabInstance:
@@ -35525,7 +35533,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GestionFrequence
   texteFrequence: {fileID: 2089672672}
   frequenceActuelle: 87.5
-  frequenceACherche: 100
+  frequenceACherche: 102
   frequenceMin: 87.5
   frequenceMax: 108
   tolerance: 0.01
@@ -38432,8 +38440,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01447b160b9aeef459134eb1d5dce415, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarLoop
-  waypointsLaneA: []
-  waypointsLaneB: []
+  waypointsLaneA:
+  - {fileID: 664414179}
+  - {fileID: 295610985}
+  waypointsLaneB:
+  - {fileID: 1175293892}
+  - {fileID: 645071893}
   startOnLaneA: 1
   startWaypointIndex: 0
   speed: 10
@@ -38442,10 +38454,10 @@ MonoBehaviour:
   minDistance: 3
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   carLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   stopAudioSource: {fileID: 0}
 --- !u!4 &2015752669 stripped
 Transform:
@@ -39344,14 +39356,15 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   transitionTime: 1
-  cursorSpeed: 800
   keySystem: {fileID: 1062510116}
   interact: {fileID: 1062510115}
   lookCam: {fileID: 521350619}
   playerCam: {fileID: 1945587659}
-  cursorPoint: {fileID: 1117554466}
+  cursorPoint: {fileID: 0}
   gestionFrequence: {fileID: 1837384398}
   graphicRaycaster: {fileID: 1837384395}
+  tempsAvantAppuiLong: 0.4
+  vitesseDefilementLong: 0.08
 --- !u!65 &2074954430
 BoxCollider:
   m_ObjectHideFlags: 0
