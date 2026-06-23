@@ -14,6 +14,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/IntroMapfarm(timothee)/MapIntro_Timop.unity
     guid: 0087a4e4303e8ba46b4f244afd65e0da
+  - enabled: 1
+    path: "Assets/Scenes/\xE9gout.unity"
+    guid: a2e04e33daa5bf34fb2a370359e8f9c3
+  - enabled: 1
+    path: Assets/Scenes/RueHarlem.unity
+    guid: 56a1f7de801e8d9468c260c82ce56b0e
+  - enabled: 1
+    path: Assets/Scenes/Enigme1.unity
+    guid: d43ac9fc0bd5dd348b66048b8c1992cf
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 518fa41bf9696c045a83e24d9dcd9e6d, type: 3}
   m_UseUCBPForAssetBundles: 0

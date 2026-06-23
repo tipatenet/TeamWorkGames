@@ -5,7 +5,7 @@ public class PianoSheetSlot : MonoBehaviour
     [Header("Configuration")]
     public int slotIndex;
     public Transform displayPoint;
-    public string requiredItemID = "partition";
+    public string requiredItemID = "IndiceEnint";
 
     [Header("Références")]
     public PianoInteractable piano;
@@ -28,7 +28,7 @@ public class PianoSheetSlot : MonoBehaviour
         Item_ScriptableObject currentItem = inventory.inventory[inventory.selectedIndex];
         if (currentItem == null) return false;
 
-        if (!string.IsNullOrEmpty(requiredItemID) && currentItem.itemID != requiredItemID)
+        if (!string.IsNullOrEmpty(requiredItemID) && currentItem.itemID != requiredItemID && currentItem.name != requiredItemID)
             return false;
 
         displayedSheet = Instantiate(currentItem.goItem, displayPoint.position, displayPoint.rotation);
