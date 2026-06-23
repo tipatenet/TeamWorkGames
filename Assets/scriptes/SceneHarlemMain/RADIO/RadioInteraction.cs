@@ -31,6 +31,11 @@ public class RadioInteraction : MonoBehaviour
     private BoxCollider boxRadio;
     private Coroutine transitionCoroutine;
 
+    // Variables pour mémoriser les coordonnées initiales de lookCam (caméra radio)
+    private bool isInitialLookCamSaved = false;
+    private Vector3 initialLookPos;
+    private Quaternion initialLookRot;
+
     // Variables pour la gestion de l'appui long
     private float holdTimer = 0f;
     private float nextTickTimer = 0f;
@@ -44,6 +49,17 @@ public class RadioInteraction : MonoBehaviour
     void Start()
     {
         boxRadio = GetComponent<BoxCollider>();
+        SaveInitialLookCam();
+    }
+
+    private void SaveInitialLookCam()
+    {
+        if (lookCam != null && !isInitialLookCamSaved)
+        {
+            initialLookPos = lookCam.transform.position;
+            initialLookRot = lookCam.transform.rotation;
+            isInitialLookCamSaved = true;
+        }
     }
 
     void Update()
@@ -120,16 +136,37 @@ public class RadioInteraction : MonoBehaviour
     {
         if (keySystem != null) keySystem.LockGamePlayForCodeLock(active);
 
+        SaveInitialLookCam();
+
         if (lookCam != null && playerCam != null)
         {
-            lookCam.gameObject.SetActive(active);
-            lookCam.depth = active ? playerCam.depth + 1 : playerCam.depth - 1;
+            // Lors du zoom avant (activation), on active immédiatement la caméra de zoom avec une priorité de profondeur supérieure
+            if (active)
+            {
+                lookCam.gameObject.SetActive(true);
+                lookCam.depth = playerCam.depth + 1;
 
-            AudioListener playerListener = playerCam.GetComponent<AudioListener>();
-            AudioListener lookListener = lookCam.GetComponent<AudioListener>();
+                AudioListener playerListener = playerCam.GetComponent<AudioListener>();
+                AudioListener lookListener = lookCam.GetComponent<AudioListener>();
 
-            if (playerListener != null) playerListener.enabled = !active;
-            if (lookListener != null) lookListener.enabled = active;
+                if (playerListener != null) playerListener.enabled = false;
+                if (lookListener != null) lookListener.enabled = true;
+            }
+        }
+
+        // Configuration dynamique de la caméra de rendu du Canvas de la radio et du culling mask
+        if (graphicRaycaster != null && lookCam != null)
+        {
+            Canvas canvas = graphicRaycaster.GetComponent<Canvas>();
+            if (canvas != null)
+            {
+                canvas.worldCamera = active ? lookCam : playerCam;
+
+                // On s'assure que lookCam inclut le layer du canvas de la radio dans son masque de rendu
+                lookCam.cullingMask |= (1 << canvas.gameObject.layer);
+                // On inclut aussi le layer UI par défaut (5) au cas où
+                lookCam.cullingMask |= (1 << 5);
+            }
         }
 
         if (gestionFrequence != null)
@@ -150,8 +187,9 @@ public class RadioInteraction : MonoBehaviour
             Vector3 startPos = active ? playerCam.transform.position : lookCam.transform.position;
             Quaternion startRot = active ? playerCam.transform.rotation : lookCam.transform.rotation;
 
-            Vector3 targetPos = active ? lookCam.transform.position : playerCam.transform.position;
-            Quaternion targetRot = active ? lookCam.transform.rotation : playerCam.transform.rotation;
+            // Utilisation des coordonnées initiales sauvegardées (pour éviter la perte de position au zoom arrière)
+            Vector3 targetPos = active ? initialLookPos : playerCam.transform.position;
+            Quaternion targetRot = active ? initialLookRot : playerCam.transform.rotation;
 
             if (active)
             {
@@ -173,6 +211,19 @@ public class RadioInteraction : MonoBehaviour
 
             lookCam.transform.position = targetPos;
             lookCam.transform.rotation = targetRot;
+
+            // Lors du zoom arrière (désactivation), on attend la fin de la transition avant de désactiver la caméra de zoom
+            if (!active)
+            {
+                lookCam.gameObject.SetActive(false);
+                lookCam.depth = playerCam.depth - 1;
+
+                AudioListener playerListener = playerCam.GetComponent<AudioListener>();
+                AudioListener lookListener = lookCam.GetComponent<AudioListener>();
+
+                if (playerListener != null) playerListener.enabled = true;
+                if (lookListener != null) lookListener.enabled = false;
+            }
         }
 
         canInteract = true;
@@ -183,12 +234,16 @@ public class RadioInteraction : MonoBehaviour
         if (Mouse.current != null)
         {
             cursorPosition = Mouse.current.position.ReadValue();
+            if (cursorPoint != null)
+            {
+                cursorPoint.position = cursorPosition;
+            }
         }
     }
 
     private void ClickRadioButtons()
     {
-        if (keySystem == null || graphicRaycaster == null) return;
+        if (keySystem == null || graphicRaycaster == null || EventSystem.current == null) return;
 
         // 1. Détection du premier clic (Instantone)
         if (keySystem.ClickInteract && !isHoldingButton)
