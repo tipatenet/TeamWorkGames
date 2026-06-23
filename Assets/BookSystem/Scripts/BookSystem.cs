@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class BookSystem : MonoBehaviour
 {
@@ -12,21 +13,66 @@ public class BookSystem : MonoBehaviour
     public int selectedIndex = 0;
     private bool canTurn = true;
     public float cooldownTime = 1.5f;
-    public Camera cam;
+    public Camera playerCam;
+    public Camera bookCam;
+    bool canSwitch = true;
+    float transitionTime = 1f;
+    private bool cameraModeActive = false;
+    public RectTransform cursorPoint;
+    private Vector2 cursorPosition;
+
+    void Awake()
+    {
+        // Force l'état initial correct peu importe la config dans l'éditeur
+        cameraModeActive = false;
+
+        // Désactive la bookCam proprement
+        if (bookCam != null)
+        {
+            bookCam.gameObject.SetActive(false);
+            bookCam.GetComponent<AudioListener>().enabled = false;
+        }
+
+        // S'assure que la playerCam est bien la cam active avec son AudioListener
+        if (playerCam != null)
+        {
+            playerCam.GetComponent<AudioListener>().enabled = true;
+        }
+
+        // Cache le curseur UI du livre
+        if (cursorPoint != null)
+            cursorPoint.gameObject.SetActive(false);
+    }
 
     void Update()
     {
-        if (handler.InteractPressed)
+        if (handler.InteractPressed && !cameraModeActive)
         {
             AddPage();
         }
-        if (handler.ClickInteract)
+
+        if (handler.OpenCloseBook && canSwitch)
+        {
+            HandleInteraction();
+        }
+
+        if (handler.ClickInteract && cameraModeActive && canSwitch)
         {
             if (canTurn)
             {
                 TurnDirection();
-                StartCoroutine(turnPageCooldown());
+                StartCoroutine(TurnPageCooldown());
             }
+        }
+
+        // Curseur UI suit la souris seulement en mode livre
+        if (cameraModeActive && cursorPoint != null)
+        {
+            cursorPosition = Mouse.current != null
+                ? Mouse.current.position.ReadValue()
+                : (Vector2)Input.mousePosition;
+
+            cursorPoint.position = cursorPosition;
         }
     }
 
@@ -45,13 +91,13 @@ public class BookSystem : MonoBehaviour
 
     void TurnDirection()
     {
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        Vector2 screenPos = cursorPoint != null ? cursorPoint.position : (Vector2)Input.mousePosition;
+        Ray ray = bookCam.ScreenPointToRay(screenPos);
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit))
         {
-            // Tourner à gauche : on accède à la page AVANT de décrémenter
-            if (hit.collider.tag == "boxL" && (selectedIndex - 1) >= 0)
+            if (hit.collider.CompareTag("boxL") && (selectedIndex - 1) >= 0)
             {
                 PageTurner pt = pages[selectedIndex].GetComponent<PageTurner>();
                 Vector3 start = pt.startRotation;
@@ -61,10 +107,9 @@ public class BookSystem : MonoBehaviour
                 pt.startRotation = start;
                 pt.endRotation = end;
                 pt.TurnPage();
-                selectedIndex--; // décrément APRÈS
+                selectedIndex--;
             }
-            // Tourner à droite : condition stricte < et non <=
-            else if (hit.collider.tag == "boxR" && (selectedIndex + 1) < pages.Count)
+            else if (hit.collider.CompareTag("boxR") && (selectedIndex + 1) < pages.Count)
             {
                 selectedIndex++;
                 PageTurner pt = pages[selectedIndex].GetComponent<PageTurner>();
@@ -79,10 +124,52 @@ public class BookSystem : MonoBehaviour
         }
     }
 
-    IEnumerator turnPageCooldown()
+    IEnumerator TurnPageCooldown()
     {
         canTurn = false;
         yield return new WaitForSeconds(cooldownTime);
         canTurn = true;
+    }
+
+    private void HandleInteraction()
+    {
+        cameraModeActive = !cameraModeActive;
+        ToggleCameraMode(cameraModeActive);
+        SwitchCameraPosition(cameraModeActive);
+    }
+
+    private void ToggleCameraMode(bool active)
+    {
+        if (cursorPoint != null)
+            cursorPoint.gameObject.SetActive(active);
+
+        if (!active)
+        {
+            Vector2 center = new Vector2(Screen.width / 2f, Screen.height / 2f);
+            Mouse.current?.WarpCursorPosition(center);
+            cursorPosition = center;
+            if (cursorPoint != null)
+                cursorPoint.position = center;
+        }
+    }
+
+    private void SwitchCameraPosition(bool active)
+    {
+        handler.LockGamePlayForBook(active);
+
+        bookCam.gameObject.SetActive(active);
+        bookCam.depth = active ? playerCam.depth + 1 : playerCam.depth - 1;
+
+        playerCam.GetComponent<AudioListener>().enabled = !active;
+        bookCam.GetComponent<AudioListener>().enabled = active;
+
+        StartCoroutine(CameraTransition());
+    }
+
+    private IEnumerator CameraTransition()
+    {
+        canSwitch = false;
+        yield return new WaitForSeconds(transitionTime);
+        canSwitch = true;
     }
 }

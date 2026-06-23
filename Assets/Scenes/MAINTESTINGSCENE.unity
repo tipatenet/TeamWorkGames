@@ -3583,12 +3583,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc58a07a9a2a664fbd77d8c8e521635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraSwitch
-  playerCamera: {fileID: 193769923}
-  bookCamera: {fileID: 539096497}
+  mainCamera: {fileID: 193769923}
+  bookTarget: {fileID: 792234656}
   UIPlayer: {fileID: 954961399}
   handler: {fileID: 535157413}
-  useFade: 1
   fadeDuration: 0.5
+  _bookOpen: 0
+  _busy: 0
+  _fade: {fileID: 0}
+  _cameraParent: {fileID: 0}
+  _playerLocalPos: {x: 0, y: 0, z: 0}
+  _playerLocalRot: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &1534409102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3608,7 +3613,8 @@ MonoBehaviour:
   pagePos: {fileID: 792234655}
   selectedIndex: 0
   cooldownTime: 1.5
-  cam: {fileID: 539096497}
+  playerCam: {fileID: 0}
+  bookCam: {fileID: 0}
 --- !u!1 &1549711776
 GameObject:
   m_ObjectHideFlags: 0
