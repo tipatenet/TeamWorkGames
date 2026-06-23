@@ -3586,7 +3586,7 @@ MonoBehaviour:
   playerCamera: {fileID: 193769923}
   bookCamera: {fileID: 539096497}
   UIPlayer: {fileID: 954961399}
-  cursorPoint: {fileID: 0}
+  cursorPoint: {fileID: 42277277}
   cursorSpeed: 800
   keySystem: {fileID: 535157413}
   useFade: 1
