@@ -3586,12 +3586,9 @@ MonoBehaviour:
   playerCamera: {fileID: 193769923}
   bookCamera: {fileID: 539096497}
   UIPlayer: {fileID: 954961399}
-  cursorPoint: {fileID: 42277277}
-  cursorSpeed: 800
-  keySystem: {fileID: 535157413}
+  handler: {fileID: 535157413}
   useFade: 1
   fadeDuration: 0.5
-  bookOpen: 0
 --- !u!114 &1534409102
 MonoBehaviour:
   m_ObjectHideFlags: 0

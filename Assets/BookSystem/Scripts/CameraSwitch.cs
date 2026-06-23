@@ -11,93 +11,71 @@ public class CameraSwitch : MonoBehaviour
     [Header("UI")]
     public GameObject UIPlayer;
 
-    [Header("Mouvement joueur à désactiver")]
+    [Header("Joueur")]
     public PlayerInputHandler handler;
 
     [Header("Fondu")]
-    public bool useFade = true;
     public float fadeDuration = 0.25f;
 
-    public enum Mode { Player, Book }
-    public Mode CurrentMode { get; private set; } = Mode.Player;
-
-    private CanvasGroup _fade;
+    private bool _bookOpen = false;
     private bool _busy = false;
+    private CanvasGroup _fade;
 
-    // -----------------------------------------------------------
     void Awake()
     {
-        if (useFade) BuildFadeCanvas();
-        Apply(Mode.Player, instant: true);
+        BuildFadeCanvas();
+        SetCameras(false);
     }
 
-    void OnEnable()
+    void Update()
     {
-        // On s'abonne à l'action directement — propre, une seule fois par press
-        handler.OnOpenCloseBook += OnBookToggle;
+        if (handler.OpenCloseBook && !_busy)
+            StartCoroutine(Switch());
     }
 
-    void OnDisable()
-    {
-        handler.OnOpenCloseBook -= OnBookToggle;
-    }
-
-    void OnBookToggle()
-    {
-        if (!_busy) Switch();
-    }
-
-    // -----------------------------------------------------------
-    public void Switch()
-    {
-        if (_busy) return;
-        Mode next = (CurrentMode == Mode.Player) ? Mode.Book : Mode.Player;
-        if (useFade) StartCoroutine(SwitchFade(next));
-        else Apply(next, instant: true);
-    }
-
-    public void OpenBook() { if (CurrentMode != Mode.Book) Switch(); }
-    public void CloseBook() { if (CurrentMode != Mode.Player) Switch(); }
-
-    // -----------------------------------------------------------
-    IEnumerator SwitchFade(Mode next)
+    IEnumerator Switch()
     {
         _busy = true;
-        yield return StartCoroutine(Fade(0f, 1f));
-        Apply(next, instant: true);
-        yield return StartCoroutine(Fade(1f, 0f));
+        _bookOpen = !_bookOpen;
+
+        // Fondu entrant
+        _fade.gameObject.SetActive(true);
+        float t = 0f;
+        while (t < fadeDuration)
+        {
+            _fade.alpha = Mathf.Lerp(0f, 1f, t / fadeDuration);
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        SetCameras(_bookOpen);
+
+        // Fondu sortant
+        t = 0f;
+        while (t < fadeDuration)
+        {
+            _fade.alpha = Mathf.Lerp(1f, 0f, t / fadeDuration);
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        _fade.alpha = 0f;
+        _fade.gameObject.SetActive(false);
         _busy = false;
     }
 
-    IEnumerator Fade(float from, float to)
+    void SetCameras(bool bookOpen)
     {
-        if (_fade == null) yield break;
-        _fade.gameObject.SetActive(true);
-        float e = 0f;
-        while (e < fadeDuration)
-        {
-            e += Time.unscaledDeltaTime;
-            _fade.alpha = Mathf.Lerp(from, to, e / fadeDuration);
-            yield return null;
-        }
-        _fade.alpha = to;
-        if (to <= 0f) _fade.gameObject.SetActive(false);
+        playerCamera.gameObject.SetActive(!bookOpen);
+        bookCamera.gameObject.SetActive(bookOpen);
+        UIPlayer.SetActive(!bookOpen);
+
+        Cursor.visible = bookOpen;
+        Cursor.lockState = bookOpen ? CursorLockMode.None : CursorLockMode.Locked;
+
+        handler.LockGamePlayForBook(bookOpen);
     }
 
-    // -----------------------------------------------------------
-    void Apply(Mode mode, bool instant)
-    {
-        CurrentMode = mode;
-        bool book = (mode == Mode.Book);
-
-        if (playerCamera != null) playerCamera.gameObject.SetActive(!book);
-        if (bookCamera != null) bookCamera.gameObject.SetActive(book);
-        if (UIPlayer != null) UIPlayer.SetActive(!book);
-
-        handler.LockGamePlayForBook(book);
-    }
-
-    // -----------------------------------------------------------
     void BuildFadeCanvas()
     {
         var cgo = new GameObject("_FadeCanvas");
@@ -122,7 +100,4 @@ public class CameraSwitch : MonoBehaviour
         _fade.alpha = 0f;
         cgo.SetActive(false);
     }
-
-    public bool IsBookMode => CurrentMode == Mode.Book;
-    public bool IsPlayerMode => CurrentMode == Mode.Player;
 }
