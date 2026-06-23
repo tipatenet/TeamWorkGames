@@ -1204,52 +1204,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2128d0ca96692a745b378e790853e485, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PianoInteractable
-  pianoKeys:
-  - noteName: Do
-    keyBinding: 0
-    audioClip: {fileID: 8300000, guid: b47d41c70ca4969479de35f3d34dc9e0, type: 3}
-    keyObject: {fileID: 1565434049}
-    highlightColor: {r: 1, g: 1, b: 0, a: 1}
-  - noteName: Re
-    keyBinding: 0
-    audioClip: {fileID: 8300000, guid: f5e4bfa7d8f2d13498dbfc16329253ff, type: 3}
-    keyObject: {fileID: 349591586}
-    highlightColor: {r: 1, g: 1, b: 0, a: 1}
-  - noteName: Mi
-    keyBinding: 0
-    audioClip: {fileID: 8300000, guid: 5471019815e3ed04289cf8ff85f46480, type: 3}
-    keyObject: {fileID: 2082745395}
-    highlightColor: {r: 1, g: 1, b: 0, a: 1}
-  - noteName: Fa
-    keyBinding: 0
-    audioClip: {fileID: 8300000, guid: e02c13e2632e8f7479bd7e65dd43d60d, type: 3}
-    keyObject: {fileID: 565393160}
-    highlightColor: {r: 1, g: 1, b: 0, a: 1}
-  - noteName: Sol
-    keyBinding: 0
-    audioClip: {fileID: 8300000, guid: 0bdf7d6465e49924e99f3cd6e6af1d29, type: 3}
-    keyObject: {fileID: 1072721396}
-    highlightColor: {r: 1, g: 1, b: 0, a: 1}
-  - noteName: La
-    keyBinding: 0
-    audioClip: {fileID: 8300000, guid: c264e54ccd73d5b4abadef698569193c, type: 3}
-    keyObject: {fileID: 85323015}
-    highlightColor: {r: 1, g: 1, b: 0, a: 1}
-  - noteName: Si
-    keyBinding: 0
-    audioClip: {fileID: 8300000, guid: dd1dafa8faab6154b83d1908505669ff, type: 3}
-    keyObject: {fileID: 1470192525}
-    highlightColor: {r: 1, g: 1, b: 0, a: 1}
+  pianoKeys: []
+  autoMapKeys: 1
+  keysParent: {fileID: 0}
+  noteClips:
+  - {fileID: 8300000, guid: b47d41c70ca4969479de35f3d34dc9e0, type: 3}
+  - {fileID: 8300000, guid: f5e4bfa7d8f2d13498dbfc16329253ff, type: 3}
+  - {fileID: 8300000, guid: 5471019815e3ed04289cf8ff85f46480, type: 3}
+  - {fileID: 8300000, guid: e02c13e2632e8f7479bd7e65dd43d60d, type: 3}
+  - {fileID: 8300000, guid: 0bdf7d6465e49924e99f3cd6e6af1d29, type: 3}
+  - {fileID: 8300000, guid: c264e54ccd73d5b4abadef698569193c, type: 3}
+  - {fileID: 8300000, guid: dd1dafa8faab6154b83d1908505669ff, type: 3}
   volume: 0.8
   interactionRange: 3
-  playKey: 101
+  playKey: 102
   pianoLayer:
     serializedVersion: 2
     m_Bits: 8
   targetSequence:
   - Do
   - Do
-  - DO
+  - Do
   sequenceTimeLimit: 45
   onSequenceSuccess:
     m_PersistentCalls:
@@ -1257,7 +1232,17 @@ MonoBehaviour:
   onSequenceFail:
     m_PersistentCalls:
       m_Calls: []
+  chestPrefab: {fileID: 1534066118601383972, guid: 36f0b95c8afb6ca49b8e112cc8fba58d, type: 3}
+  chestSpawnPoint: {fileID: 680421750}
+  chestPopDuration: 0.5
   isActive: 0
+  interactPromptUI: {fileID: 0}
+  sheetSlots: []
+  slotLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  labelHeight: 0.05
+  labelSize: 0.3
 --- !u!114 &211002555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1272,12 +1257,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PianoSeat
   seatCameraPoint: {fileID: 751903599}
   playerController: {fileID: 0}
-  playerBody: {fileID: 0}
+  playerBody: {fileID: 718512240}
   playerInputHandler: {fileID: 2124389218}
+  chairObject: {fileID: 652289917}
   inventoryUI: {fileID: 0}
   hotbarUI: {fileID: 0}
   uisToHide: []
-  interactionRange: 2.5
+  interactionRange: 3
   sitKey: 102
   cameraTransitionSpeed: 5
   promptUI: {fileID: 0}
@@ -3660,6 +3646,11 @@ MonoBehaviour:
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   emissionIntensity: 2
   currentParticle: {fileID: 0}
+--- !u!1 &652289917 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6662681214086243060, guid: 451b4690463bd5048939c8de5bf47c3d, type: 3}
+  m_PrefabInstance: {fileID: 800946788}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &662973312
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3717,6 +3708,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 451b4690463bd5048939c8de5bf47c3d, type: 3}
+--- !u!1 &680421749
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 680421750}
+  m_Layer: 0
+  m_Name: ChestSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &680421750
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 680421749}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -8.82, y: -0, z: 0.571}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &713427022
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3781,6 +3803,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 148513044}
   m_SourcePrefab: {fileID: 100100000, guid: 9697ceaa06fa71a47886f1610accc6ce, type: 3}
+--- !u!1 &718512240 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7125053771309427438, guid: 002275a7651d7e7428eaf7192bbd086c, type: 3}
+  m_PrefabInstance: {fileID: 823574851}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &728291994
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12831,3 +12858,4 @@ SceneRoots:
   - {fileID: 1402659061}
   - {fileID: 1847976795}
   - {fileID: 823574851}
+  - {fileID: 680421750}

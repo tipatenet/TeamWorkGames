@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using TMPro;
 
 public class PianoInteractable : MonoBehaviour
 {
@@ -18,20 +19,32 @@ public class PianoInteractable : MonoBehaviour
     [Header("Touches du piano")]
     public List<PianoKey> pianoKeys = new List<PianoKey>();
 
+    [Header("Auto-mapping")]
+    [Tooltip("Cocher pour mapper automatiquement toutes les touches enfants au Start")]
+    public bool autoMapKeys = true;
+    public Transform keysParent;
+    public AudioClip[] noteClips;
+
     [Header("Paramètres audio")]
     [Range(0f, 1f)]
     public float volume = 0.8f;
 
     [Header("Paramètres d'interaction")]
     public float interactionRange = 3f;
-    public KeyCode playKey = KeyCode.E;
+    public KeyCode playKey = KeyCode.F;
     public LayerMask pianoLayer;
 
     [Header("Enigme - Partition")]
-    public List<string> targetSequence = new List<string>();
+    public List<string> targetSequence = new List<string> { "Do", "Do", "Do" };
     public float sequenceTimeLimit = 10f;
     public UnityEvent onSequenceSuccess;
     public UnityEvent onSequenceFail;
+
+    [Header("Récompense - Coffre")]
+    public GameObject chestPrefab;
+    public Transform chestSpawnPoint;
+    [Tooltip("Durée de l'animation de pop du coffre")]
+    public float chestPopDuration = 0.5f;
 
     // --- Privé ---
     private AudioSource audioSource;
@@ -44,11 +57,24 @@ public class PianoInteractable : MonoBehaviour
     private float sequenceTimer = 0f;
 
     private Dictionary<GameObject, Vector3> originalPositions = new Dictionary<GameObject, Vector3>();
+    private Dictionary<GameObject, Hoverable> hoverableMap = new Dictionary<GameObject, Hoverable>();
     private MaterialPropertyBlock mpb;
     private PianoKey hoveredKey = null;
+    private bool puzzleSolved = false;
+    private GameObject noteLabel;
 
     [Header("État du Piano")]
-    public bool isActive = false; // /!\ Doit être mis à TRUE (via ton script de chaise/interaction) pour que le piano s'active
+    public bool isActive = false;
+    public GameObject interactPromptUI;
+
+    [Header("Emplacements partitions")]
+    public PianoSheetSlot[] sheetSlots;
+    public LayerMask slotLayer;
+
+    [Header("Label note")]
+    [Tooltip("Hauteur au-dessus de la touche pour le label")]
+    public float labelHeight = 0.05f;
+    public float labelSize = 0.3f;
 
     void Start()
     {
@@ -64,6 +90,11 @@ public class PianoInteractable : MonoBehaviour
 
         playerCamera = Camera.main;
 
+        if (autoMapKeys)
+            AutoMapKeys();
+
+        CreateNoteLabel();
+
         foreach (var key in pianoKeys)
         {
             if (!string.IsNullOrEmpty(key.noteName))
@@ -74,7 +105,13 @@ public class PianoInteractable : MonoBehaviour
                 objectMap[key.keyObject] = key;
                 originalPositions[key.keyObject] = key.keyObject.transform.localPosition;
 
-                // Pré-activer le mot-clé d'émission sur le matériau partagé pour éviter les bugs
+                var hoverable = key.keyObject.GetComponent<Hoverable>();
+                if (hoverable == null)
+                    hoverable = key.keyObject.AddComponent<Hoverable>();
+                hoverable.hoverColor = key.highlightColor;
+                hoverable.emissionIntensity = 2f;
+                hoverableMap[key.keyObject] = hoverable;
+
                 var r = key.keyObject.GetComponent<Renderer>();
                 if (r != null && r.sharedMaterial != null)
                 {
@@ -86,18 +123,16 @@ public class PianoInteractable : MonoBehaviour
 
     void Update()
     {
-        // Si le joueur n'est pas assis/actif sur le piano, on ne fait rien
         if (!isActive) return;
 
         HandleHover();
+        HandleSlotInteraction();
 
-        // Si on appuie sur la touche d'interaction (E) et qu'on regarde une touche valide
         if (Input.GetKeyDown(playKey) && hoveredKey != null)
         {
             PlayNote(hoveredKey);
         }
 
-        // Gestion du timer de l'énigme
         if (sequenceActive)
         {
             sequenceTimer -= Time.deltaTime;
@@ -107,6 +142,83 @@ public class PianoInteractable : MonoBehaviour
                 FailSequence();
             }
         }
+    }
+
+    void HandleSlotInteraction()
+    {
+        if (sheetSlots == null || sheetSlots.Length == 0) return;
+        if (!Input.GetKeyDown(playKey)) return;
+        if (hoveredKey != null) return;
+
+        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, interactionRange))
+        {
+            PianoSheetSlot slot = hit.collider.GetComponent<PianoSheetSlot>();
+            if (slot != null && !slot.isFilled)
+            {
+                slot.TryPlaceSheet();
+            }
+        }
+    }
+
+    void CreateNoteLabel()
+    {
+        noteLabel = new GameObject("NoteLabel");
+        noteLabel.transform.SetParent(transform);
+        var tmp = noteLabel.AddComponent<TextMeshPro>();
+        tmp.alignment = TextAlignmentOptions.Center;
+        tmp.fontSize = labelSize;
+        tmp.color = Color.white;
+        tmp.text = "";
+        tmp.rectTransform.sizeDelta = new Vector2(1f, 0.5f);
+        noteLabel.SetActive(false);
+    }
+
+    void AutoMapKeys()
+    {
+        string[] noteNames = { "Do", "Re", "Mi", "Fa", "Sol", "La", "Si" };
+
+        Transform parent = keysParent != null ? keysParent : transform;
+        List<Transform> keys = new List<Transform>();
+
+        foreach (Transform child in parent)
+        {
+            if (child.name.Contains("key"))
+                keys.Add(child);
+        }
+
+        keys.Sort((a, b) => b.position.x.CompareTo(a.position.x));
+
+        pianoKeys.Clear();
+        for (int i = 0; i < keys.Count; i++)
+        {
+            int noteIndex = i % noteNames.Length;
+            var pk = new PianoKey
+            {
+                noteName = noteNames[noteIndex],
+                keyObject = keys[i].gameObject,
+                audioClip = (noteClips != null && noteClips.Length > noteIndex) ? noteClips[noteIndex] : null,
+                highlightColor = Color.yellow
+            };
+            pianoKeys.Add(pk);
+        }
+
+        Debug.Log($"[Piano] Auto-mapping : {keys.Count} touches mappées.");
+    }
+
+    int ExtractKeyNumber(string name)
+    {
+        string digits = "";
+        for (int i = name.Length - 1; i >= 0; i--)
+        {
+            if (char.IsDigit(name[i]))
+                digits = name[i] + digits;
+            else
+                break;
+        }
+        return digits.Length > 0 ? int.Parse(digits) : 0;
     }
 
     void HandleHover()
@@ -131,24 +243,40 @@ public class PianoInteractable : MonoBehaviour
             }
         }
 
-        // Gestion du changement d'état (Hover Enter / Hover Exit)
         if (detectedKey != hoveredKey)
         {
-            // 1. Quitter l'ancienne touche (Reset visuel)
             if (hoveredKey != null && hoveredKey.keyObject != null)
             {
-                hoveredKey.keyObject.GetComponent<Hoverable>().OnHoverExit();
-
+                if (hoverableMap.TryGetValue(hoveredKey.keyObject, out Hoverable prevHov))
+                    prevHov.OnHoverExit();
                 SetKeyEmission(hoveredKey.keyObject, Color.black);
             }
 
             hoveredKey = detectedKey;
 
-            // 2. Entrer sur la nouvelle touche (Allumage visuel)
             if (hoveredKey != null && hoveredKey.keyObject != null)
             {
-                hoveredKey.keyObject.GetComponent<Hoverable>().OnHoverEnter();
-                SetKeyEmission(hoveredKey.keyObject, hoveredKey.highlightColor * 2f); // Intensité de 2f
+                if (hoverableMap.TryGetValue(hoveredKey.keyObject, out Hoverable newHov))
+                    newHov.OnHoverEnter();
+                SetKeyEmission(hoveredKey.keyObject, hoveredKey.highlightColor * 2f);
+            }
+
+            if (interactPromptUI != null)
+                interactPromptUI.SetActive(hoveredKey != null);
+
+            if (noteLabel != null)
+            {
+                if (hoveredKey != null && hoveredKey.keyObject != null)
+                {
+                    noteLabel.SetActive(true);
+                    noteLabel.transform.position = hoveredKey.keyObject.transform.position + Vector3.up * labelHeight;
+                    noteLabel.transform.rotation = playerCamera.transform.rotation;
+                    noteLabel.GetComponent<TextMeshPro>().text = hoveredKey.noteName;
+                }
+                else
+                {
+                    noteLabel.SetActive(false);
+                }
             }
         }
     }
@@ -172,6 +300,10 @@ public class PianoInteractable : MonoBehaviour
             SetKeyEmission(hoveredKey.keyObject, Color.black);
         }
         hoveredKey = null;
+        if (interactPromptUI != null)
+            interactPromptUI.SetActive(false);
+        if (noteLabel != null)
+            noteLabel.SetActive(false);
     }
 
     public void PlayNote(PianoKey key)
@@ -225,9 +357,14 @@ public class PianoInteractable : MonoBehaviour
 
     void SuccessSequence()
     {
+        if (puzzleSolved) return;
+        puzzleSolved = true;
+
         sequenceActive = false;
         playerSequence.Clear();
         onSequenceSuccess?.Invoke();
+
+        SpawnChest();
     }
 
     void FailSequence()
@@ -242,6 +379,43 @@ public class PianoInteractable : MonoBehaviour
         sequenceActive = false;
         playerSequence.Clear();
         sequenceTimer = 0f;
+    }
+
+    void SpawnChest()
+    {
+        if (chestPrefab == null)
+        {
+            Debug.LogWarning("[Piano] Pas de prefab coffre assigné !");
+            return;
+        }
+
+        Vector3 spawnPos = chestSpawnPoint != null
+            ? chestSpawnPoint.position
+            : transform.position + transform.right * 2f;
+
+        Quaternion spawnRot = chestSpawnPoint != null
+            ? chestSpawnPoint.rotation
+            : Quaternion.identity;
+
+        GameObject chest = Instantiate(chestPrefab, spawnPos, spawnRot);
+        Debug.Log("[Piano] Coffre apparu !");
+        StartCoroutine(AnimateChestPop(chest));
+    }
+
+    IEnumerator AnimateChestPop(GameObject chest)
+    {
+        Vector3 targetScale = chest.transform.localScale;
+        chest.transform.localScale = Vector3.zero;
+
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.deltaTime / chestPopDuration;
+            float eased = 1f - Mathf.Pow(1f - t, 3f);
+            chest.transform.localScale = Vector3.Lerp(Vector3.zero, targetScale, eased);
+            yield return null;
+        }
+        chest.transform.localScale = targetScale;
     }
 
     IEnumerator AnimateKeyPress(GameObject keyObj)

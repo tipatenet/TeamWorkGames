@@ -8,6 +8,7 @@ public class PianoSeat : MonoBehaviour
     public MonoBehaviour playerController;
     public GameObject playerBody;
     public PlayerInputHandler playerInputHandler;
+    public GameObject chairObject;
 
     [Header("UI à cacher au piano")]
     public GameObject inventoryUI;      // Glisser ton canvas inventaire ici
@@ -28,9 +29,12 @@ public class PianoSeat : MonoBehaviour
     private Vector3 originalCamPos;
     private Quaternion originalCamRot;
     private Transform originalCamParent;
+    private Vector3 originalCamLocalPos;
+    private Quaternion originalCamLocalRot;
     private bool isTransitioning = false;
 
     private PianoInteractable pianoInteractable;
+    private Collider[] chairColliders;
 
     void Start()
     {
@@ -38,6 +42,15 @@ public class PianoSeat : MonoBehaviour
         pianoInteractable = GetComponent<PianoInteractable>();
         if (pianoInteractable == null)
             pianoInteractable = GetComponentInChildren<PianoInteractable>();
+
+        GameObject target = chairObject != null ? chairObject : gameObject;
+        var hoverable = target.GetComponent<Hoverable>();
+        if (hoverable == null)
+            hoverable = target.AddComponent<Hoverable>();
+        hoverable.hoverColor = Color.yellow;
+        hoverable.emissionIntensity = 1.5f;
+
+        chairColliders = target.GetComponents<Collider>();
     }
 
     void Update()
@@ -48,11 +61,11 @@ public class PianoSeat : MonoBehaviour
         if (promptUI != null)
             promptUI.SetActive(inRange && !isSeated);
 
-        if (Input.GetKeyDown(sitKey) && !isTransitioning)
+        if (!isTransitioning)
         {
-            if (!isSeated && inRange)
+            if (!isSeated && inRange && Input.GetKeyDown(sitKey))
                 StartCoroutine(SitDown());
-            else if (isSeated)
+            else if (isSeated && (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)))
                 StartCoroutine(StandUp());
         }
     }
@@ -70,13 +83,17 @@ public class PianoSeat : MonoBehaviour
         isTransitioning = true;
         playerInputHandler.LockGameplayInputsForPiano(true);
 
+        SetChairCollidersEnabled(false);
+
         originalCamPos = playerCamera.transform.position;
         originalCamRot = playerCamera.transform.rotation;
         originalCamParent = playerCamera.transform.parent;
+        originalCamLocalPos = playerCamera.transform.localPosition;
+        originalCamLocalRot = playerCamera.transform.localRotation;
 
         if (playerController != null) playerController.enabled = false;
+        SetPlayerVisible(false);
 
-        // Cacher l'inventaire et les autres UI
         SetInventoryVisible(false);
 
         playerCamera.transform.SetParent(null);
@@ -133,17 +150,33 @@ public class PianoSeat : MonoBehaviour
         }
 
         playerCamera.transform.SetParent(originalCamParent);
-        playerCamera.transform.localPosition = Vector3.zero;
-        playerCamera.transform.localRotation = Quaternion.identity;
+        playerCamera.transform.localPosition = originalCamLocalPos;
+        playerCamera.transform.localRotation = originalCamLocalRot;
 
+        SetPlayerVisible(true);
         if (playerController != null) playerController.enabled = true;
 
-        // Remettre l'inventaire visible
         SetInventoryVisible(true);
+
+        SetChairCollidersEnabled(true);
 
         isSeated = false;
         isTransitioning = false;
         Debug.Log("[PianoSeat] Debout.");
+    }
+
+    void SetPlayerVisible(bool visible)
+    {
+        if (playerBody == null) return;
+        foreach (var rend in playerBody.GetComponentsInChildren<Renderer>())
+            rend.enabled = visible;
+    }
+
+    void SetChairCollidersEnabled(bool enabled)
+    {
+        if (chairColliders == null) return;
+        foreach (var col in chairColliders)
+            if (col != null) col.enabled = enabled;
     }
 
     void OnDrawGizmosSelected()
