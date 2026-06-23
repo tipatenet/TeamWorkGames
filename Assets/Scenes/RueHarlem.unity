@@ -635,6 +635,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8863802660113216126, guid: cfab94b91f7d3794e896257f6960cce1, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -21425,7 +21429,7 @@ Transform:
   m_GameObject: {fileID: 996487684}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.6884056, z: -0, w: 0.725326}
-  m_LocalPosition: {x: -22, y: 1.63, z: -45.4}
+  m_LocalPosition: {x: -22, y: 3.8, z: -45.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -39344,7 +39348,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   transitionTime: 1
-  cursorSpeed: 800
   keySystem: {fileID: 1062510116}
   interact: {fileID: 1062510115}
   lookCam: {fileID: 521350619}
@@ -39352,6 +39355,8 @@ MonoBehaviour:
   cursorPoint: {fileID: 1117554466}
   gestionFrequence: {fileID: 1837384398}
   graphicRaycaster: {fileID: 1837384395}
+  tempsAvantAppuiLong: 0.4
+  vitesseDefilementLong: 0.08
 --- !u!65 &2074954430
 BoxCollider:
   m_ObjectHideFlags: 0
