@@ -24,6 +24,8 @@ TagManager:
   - tuyau1
   - tuyau2
   - tuyau3
+  - BoutonRadioDroite
+  - BoutonRadioGauche
   layers:
   - Default
   - TransparentFX
@@ -34,7 +36,7 @@ TagManager:
   - Ground
   - Player
   - interactive
-  - 
+  - car
   - postprocessing
   - 
   - 
