@@ -151,8 +151,6 @@ public class RadioInteraction : MonoBehaviour
 
         if (lookCam != null && playerCam != null)
         {
-            // Entrée : on active la lookCam AVANT la transition
-            // Sortie : on la laisse active pendant la transition, elle sera désactivée en fin de coroutine
             if (active)
             {
                 lookCam.gameObject.SetActive(true);
@@ -163,12 +161,13 @@ public class RadioInteraction : MonoBehaviour
             AudioListener playerListener = playerCam.GetComponent<AudioListener>();
             AudioListener lookListener = lookCam.GetComponent<AudioListener>();
 
+            // --- MODIFICATION ICI ---
+            // Au lieu de couper le playerListener quand active est faux, 
+            // on s'assure qu'il se réactive IMMÉDIATEMENT quand on quitte la radio !
             if (playerListener != null) playerListener.enabled = !active;
             if (lookListener != null) lookListener.enabled = active;
-            else if (playerListener != null) playerListener.enabled = true;
         }
 
-        // On envoie l'état directement à la gestion de fréquence ici
         if (gestionFrequence != null)
         {
             gestionFrequence.SetAudioActive(active);
@@ -177,7 +176,6 @@ public class RadioInteraction : MonoBehaviour
         if (transitionCoroutine != null) StopCoroutine(transitionCoroutine);
         transitionCoroutine = StartCoroutine(CameraTransition(active));
     }
-
     private IEnumerator CameraTransition(bool active)
     {
         canInteract = false;
@@ -231,11 +229,11 @@ public class RadioInteraction : MonoBehaviour
                 lookCam.gameObject.SetActive(false);
 
                 // Réactive le AudioListener du joueur maintenant que la transition est terminée
-                if (playerCam != null)
-                {
-                    AudioListener playerListener = playerCam.GetComponent<AudioListener>();
-                    if (playerListener != null) playerListener.enabled = true;
-                }
+                //if (playerCam != null)
+                //{
+                //    AudioListener playerListener = playerCam.GetComponent<AudioListener>();
+                //    if (playerListener != null) playerListener.enabled = true;
+                //}
             }
         }
 
