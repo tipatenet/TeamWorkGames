@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 486967e4c6c5ad443befd8020457cec3, type: 3}
+  m_Name: IndicePartittion1
+  m_EditorClassIdentifier: Assembly-CSharp::Item_ScriptableObject
+  itemID: 10
+  item_Name: IndicePartittion
+  icon: {fileID: 21300000, guid: 6780023b132833c49be5370c839bc54c, type: 3}
+  goItem: {fileID: 564777821165992808, guid: a17025069aa92454086c7631626cd9fb, type: 3}
+  animatorOverride: {fileID: 22100000, guid: 7bceb6fbf22781940980b1231ba250bb, type: 2}
+  holdPositionOffset: {x: 0.2853146, y: -0.1878602, z: 0.1404452}
+  holdRotation: {x: -0.0003509551, y: -0.0013556001, z: 0.7960598, w: -0.60521644}
+  item_scaleFactor: 0.5
+  item_scaleInspactFactor: 1

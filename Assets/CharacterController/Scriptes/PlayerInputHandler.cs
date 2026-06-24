@@ -112,6 +112,25 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.RotateItem.Disable();
         }
     }
+    public void LockGameplayInputsForPiano(bool locked)
+    {
+        if (locked)
+        {
+            inputActions.Player.Move.Disable();
+            inputActions.Player.Jump.Disable();
+            inputActions.Player.Scroll.Disable();
+            inputActions.Player.DropItem.Disable();
+            inputActions.Player.RotateItem.Enable();
+        }
+        else
+        {
+            inputActions.Player.Move.Enable();
+            inputActions.Player.Jump.Enable();
+            inputActions.Player.Scroll.Enable();
+            inputActions.Player.DropItem.Enable();
+            inputActions.Player.RotateItem.Disable();
+        }
+    }
     public void LockGameplayInputsForPose(bool locked)
     {
         if (locked)
