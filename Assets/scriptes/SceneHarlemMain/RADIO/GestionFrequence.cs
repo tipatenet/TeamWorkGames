@@ -40,6 +40,7 @@ public class GestionFrequence : MonoBehaviour
         {
             audioMusique.loop = true;
             audioMusique.mute = false;
+            audioMusique.spatialBlend = 1f; // <-- MODIFIE ICI (0f devient 1f pour passer en 3D)
             if (!audioMusique.isPlaying) audioMusique.Play();
         }
 
@@ -47,6 +48,7 @@ public class GestionFrequence : MonoBehaviour
         {
             audioGresillement.loop = true;
             audioGresillement.mute = false;
+            audioGresillement.spatialBlend = 1f; // <-- MODIFIE ICI (0f devient 1f pour passer en 3D)
             if (!audioGresillement.isPlaying) audioGresillement.Play();
         }
 
