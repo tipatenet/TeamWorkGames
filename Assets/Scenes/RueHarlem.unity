@@ -60079,12 +60079,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GestionFrequence
   texteFrequence: {fileID: 2089672672}
-  frequenceActuelle: 87.5
+  frequenceActuelle: 102
   frequenceACherche: 90
   frequenceMin: 87.5
   frequenceMax: 108
   tolerance: 0.01
-  tempsRequis: 3.5
+  tempsRequis: 3
   audioMusique: {fileID: 1642314196}
   audioGresillement: {fileID: 185408523}
   distanceMaxAudio: 4
