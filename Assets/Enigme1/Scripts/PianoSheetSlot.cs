@@ -13,14 +13,11 @@ public class PianoSheetSlot : MonoBehaviour
     public InventorySystem inventory;
 
     [Header("Interaction")]
-    public GameObject placePromptUI;   // (optionnel) UI "P : Poser"
+    public GameObject placePromptUI;
 
     [Header("Affichage")]
-    public Vector3 sheetScale = new Vector3(0.3f, 0.3f, 0.3f); // Taille de la feuille posée
-    public Vector3 sheetRotationOffset = Vector3.zero;          // Rotation supplémentaire si besoin
-
-    [Header("Main du joueur")]
-    public Transform handItemHolder;   // Glisser le HoldPosition / BrasJoueur ici
+    public Vector3 sheetScale = new Vector3(0.3f, 0.3f, 0.3f);
+    public Vector3 sheetRotationOffset = Vector3.zero;
 
     [HideInInspector] public bool isFilled = false;
     private GameObject displayedSheet;
@@ -47,13 +44,12 @@ public class PianoSheetSlot : MonoBehaviour
             return false;
         }
 
-        // Instancier la feuille sur le slot avec une petite taille fixe
+        // Instancier la feuille sur le slot
         Quaternion rot = displayPoint.rotation * Quaternion.Euler(sheetRotationOffset);
         displayedSheet = Instantiate(currentItem.goItem, displayPoint.position, rot);
         displayedSheet.transform.SetParent(displayPoint);
         displayedSheet.transform.localScale = sheetScale;
 
-        // Désactiver physics et interactions sur l'objet posé
         foreach (var rb in displayedSheet.GetComponentsInChildren<Rigidbody>())
             rb.isKinematic = true;
         foreach (var col in displayedSheet.GetComponentsInChildren<Collider>())
@@ -61,22 +57,8 @@ public class PianoSheetSlot : MonoBehaviour
         foreach (var item in displayedSheet.GetComponentsInChildren<Item>())
             Destroy(item);
 
-        // Vider la main : détruire tous les enfants de HoldPosition
-        Transform holdTransform = handItemHolder;
-        if (holdTransform == null)
-        {
-            GameObject holdObj = GameObject.Find("HoldPosition");
-            if (holdObj != null) holdTransform = holdObj.transform;
-        }
-        if (holdTransform != null)
-        {
-            List<GameObject> toDestroy = new List<GameObject>();
-            foreach (Transform child in holdTransform)
-                toDestroy.Add(child.gameObject);
-            foreach (GameObject obj in toDestroy)
-                Destroy(obj);
-        }
 
+        // Retirer l'item de l'inventaire
         inventory.inventory.RemoveAt(inventory.selectedIndex);
         inventory.inventoryUniqueIDs.RemoveAt(inventory.selectedIndex);
         inventory.currentInventorySize--;
@@ -85,8 +67,11 @@ public class PianoSheetSlot : MonoBehaviour
 
         isFilled = true;
 
-        if (placePromptUI != null) placePromptUI.SetActive(false);
+        // Cacher le Quad
+        foreach (Transform child in transform)
+            if (child.name == "Quad") child.gameObject.SetActive(false);
 
+        if (placePromptUI != null) placePromptUI.SetActive(false);
         if (piano != null) piano.OnSheetPlaced(slotIndex);
 
         Debug.Log($"[PianoSlot] Partition posée sur l'emplacement {slotIndex}.");
@@ -97,6 +82,8 @@ public class PianoSheetSlot : MonoBehaviour
     {
         if (displayedSheet != null) Destroy(displayedSheet);
         isFilled = false;
+        foreach (Transform child in transform)
+            if (child.name == "Quad") child.gameObject.SetActive(true);
     }
 
     void OnDrawGizmosSelected()
