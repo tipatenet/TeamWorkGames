@@ -150,6 +150,8 @@ public class CadenasInteraction : MonoBehaviour
         canInteract = true;
     }
 
+
+
     private void RotateCodes()
     {
         if (!cameraModeActive) return;
