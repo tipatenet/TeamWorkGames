@@ -10,13 +10,12 @@ public class BookSystem : MonoBehaviour
     public List<GameObject> pages = new List<GameObject>();
     public GameObject pagePos;
     public int selectedIndex = 0;
-    public float cooldownTimeTransition = 1f;
+    public float cooldownTimeTransition = 0.2f;
     public float cooldownTimeTurn = 0.3f;
     public Camera playerCam;
     public Camera bookCam;
     bool canSwitch = true;
     bool canTurn = true;
-    float transitionTime = 1f;
     private bool cameraModeActive = false;
     public RectTransform cursorPoint;
     private Vector2 cursorPosition;
@@ -29,7 +28,7 @@ public class BookSystem : MonoBehaviour
     public float zoomMin = 20f;
     public float zoomMax = 80f;
     private float targetFOV;
-    private float addY = 0.01f;
+    private float addY = 0.0001f;
 
     void Awake()
     {
@@ -47,6 +46,11 @@ public class BookSystem : MonoBehaviour
 
         if (cursorPoint != null)
             cursorPoint.gameObject.SetActive(false);
+    }
+    private void Start()
+    {
+        foreach (GameObject prefab in pages)
+            AddPage(prefab);
     }
 
     void Update()
@@ -128,7 +132,7 @@ public class BookSystem : MonoBehaviour
         GameObject newPage = Instantiate(prefab, pagePos.transform.position, pagePos.transform.rotation);
         newPage.transform.localScale = new Vector3(0.91f, 0.65f, 0.65f);
         Vector3 temp = newPage.transform.localPosition;
-        addY -= 0.001f;
+        addY -= 0.0001f;
         temp.y += addY;
         newPage.transform.localPosition = temp;
         pages.Add(newPage);

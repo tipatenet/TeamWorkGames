@@ -77,20 +77,15 @@ public class InventorySystem : MonoBehaviour
 
             if (!inventoryFull())
             {
-                if (currentInventorySize != 0)
-                {
-                    selectedIndex = currentInventorySize - 1;
-                    ScroolInventory();
-                }
-
                 inventory.Add(itemHit);
-                inventoryUniqueIDs.Add(itemTouch.uniqueID); // Ajouté en parallèle
+                inventoryUniqueIDs.Add(itemTouch.uniqueID);
                 currentInventorySize++;
+                selectedIndex = currentInventorySize - 1; // focus nouvel item
                 UpdateUI();
+                ScroolInventory();
 
                 GameManager.Instance.RegisterPickedUpItem(itemTouch.uniqueID);
 
-                // Désactive l'UI d'interaction au moment du ramassage
                 HoverManager hoverManager = GetComponent<HoverManager>();
                 if (hoverManager != null) hoverManager.ForceResetUI();
 
@@ -100,9 +95,6 @@ public class InventorySystem : MonoBehaviour
                 handAnimation.HoldAnimation();
             }
         }
-        //--------------------------------------
-        //Gestion Page
-        //--------------------------------------
         else if (hit.collider != null && hit.collider.tag == "pageLivre")
         {
             bookSystem.AddPage(hit.collider.gameObject);
