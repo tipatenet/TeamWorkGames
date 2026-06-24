@@ -10,7 +10,7 @@ public class PianoInteractable : MonoBehaviour
     public class PianoKey
     {
         public string noteName;
-        public KeyCode keyBinding; // Optionnel : si tu veux aussi jouer au clavier
+        public KeyCode keyBinding;
         public AudioClip audioClip;
         public GameObject keyObject;
         public Color highlightColor = Color.yellow;
@@ -20,7 +20,6 @@ public class PianoInteractable : MonoBehaviour
     public List<PianoKey> pianoKeys = new List<PianoKey>();
 
     [Header("Auto-mapping")]
-    [Tooltip("Cocher pour mapper automatiquement toutes les touches enfants au Start")]
     public bool autoMapKeys = true;
     public Transform keysParent;
     public AudioClip[] noteClips;
@@ -31,7 +30,8 @@ public class PianoInteractable : MonoBehaviour
 
     [Header("Paramètres d'interaction")]
     public float interactionRange = 3f;
-    public KeyCode playKey = KeyCode.F;
+    public KeyCode playKey = KeyCode.E;     // Jouer une note
+    public KeyCode placeKey = KeyCode.P;    // Poser une partition
     public LayerMask pianoLayer;
 
     [Header("Enigme - Partition")]
@@ -43,7 +43,6 @@ public class PianoInteractable : MonoBehaviour
     [Header("Récompense - Coffre")]
     public GameObject chestPrefab;
     public Transform chestSpawnPoint;
-    [Tooltip("Durée de l'animation de pop du coffre")]
     public float chestPopDuration = 0.5f;
 
     // --- Privé ---
@@ -72,7 +71,6 @@ public class PianoInteractable : MonoBehaviour
     public LayerMask slotLayer;
 
     [Header("Label note")]
-    [Tooltip("Hauteur au-dessus de la touche pour le label")]
     public float labelHeight = 0.05f;
     public float labelSize = 0.3f;
 
@@ -114,9 +112,7 @@ public class PianoInteractable : MonoBehaviour
 
                 var r = key.keyObject.GetComponent<Renderer>();
                 if (r != null && r.sharedMaterial != null)
-                {
                     r.sharedMaterial.EnableKeyword("_EMISSION");
-                }
             }
         }
     }
@@ -126,12 +122,14 @@ public class PianoInteractable : MonoBehaviour
         if (!isActive) return;
 
         HandleHover();
-        HandleSlotInteraction();
 
+        // E = jouer la note survolée
         if (Input.GetKeyDown(playKey) && hoveredKey != null)
-        {
             PlayNote(hoveredKey);
-        }
+
+        // F = poser une partition sur le slot survolé
+        if (Input.GetKeyDown(KeyCode.F))
+            HandleSlotInteraction();
 
         if (sequenceActive)
         {
@@ -147,20 +145,73 @@ public class PianoInteractable : MonoBehaviour
     void HandleSlotInteraction()
     {
         if (sheetSlots == null || sheetSlots.Length == 0) return;
-        if (!Input.GetKeyDown(playKey)) return;
-        if (hoveredKey != null) return;
 
         Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
-        RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, interactionRange))
+        // RaycastAll pour traverser le mesh du piano et atteindre les slots derrière
+        RaycastHit[] hits = Physics.RaycastAll(ray, interactionRange);
+        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        foreach (var hit in hits)
         {
+            // Ignorer les enfants du piano qui ne sont pas des slots (touches, corps...)
+            bool isSlot = hit.collider.GetComponent<PianoSheetSlot>() != null;
+            bool isPianoBody = hit.collider.gameObject == gameObject
+                            || (hit.collider.transform.IsChildOf(transform) && !isSlot);
+            if (isPianoBody) continue;
+
             PianoSheetSlot slot = hit.collider.GetComponent<PianoSheetSlot>();
             if (slot != null && !slot.isFilled)
             {
                 slot.TryPlaceSheet();
+                return;
             }
         }
+
+        // Fallback : slot le plus proche du centre de l'écran (si collider trop petit)
+        PianoSheetSlot closest = null;
+        float bestScreenDist = 100f; // pixels max depuis le centre
+
+        foreach (var slot in sheetSlots)
+        {
+            if (slot == null || slot.isFilled) continue;
+
+            Vector3 screenPos = playerCamera.WorldToScreenPoint(slot.transform.position);
+            if (screenPos.z < 0) continue;
+
+            float worldDist = Vector3.Distance(playerCamera.transform.position, slot.transform.position);
+            if (worldDist > interactionRange) continue;
+
+            float pixelDist = Vector2.Distance(
+                new Vector2(screenPos.x, screenPos.y),
+                new Vector2(Screen.width / 2f, Screen.height / 2f)
+            );
+
+            if (pixelDist < bestScreenDist)
+            {
+                bestScreenDist = pixelDist;
+                closest = slot;
+            }
+        }
+
+        if (closest != null)
+        {
+            Debug.Log($"[Piano] Slot via fallback : {closest.name}");
+            closest.TryPlaceSheet();
+        }
+    }
+
+    // Appelé par PianoSheetSlot quand une partition est posée
+    public void OnSheetPlaced(int slotIndex)
+    {
+        Debug.Log($"[Piano] Partition posée sur le slot {slotIndex}.");
+
+        bool allFilled = true;
+        foreach (var slot in sheetSlots)
+            if (slot != null && !slot.isFilled) { allFilled = false; break; }
+
+        if (allFilled)
+            Debug.Log("[Piano] Toutes les partitions sont en place !");
     }
 
     void CreateNoteLabel()
@@ -184,10 +235,8 @@ public class PianoInteractable : MonoBehaviour
         List<Transform> keys = new List<Transform>();
 
         foreach (Transform child in parent)
-        {
             if (child.name.Contains("key"))
                 keys.Add(child);
-        }
 
         keys.Sort((a, b) => b.position.x.CompareTo(a.position.x));
 
@@ -195,30 +244,16 @@ public class PianoInteractable : MonoBehaviour
         for (int i = 0; i < keys.Count; i++)
         {
             int noteIndex = i % noteNames.Length;
-            var pk = new PianoKey
+            pianoKeys.Add(new PianoKey
             {
                 noteName = noteNames[noteIndex],
                 keyObject = keys[i].gameObject,
                 audioClip = (noteClips != null && noteClips.Length > noteIndex) ? noteClips[noteIndex] : null,
                 highlightColor = Color.yellow
-            };
-            pianoKeys.Add(pk);
+            });
         }
 
         Debug.Log($"[Piano] Auto-mapping : {keys.Count} touches mappées.");
-    }
-
-    int ExtractKeyNumber(string name)
-    {
-        string digits = "";
-        for (int i = name.Length - 1; i >= 0; i--)
-        {
-            if (char.IsDigit(name[i]))
-                digits = name[i] + digits;
-            else
-                break;
-        }
-        return digits.Length > 0 ? int.Parse(digits) : 0;
     }
 
     void HandleHover()
@@ -226,8 +261,6 @@ public class PianoInteractable : MonoBehaviour
         if (playerCamera == null) return;
 
         PianoKey detectedKey = null;
-
-        // Raycast depuis le centre exact de l'écran (Réticule)
         Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
         RaycastHit hit;
 
@@ -236,28 +269,21 @@ public class PianoInteractable : MonoBehaviour
             : Physics.Raycast(ray, out hit, interactionRange);
 
         if (didHit && hit.collider != null)
-        {
-            if (objectMap.TryGetValue(hit.collider.gameObject, out PianoKey key))
-            {
-                detectedKey = key;
-            }
-        }
+            objectMap.TryGetValue(hit.collider.gameObject, out detectedKey);
 
         if (detectedKey != hoveredKey)
         {
-            if (hoveredKey != null && hoveredKey.keyObject != null)
+            if (hoveredKey?.keyObject != null)
             {
-                if (hoverableMap.TryGetValue(hoveredKey.keyObject, out Hoverable prevHov))
-                    prevHov.OnHoverExit();
+                if (hoverableMap.TryGetValue(hoveredKey.keyObject, out Hoverable prev)) prev.OnHoverExit();
                 SetKeyEmission(hoveredKey.keyObject, Color.black);
             }
 
             hoveredKey = detectedKey;
 
-            if (hoveredKey != null && hoveredKey.keyObject != null)
+            if (hoveredKey?.keyObject != null)
             {
-                if (hoverableMap.TryGetValue(hoveredKey.keyObject, out Hoverable newHov))
-                    newHov.OnHoverEnter();
+                if (hoverableMap.TryGetValue(hoveredKey.keyObject, out Hoverable next)) next.OnHoverEnter();
                 SetKeyEmission(hoveredKey.keyObject, hoveredKey.highlightColor * 2f);
             }
 
@@ -266,22 +292,18 @@ public class PianoInteractable : MonoBehaviour
 
             if (noteLabel != null)
             {
-                if (hoveredKey != null && hoveredKey.keyObject != null)
+                if (hoveredKey?.keyObject != null)
                 {
                     noteLabel.SetActive(true);
                     noteLabel.transform.position = hoveredKey.keyObject.transform.position + Vector3.up * labelHeight;
                     noteLabel.transform.rotation = playerCamera.transform.rotation;
                     noteLabel.GetComponent<TextMeshPro>().text = hoveredKey.noteName;
                 }
-                else
-                {
-                    noteLabel.SetActive(false);
-                }
+                else noteLabel.SetActive(false);
             }
         }
     }
 
-    // Méthode sécurisée URP utilisant MaterialPropertyBlock pour la couleur d'émission
     void SetKeyEmission(GameObject keyObj, Color color)
     {
         Renderer rend = keyObj.GetComponent<Renderer>();
@@ -295,34 +317,25 @@ public class PianoInteractable : MonoBehaviour
 
     public void ClearHover()
     {
-        if (hoveredKey != null && hoveredKey.keyObject != null)
-        {
+        if (hoveredKey?.keyObject != null)
             SetKeyEmission(hoveredKey.keyObject, Color.black);
-        }
         hoveredKey = null;
-        if (interactPromptUI != null)
-            interactPromptUI.SetActive(false);
-        if (noteLabel != null)
-            noteLabel.SetActive(false);
+        if (interactPromptUI != null) interactPromptUI.SetActive(false);
+        if (noteLabel != null) noteLabel.SetActive(false);
     }
 
     public void PlayNote(PianoKey key)
     {
         if (key == null || key.audioClip == null) return;
-
         audioSource.PlayOneShot(key.audioClip, volume);
-
-        if (key.keyObject != null)
-            StartCoroutine(AnimateKeyPress(key.keyObject));
-
+        if (key.keyObject != null) StartCoroutine(AnimateKeyPress(key.keyObject));
         RecordNoteForSequence(key.noteName);
         Debug.Log($"[Piano] ♪ {key.noteName}");
     }
 
     public void PlayNoteByName(string noteName)
     {
-        if (keyMap.TryGetValue(noteName, out PianoKey key))
-            PlayNote(key);
+        if (keyMap.TryGetValue(noteName, out PianoKey key)) PlayNote(key);
     }
 
     void RecordNoteForSequence(string noteName)
@@ -339,18 +352,16 @@ public class PianoInteractable : MonoBehaviour
         playerSequence.Add(noteName);
         int idx = playerSequence.Count - 1;
 
-        // Si la note jouée ne correspond pas à la partition cible
         if (playerSequence[idx] != targetSequence[idx])
         {
-            Debug.Log("[Piano] ✗ Mauvaise note ! Séquence réinitialisée.");
+            Debug.Log("[Piano] ✗ Mauvaise note !");
             FailSequence();
             return;
         }
 
-        // Si toute la séquence est réussie
         if (playerSequence.Count == targetSequence.Count)
         {
-            Debug.Log("[Piano] ✓ Séquence correcte ! Énigme résolue.");
+            Debug.Log("[Piano] ✓ Séquence correcte !");
             SuccessSequence();
         }
     }
@@ -359,11 +370,9 @@ public class PianoInteractable : MonoBehaviour
     {
         if (puzzleSolved) return;
         puzzleSolved = true;
-
         sequenceActive = false;
         playerSequence.Clear();
         onSequenceSuccess?.Invoke();
-
         SpawnChest();
     }
 
@@ -383,66 +392,35 @@ public class PianoInteractable : MonoBehaviour
 
     void SpawnChest()
     {
-        if (chestPrefab == null)
-        {
-            Debug.LogWarning("[Piano] Pas de prefab coffre assigné !");
-            return;
-        }
-
-        Vector3 spawnPos = chestSpawnPoint != null
-            ? chestSpawnPoint.position
-            : transform.position + transform.right * 2f;
-
-        Quaternion spawnRot = chestSpawnPoint != null
-            ? chestSpawnPoint.rotation
-            : Quaternion.identity;
-
-        GameObject chest = Instantiate(chestPrefab, spawnPos, spawnRot);
+        if (chestPrefab == null) { Debug.LogWarning("[Piano] Pas de prefab coffre !"); return; }
+        Vector3 pos = chestSpawnPoint != null ? chestSpawnPoint.position : transform.position + transform.right * 2f;
+        Quaternion rot = chestSpawnPoint != null ? chestSpawnPoint.rotation : Quaternion.identity;
+        StartCoroutine(AnimateChestPop(Instantiate(chestPrefab, pos, rot)));
         Debug.Log("[Piano] Coffre apparu !");
-        StartCoroutine(AnimateChestPop(chest));
     }
 
     IEnumerator AnimateChestPop(GameObject chest)
     {
-        Vector3 targetScale = chest.transform.localScale;
+        Vector3 target = chest.transform.localScale;
         chest.transform.localScale = Vector3.zero;
-
         float t = 0f;
         while (t < 1f)
         {
             t += Time.deltaTime / chestPopDuration;
-            float eased = 1f - Mathf.Pow(1f - t, 3f);
-            chest.transform.localScale = Vector3.Lerp(Vector3.zero, targetScale, eased);
+            chest.transform.localScale = Vector3.Lerp(Vector3.zero, target, 1f - Mathf.Pow(1f - t, 3f));
             yield return null;
         }
-        chest.transform.localScale = targetScale;
+        chest.transform.localScale = target;
     }
 
     IEnumerator AnimateKeyPress(GameObject keyObj)
     {
         if (!originalPositions.TryGetValue(keyObj, out Vector3 original)) yield break;
-
-        float pressDepth = 0.01f; // Enfoncement de 1cm
-        float duration = 0.07f;
-        Vector3 pressed = original + Vector3.down * pressDepth;
-
-        // Enfoncement
+        Vector3 pressed = original + Vector3.down * 0.01f;
         float t = 0f;
-        while (t < 1f)
-        {
-            t += Time.deltaTime / duration;
-            keyObj.transform.localPosition = Vector3.Lerp(original, pressed, t);
-            yield return null;
-        }
-
-        // Retour à la position initiale
+        while (t < 1f) { t += Time.deltaTime / 0.07f; keyObj.transform.localPosition = Vector3.Lerp(original, pressed, t); yield return null; }
         t = 0f;
-        while (t < 1f)
-        {
-            t += Time.deltaTime / (duration * 1.5f);
-            keyObj.transform.localPosition = Vector3.Lerp(pressed, original, t);
-            yield return null;
-        }
+        while (t < 1f) { t += Time.deltaTime / 0.105f; keyObj.transform.localPosition = Vector3.Lerp(pressed, original, t); yield return null; }
         keyObj.transform.localPosition = original;
     }
 
