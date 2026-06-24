@@ -16847,6 +16847,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cfab94b91f7d3794e896257f6960cce1, type: 3}
+--- !u!1 &643118583 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2376695248467020831, guid: cfab94b91f7d3794e896257f6960cce1, type: 3}
+  m_PrefabInstance: {fileID: 643118582}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &644914376
 GameObject:
   m_ObjectHideFlags: 0
@@ -17299,11 +17304,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -8442455623976504973, guid: b0cfcbeda59783e4fb68fd411738e3c2, type: 3}
---- !u!1 &655193978 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2854447666798871401, guid: cfab94b91f7d3794e896257f6960cce1, type: 3}
-  m_PrefabInstance: {fileID: 643118582}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &663284875
 GameObject:
   m_ObjectHideFlags: 0
@@ -30121,6 +30121,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8256444539870969973, guid: 0909c9200903d0442a915cd65e2d7eb5, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8571587503502575547, guid: 0909c9200903d0442a915cd65e2d7eb5, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -43765,7 +43769,7 @@ PrefabInstance:
     - target: {fileID: 337871307818046262, guid: 002275a7651d7e7428eaf7192bbd086c, type: 3}
       propertyPath: holdPosition
       value: 
-      objectReference: {fileID: 655193978}
+      objectReference: {fileID: 643118583}
     - target: {fileID: 461349637201482356, guid: 002275a7651d7e7428eaf7192bbd086c, type: 3}
       propertyPath: cam
       value: 
