@@ -14783,6 +14783,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f3d44fa4beb5348429db5a4ba21fc63b, type: 3}
+--- !u!224 &321830597 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4853899807733681176, guid: 0909c9200903d0442a915cd65e2d7eb5, type: 3}
+  m_PrefabInstance: {fileID: 1850370185}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &329032321 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9131881006564492249, guid: 8f405fcc79aad6442b9dcccaca5d5d4e, type: 3}
@@ -46428,6 +46433,10 @@ PrefabInstance:
       propertyPath: playerCam
       value: 
       objectReference: {fileID: 1945587659}
+    - target: {fileID: 7318831805279616088, guid: d73bb841365f0344787a349fc1ee9c38, type: 3}
+      propertyPath: cursorPoint
+      value: 
+      objectReference: {fileID: 321830597}
     - target: {fileID: 7318831805279616088, guid: d73bb841365f0344787a349fc1ee9c38, type: 3}
       propertyPath: 'targetCodes.Array.data[1]'
       value: 9
