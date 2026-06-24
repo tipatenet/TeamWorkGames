@@ -30,8 +30,17 @@ public class BookSystem : MonoBehaviour
     private float targetFOV;
     private float addY = 0.0001f;
 
+    public static BookSystem Instance;
+
     void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
         cameraModeActive = false;
 
         if (bookCam != null)
@@ -44,8 +53,6 @@ public class BookSystem : MonoBehaviour
         if (playerCam != null)
             playerCam.GetComponent<AudioListener>().enabled = true;
 
-        if (cursorPoint != null)
-            cursorPoint.gameObject.SetActive(false);
     }
     private void Start()
     {
@@ -158,11 +165,10 @@ public class BookSystem : MonoBehaviour
 
     private void ToggleCameraMode(bool active)
     {
-        if (cursorPoint != null)
-            cursorPoint.gameObject.SetActive(active);
 
-        if (active)
-            cursorPosition = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        cursorPosition = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        if (cursorPoint != null)
+            cursorPoint.position = cursorPosition;
     }
 
     private void UpdateCursor()
