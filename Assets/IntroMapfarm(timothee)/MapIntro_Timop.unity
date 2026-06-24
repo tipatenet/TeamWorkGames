@@ -1163,6 +1163,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1240763534}
     - target: {fileID: 7017700529446157113, guid: 002275a7651d7e7428eaf7192bbd086c, type: 3}
+      propertyPath: cooldownTime
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7017700529446157113, guid: 002275a7651d7e7428eaf7192bbd086c, type: 3}
       propertyPath: textNameZone
       value: 
       objectReference: {fileID: 2075282399}

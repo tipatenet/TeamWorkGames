@@ -20,7 +20,7 @@ public class EnigmeEngrainages : MonoBehaviour
     public AudioClip RotationSound;
     public AudioClip success;
     bool canInteract = true;
-    private float cooldownTime = 1f;
+    private float cooldownTime = 2f;
     private int currentNum1 = 0;
     private int currentNum2 = 0;
     private int currentNum3 = 0;
