@@ -87,9 +87,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6f612db7632b154bb065a2cb02a53a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  moveSpeed: 5
+  moveSpeed: 3
   groundDrag: 6.5
-  jumpForce: 25
+  jumpForce: 15
   jumpCooldown: 0.5
   airMultiplier: 0.4
   jumpKey: 32
