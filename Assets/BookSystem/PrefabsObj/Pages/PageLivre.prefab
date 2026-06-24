@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &6345982616456874268
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.91
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.65000004
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.65000004
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 51.96301
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.00000063404184
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 40.646767
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071067
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
+      propertyPath: m_Name
+      value: PageLivre
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4672155039559560094}
+  m_SourcePrefab: {fileID: 100100000, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
+--- !u!1 &6111415759047128141 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
+  m_PrefabInstance: {fileID: 6345982616456874268}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4672155039559560094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6111415759047128141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6e29d0a509ff5f42a716733972e7816, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PageTurner
+  turnDuration: 1.4
+  maxCurve: 0.12
+  startRotation: {x: 90, y: 90, z: 0}
+  endRotation: {x: -90, y: 90, z: 0}
+  foldOriginX: 0.8
+  foldOriginY: 0.33
+  currentState: 0

@@ -27,6 +27,9 @@ TagManager:
   - BoutonRadioDroite
   - BoutonRadioGauche
   - tpDoor
+  - boxL
+  - boxR
+  - pageLivre
   layers:
   - Default
   - TransparentFX

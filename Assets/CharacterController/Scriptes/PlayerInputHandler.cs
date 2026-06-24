@@ -14,6 +14,8 @@ public class PlayerInputHandler : MonoBehaviour
     public Vector2 ScrollInventory { get; private set; }
     public Vector2 RotateItemInspact { get; private set; }
 
+    public Vector2 ZoomInput { get; private set; }
+
     //Stock dans une bool :
     public bool JumpPressed { get; private set; }
 
@@ -27,6 +29,8 @@ public class PlayerInputHandler : MonoBehaviour
     public bool InspactItem { get; private set; }
 
     public bool ClickInteract { get; private set; }
+
+    public bool BookInteraction { get; private set; }
 
     //Pose touche :
     public System.Action OnPosePressed;
@@ -58,6 +62,10 @@ public class PlayerInputHandler : MonoBehaviour
         inputActions.Player.RotateItem.performed += ctx => RotateItemInspact = ctx.ReadValue<Vector2>();
         inputActions.Player.RotateItem.canceled += ctx => RotateItemInspact = Vector2.zero;
 
+        // dans OnEnable :
+        inputActions.Player.Zoom.performed += ctx => ZoomInput = ctx.ReadValue<Vector2>();
+        inputActions.Player.Zoom.canceled += ctx => ZoomInput = Vector2.zero;
+
         //Définie les valeurs des bool (Pour savoir si la touche est appuyer)
 
         inputActions.Player.Jump.performed += ctx => JumpPressed = true;
@@ -74,6 +82,9 @@ public class PlayerInputHandler : MonoBehaviour
 
         inputActions.Player.Click.performed += ctx => ClickInteract = true;
         inputActions.Player.Click.canceled += ctx => ClickInteract = false;
+
+        inputActions.Player.Book.canceled += ctx => BookInteraction = false;
+        inputActions.Player.Book.performed += ctx => BookInteraction = true;
 
         //pose
         inputActions.Player.Pose.performed += ctx => OnPosePressed?.Invoke();
@@ -100,6 +111,8 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.Interact.Disable();
             inputActions.Player.DropItem.Disable();
             inputActions.Player.RotateItem.Enable();
+            inputActions.Player.Book.Disable();
+            inputActions.Player.Zoom.Disable();
         }
         else
         {
@@ -110,6 +123,8 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.Interact.Enable();
             inputActions.Player.DropItem.Enable();
             inputActions.Player.RotateItem.Disable();
+            inputActions.Player.Book.Enable();
+            inputActions.Player.Zoom.Disable();
         }
     }
     public void LockGameplayInputsForPiano(bool locked)
@@ -142,6 +157,8 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.Interact.Disable();
             inputActions.Player.DropItem.Disable();
             inputActions.Player.RotateItem.Disable();
+            inputActions.Player.Book.Disable();
+            inputActions.Player.Zoom.Disable();
         }
         else
         {
@@ -152,6 +169,8 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.Interact.Enable();
             inputActions.Player.DropItem.Enable();
             inputActions.Player.RotateItem.Enable();
+            inputActions.Player.Book.Enable();
+            inputActions.Player.Zoom.Disable();
         }
     }
     public void LockGamePlayForCodeLock(bool locked)
@@ -166,6 +185,8 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.DropItem.Disable();
             inputActions.Player.RotateItem.Disable();
             inputActions.Player.Pose.Disable();
+            inputActions.Player.Book.Disable();
+            inputActions.Player.Zoom.Disable();
         }
         else
         {
@@ -177,6 +198,40 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.DropItem.Enable();
             inputActions.Player.RotateItem.Enable();
             inputActions.Player.Pose.Enable();
+            inputActions.Player.Book.Enable();
+            inputActions.Player.Zoom.Disable();
+        }
+    }
+
+    public void LockGamePlayForBook(bool locked)
+    {
+        if (locked)
+        {
+            inputActions.Player.Move.Disable();
+            inputActions.Player.Look.Disable();
+            inputActions.Player.Jump.Disable();
+            inputActions.Player.Scroll.Disable();
+            inputActions.Player.Interact.Disable();
+            inputActions.Player.DropItem.Disable();
+            inputActions.Player.RotateItem.Disable();
+            inputActions.Player.Pose.Disable();
+            inputActions.Player.Book.Enable();
+            inputActions.Player.Click.Enable();
+            inputActions.Player.Zoom.Enable();
+        }
+        else
+        {
+            inputActions.Player.Move.Enable();
+            inputActions.Player.Look.Enable();
+            inputActions.Player.Jump.Enable();
+            inputActions.Player.Scroll.Enable();
+            inputActions.Player.Interact.Enable();
+            inputActions.Player.DropItem.Enable();
+            inputActions.Player.RotateItem.Enable();
+            inputActions.Player.Pose.Enable();
+            inputActions.Player.Book.Enable();
+            inputActions.Player.Click.Enable();
+            inputActions.Player.Zoom.Disable();
 
         }
     }
