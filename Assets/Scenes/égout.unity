@@ -30137,6 +30137,16 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8571587503502575547, guid: 0909c9200903d0442a915cd65e2d7eb5, type: 3}
   m_PrefabInstance: {fileID: 1094156351}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1094156353 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2037180378186619103, guid: 0909c9200903d0442a915cd65e2d7eb5, type: 3}
+  m_PrefabInstance: {fileID: 1094156351}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1094156354 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8766652598231258592, guid: 0909c9200903d0442a915cd65e2d7eb5, type: 3}
+  m_PrefabInstance: {fileID: 1094156351}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1100892433
 GameObject:
   m_ObjectHideFlags: 0
@@ -43794,6 +43804,14 @@ PrefabInstance:
       propertyPath: m_Resource
       value: 
       objectReference: {fileID: 8300000, guid: 51c95833737d98a48a839a7e892b4de1, type: 3}
+    - target: {fileID: 4036913667763021460, guid: 002275a7651d7e7428eaf7192bbd086c, type: 3}
+      propertyPath: bookUIIn
+      value: 
+      objectReference: {fileID: 1094156354}
+    - target: {fileID: 4036913667763021460, guid: 002275a7651d7e7428eaf7192bbd086c, type: 3}
+      propertyPath: bookUIOpenClose
+      value: 
+      objectReference: {fileID: 1094156353}
     - target: {fileID: 5517342126431416756, guid: 002275a7651d7e7428eaf7192bbd086c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.102

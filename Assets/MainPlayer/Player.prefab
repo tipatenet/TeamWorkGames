@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4189595711799289265}
   - component: {fileID: 1856805376263237238}
   - component: {fileID: 6936363065983458075}
-  - component: {fileID: 6849089081430564613}
   - component: {fileID: 6522845788742127007}
   - component: {fileID: 4036913667763021460}
   m_Layer: 7
@@ -338,28 +337,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PauseScript
   poseMenuUI: {fileID: 0}
---- !u!114 &6849089081430564613
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 110865528592120011}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 51f84f8ac667b634e808ed1c72f8b6c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  currentSlot: -1
-  currentSaveData:
-    sceneName: 
-    posX: 0
-    posY: 0
-    posZ: 0
-    inventoryItemIDs: []
-    inventoryUniqueIDs: []
-    pickedUpItemsByScene: []
-    isEmpty: 1
 --- !u!114 &6522845788742127007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,7 +362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 160e39fd88984cf4d96b7771e1e59322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  HaveBook: 0
+  HaveBook: 1
   inBook: 0
   bookUIIn: {fileID: 0}
   bookUIOpenClose: {fileID: 0}
