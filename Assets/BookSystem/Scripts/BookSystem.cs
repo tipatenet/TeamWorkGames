@@ -205,6 +205,8 @@ public class BookSystem : MonoBehaviour
             return;
         }
 
+        prefab.GetComponent<PageTurner>().startRotation = new Vector3(90f, 90f, 0f); ;
+
         // Instancie la page comme enfant du BookSystem
         GameObject newPage = Instantiate(
             prefab,

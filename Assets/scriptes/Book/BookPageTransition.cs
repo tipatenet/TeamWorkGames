@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BookPageTransition : MonoBehaviour
 {
@@ -7,16 +8,17 @@ public class BookPageTransition : MonoBehaviour
     public class PageTransitionRule
     {
         [Header("Condition")]
-        public int pageIndex;           // index de la page qui déclenche la transition
-        public List<string> requiredScenes; // scènes où cette règle est active (vide = toutes les scènes)
+        public int requiredPageCount; // 🔥 nombre de pages requis pour déclencher
+        public List<string> requiredScenes;
 
         [Header("Action")]
-        public string targetScene;      // scène vers laquelle on tp
+        public string targetScene;
     }
 
     public List<PageTransitionRule> rules = new List<PageTransitionRule>();
+
     private BookSystem bookSystem;
-    private int lastPageIndex = -1;
+    private int lastPageCount = -1;
 
     void Start()
     {
@@ -27,29 +29,33 @@ public class BookPageTransition : MonoBehaviour
     {
         if (bookSystem == null) return;
 
-        // Détecte un changement de page
-        if (bookSystem.selectedIndex == lastPageIndex) return;
-        lastPageIndex = bookSystem.selectedIndex;
+        // Détecte changement du nombre de pages
+        if (bookSystem.nbPages == lastPageCount) return;
+        lastPageCount = bookSystem.nbPages;
 
         CheckTransitionRules();
     }
 
     void CheckTransitionRules()
     {
-        string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        string currentScene = SceneManager.GetActiveScene().name;
 
         foreach (PageTransitionRule rule in rules)
         {
-            // Vérifie que c'est la bonne page
-            if (bookSystem.selectedIndex != rule.pageIndex) continue;
+            // 🔥 condition basée sur le nombre de pages
+            if (bookSystem.nbPages != rule.requiredPageCount)
+                continue;
 
-            // Vérifie qu'on est dans la bonne scène (si la liste est vide = toutes les scènes)
-            if (rule.requiredScenes.Count > 0 && !rule.requiredScenes.Contains(currentScene)) continue;
+            // vérification scène
+            if (rule.requiredScenes != null &&
+                rule.requiredScenes.Count > 0 &&
+                !rule.requiredScenes.Contains(currentScene))
+                continue;
 
-            // Déclenche la transition
+            // transition
             if (!string.IsNullOrEmpty(rule.targetScene))
             {
-                Debug.Log($"[BOOK] Page {rule.pageIndex} dans '{currentScene}' → tp vers '{rule.targetScene}'");
+                Debug.Log($"[BOOK] nbPages = {bookSystem.nbPages} → TP vers {rule.targetScene}");
                 SceneTransitionManager.Instance.GoToScene(rule.targetScene);
                 return;
             }

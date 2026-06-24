@@ -90,6 +90,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
       insertIndex: -1
       addedObject: {fileID: -5961881514603167661}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -1263568832120223908}
   m_SourcePrefab: {fileID: 100100000, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
 --- !u!1 &570082940329730746 stripped
 GameObject:
@@ -137,3 +140,22 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -462981019419857548, guid: d950fa8069cf4e14f9dac4a3ea8d50bf, type: 3}
+--- !u!114 &-1263568832120223908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 570082940329730746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb40ce606288b66409f25d2b47bbb02d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Hoverable
+  overParticlePrefab: {fileID: 0}
+  particleOffsetY: 0.5
+  particleScale: {x: 1, y: 1, z: 1}
+  objectRenderer: {fileID: 0}
+  hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  emissionIntensity: 1.5
+  currentParticle: {fileID: 0}

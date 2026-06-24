@@ -39553,6 +39553,34 @@ PrefabInstance:
       propertyPath: cursorPoint
       value: 
       objectReference: {fileID: 1240763535}
+    - target: {fileID: 3370962937046894238, guid: 9075630f5c5dd8442a1b34b11fc1c218, type: 3}
+      propertyPath: rules.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3370962937046894238, guid: 9075630f5c5dd8442a1b34b11fc1c218, type: 3}
+      propertyPath: rules.Array.data[1].targetScene
+      value: "\xE9gout"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3370962937046894238, guid: 9075630f5c5dd8442a1b34b11fc1c218, type: 3}
+      propertyPath: rules.Array.data[0].requiredPageCount
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3370962937046894238, guid: 9075630f5c5dd8442a1b34b11fc1c218, type: 3}
+      propertyPath: rules.Array.data[1].requiredPageCount
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3370962937046894238, guid: 9075630f5c5dd8442a1b34b11fc1c218, type: 3}
+      propertyPath: rules.Array.data[1].requiredScenes.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3370962937046894238, guid: 9075630f5c5dd8442a1b34b11fc1c218, type: 3}
+      propertyPath: 'rules.Array.data[1].requiredScenes.Array.data[0]'
+      value: RueHarlem
+      objectReference: {fileID: 0}
+    - target: {fileID: 3370962937046894238, guid: 9075630f5c5dd8442a1b34b11fc1c218, type: 3}
+      propertyPath: 'rules.Array.data[1].requiredScenes.Array.data[1]'
+      value: Enigme1
+      objectReference: {fileID: 0}
     - target: {fileID: 5780402864631486183, guid: 9075630f5c5dd8442a1b34b11fc1c218, type: 3}
       propertyPath: m_Name
       value: bookSystem
