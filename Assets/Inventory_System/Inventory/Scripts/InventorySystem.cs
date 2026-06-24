@@ -40,10 +40,11 @@ public class InventorySystem : MonoBehaviour
 
     private void Start()
     {
-        //Récupère directement sur le Player les scripts : ATTENTION ils faut les ajoutées !!!
         interaction = GetComponent<Interact>();
         keySystem = GetComponent<PlayerInputHandler>();
-        source = this.gameObject.GetComponent<AudioSource>();
+        source = GetComponent<AudioSource>();
+
+        bookSystem = BookSystem.Instance;
     }
     public void Update()
     {

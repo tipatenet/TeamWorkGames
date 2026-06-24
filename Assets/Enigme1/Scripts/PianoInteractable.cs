@@ -28,6 +28,9 @@ public class PianoInteractable : MonoBehaviour
     [Range(0f, 1f)]
     public float volume = 0.8f;
 
+    [Header("Audio Source (assigné dans l'Inspector)")]
+    public AudioSource audioSource;
+
     [Header("Paramètres d'interaction")]
     public float interactionRange = 3f;
     public KeyCode playKey = KeyCode.E;     // Jouer une note
@@ -46,7 +49,6 @@ public class PianoInteractable : MonoBehaviour
     public float chestPopDuration = 0.5f;
 
     // --- Privé ---
-    private AudioSource audioSource;
     private Camera playerCamera;
     private Dictionary<string, PianoKey> keyMap = new Dictionary<string, PianoKey>();
     private Dictionary<GameObject, PianoKey> objectMap = new Dictionary<GameObject, PianoKey>();
@@ -77,9 +79,12 @@ public class PianoInteractable : MonoBehaviour
     void Start()
     {
         mpb = new MaterialPropertyBlock();
-        audioSource = GetComponent<AudioSource>();
+
         if (audioSource == null)
-            audioSource = gameObject.AddComponent<AudioSource>();
+        {
+            Debug.LogError("[Piano] Aucun AudioSource assigné dans l'Inspector !");
+            return;
+        }
 
         audioSource.playOnAwake = false;
         audioSource.spatialBlend = 1f;
@@ -106,6 +111,7 @@ public class PianoInteractable : MonoBehaviour
                 var hoverable = key.keyObject.GetComponent<Hoverable>();
                 if (hoverable == null)
                     hoverable = key.keyObject.AddComponent<Hoverable>();
+
                 hoverable.hoverColor = key.highlightColor;
                 hoverable.emissionIntensity = 2f;
                 hoverableMap[key.keyObject] = hoverable;

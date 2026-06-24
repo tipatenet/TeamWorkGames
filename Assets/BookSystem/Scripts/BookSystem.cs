@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class BookSystem : MonoBehaviour
 {
@@ -32,6 +33,10 @@ public class BookSystem : MonoBehaviour
 
     public static BookSystem Instance;
 
+    [Header("Pages par défaut")]
+    public bool spawnDefaultPages = false;
+    public List<GameObject> defaultPages = new List<GameObject>();
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -39,8 +44,12 @@ public class BookSystem : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
         cameraModeActive = false;
 
         if (bookCam != null)
@@ -52,12 +61,71 @@ public class BookSystem : MonoBehaviour
 
         if (playerCam != null)
             playerCam.GetComponent<AudioListener>().enabled = true;
-
     }
     private void Start()
     {
-        foreach (GameObject prefab in pages)
+        if (!spawnDefaultPages)
+            return;
+
+        foreach (GameObject prefab in defaultPages)
+        {
             AddPage(prefab);
+        }
+        spawnDefaultPages = false;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        ForceCloseBook();
+        StartCoroutine(FindSceneReferences());
+
+    }
+
+    private IEnumerator FindSceneReferences()
+    {
+        yield return null; // attendre 1 frame
+
+        ForceCloseBook();
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+            handler = player.GetComponentInParent<PlayerInputHandler>();
+
+        GameObject cam = GameObject.FindGameObjectWithTag("MainCamera");
+        if (cam != null)
+            playerCam = cam.GetComponent<Camera>();
+
+        cursorPoint = GameObject.Find("CursorPoint")?.GetComponent<RectTransform>();
+
+        Debug.Log($"Player trouvé : {player != null}");
+        Debug.Log(player.name);
+        Debug.Log($"Handler trouvé : {handler != null}");
+        Debug.Log($"Caméra trouvée : {playerCam != null}");
+        Debug.Log($"Cursor trouvé : {cursorPoint != null}");
+    }
+
+    private void ForceCloseBook()
+    {
+        cameraModeActive = false;
+
+        if (bookCam != null)
+        {
+            bookCam.gameObject.SetActive(false);
+            bookCam.GetComponent<AudioListener>().enabled = false;
+        }
+
+        if (playerCam != null)
+            playerCam.GetComponent<AudioListener>().enabled = true;
+
+        if (handler != null)
+            handler.LockGamePlayForBook(false);
+
+        targetFOV = bookCam.fieldOfView;
     }
 
     void Update()
@@ -136,12 +204,22 @@ public class BookSystem : MonoBehaviour
             Debug.LogError("pagePrefab n'est pas assigné !");
             return;
         }
-        GameObject newPage = Instantiate(prefab, pagePos.transform.position, pagePos.transform.rotation);
+
+        // Instancie la page comme enfant du BookSystem
+        GameObject newPage = Instantiate(
+            prefab,
+            pagePos.transform.position,
+            pagePos.transform.rotation,
+            transform
+        );
+
         newPage.transform.localScale = new Vector3(0.91f, 0.65f, 0.65f);
+
         Vector3 temp = newPage.transform.localPosition;
         addY -= 0.0001f;
         temp.y += addY;
         newPage.transform.localPosition = temp;
+
         pages.Add(newPage);
         nbPages++;
     }

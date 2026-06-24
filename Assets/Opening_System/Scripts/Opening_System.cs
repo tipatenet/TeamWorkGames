@@ -10,7 +10,6 @@ public class Opening_System : MonoBehaviour
     }
 
     [Header("Settings")]
-
     public float timeToOpen = 1f;
     public float timeToClose = 1f;
     public GameObject objectHaveToMove;
@@ -21,15 +20,24 @@ public class Opening_System : MonoBehaviour
     public AudioClip closeSound;
     public bool isLocked = false;
 
+    [Header("Collider")]
+    public bool disableColliderWhenOpen = false;
+
     [Header("L'object à t'il un code")]
     public CadenasInteraction cadenasInteraction = null;
 
     [Header("States")]
-
     private bool isMoving = false;
     private bool isOpen = false;
 
-    //Fonction qui permet de lancer l'ouverture
+    private Collider[] itemColliders;
+
+    private void Start()
+    {
+        itemColliders = GetComponents<Collider>();
+    }
+
+    // Fonction qui permet de lancer l'ouverture
     public void StartOpeningOrClose()
     {
         if (canBeOpened())
@@ -39,9 +47,20 @@ public class Opening_System : MonoBehaviour
                 if (!isMoving)
                 {
                     ModeSelected(amountOpen, timeToOpen);
-                    source.PlayOneShot(openSound);
+
+                    if (source != null && openSound != null)
+                        source.PlayOneShot(openSound);
+
                     StartCoroutine(coolDownMoving());
                     isOpen = true;
+
+                    if (disableColliderWhenOpen)
+                    {
+                        foreach (Collider col in itemColliders)
+                        {
+                            col.enabled = false;
+                        }
+                    }
                 }
             }
             else
@@ -60,22 +79,33 @@ public class Opening_System : MonoBehaviour
                 if (!isMoving)
                 {
                     ModeSelected(-amountOpen, timeToClose);
-                    source.PlayOneShot(closeSound);
+
+                    if (source != null && closeSound != null)
+                        source.PlayOneShot(closeSound);
+
                     StartCoroutine(coolDownMoving());
                     isOpen = false;
+
+                    if (disableColliderWhenOpen)
+                    {
+                        foreach (Collider col in itemColliders)
+                        {
+                            col.enabled = true;
+                        }
+                    }
                 }
             }
         }
     }
 
-    //Fonction qui fait le mouvement en fonction du mode de mouvement
+    // Fonction qui fait le mouvement en fonction du mode de mouvement
     public void ModeSelected(Vector3 amount, float time)
     {
         if (typeOfMouvement == typeOfOpening.Rotation)
         {
             iTween.RotateAdd(objectHaveToMove, amount, time);
         }
-        else if(typeOfMouvement == typeOfOpening.Translation)
+        else if (typeOfMouvement == typeOfOpening.Translation)
         {
             iTween.MoveBy(objectHaveToMove, amount, time);
         }
@@ -85,24 +115,18 @@ public class Opening_System : MonoBehaviour
     {
         if (cadenasInteraction != null)
         {
-            if (cadenasInteraction.codeValid)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return cadenasInteraction.codeValid;
         }
+
         return true;
     }
 
-    /*CoolDown pour eviter que la fonction soit appelée
-      alors que l'animation n'est pas finis*/
+    /* CoolDown pour eviter que la fonction soit appelée
+       alors que l'animation n'est pas finie */
     IEnumerator coolDownMoving()
     {
         isMoving = true;
-        yield return new WaitForSeconds(timeToOpen);
+        yield return new WaitForSeconds(Mathf.Max(timeToOpen, timeToClose));
         isMoving = false;
     }
 }
