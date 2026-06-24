@@ -26,6 +26,7 @@ TagManager:
   - tuyau3
   - BoutonRadioDroite
   - BoutonRadioGauche
+  - tpDoor
   layers:
   - Default
   - TransparentFX

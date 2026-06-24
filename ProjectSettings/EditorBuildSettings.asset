@@ -8,15 +8,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 5c5fa0d7c66b1ff4d85eb47575d64c28
-  - enabled: 0
-    path: Assets/Scenes/MAINTESTINGSCENE.unity
-    guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
     path: Assets/IntroMapfarm(timothee)/MapIntro_Timop.unity
     guid: 0087a4e4303e8ba46b4f244afd65e0da
   - enabled: 1
     path: Assets/Scenes/RueHarlem.unity
     guid: 56a1f7de801e8d9468c260c82ce56b0e
+  - enabled: 1
+    path: Assets/Scenes/Enigme1.unity
+    guid: d43ac9fc0bd5dd348b66048b8c1992cf
   - enabled: 1
     path: "Assets/Scenes/\xE9gout.unity"
     guid: a2e04e33daa5bf34fb2a370359e8f9c3
