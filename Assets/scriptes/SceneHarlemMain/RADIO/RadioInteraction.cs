@@ -161,9 +161,7 @@ public class RadioInteraction : MonoBehaviour
             AudioListener playerListener = playerCam.GetComponent<AudioListener>();
             AudioListener lookListener = lookCam.GetComponent<AudioListener>();
 
-            // --- MODIFICATION ICI ---
-            // Au lieu de couper le playerListener quand active est faux, 
-            // on s'assure qu'il se réactive IMMÉDIATEMENT quand on quitte la radio !
+            // CORRECTION : On réactive l'écouteur du joueur IMMÉDIATEMENT dès qu'on sort du mode radio
             if (playerListener != null) playerListener.enabled = !active;
             if (lookListener != null) lookListener.enabled = active;
         }
@@ -176,6 +174,7 @@ public class RadioInteraction : MonoBehaviour
         if (transitionCoroutine != null) StopCoroutine(transitionCoroutine);
         transitionCoroutine = StartCoroutine(CameraTransition(active));
     }
+
     private IEnumerator CameraTransition(bool active)
     {
         canInteract = false;
@@ -189,7 +188,6 @@ public class RadioInteraction : MonoBehaviour
 
             if (active)
             {
-                // Entrée : on part de la playerCam et on va vers la position fixe de la lookCam
                 startPos = playerCam.transform.position;
                 startRot = playerCam.transform.rotation;
                 targetPos = lookCamOriginalPos;
@@ -197,7 +195,6 @@ public class RadioInteraction : MonoBehaviour
             }
             else
             {
-                // Sortie : on part de la position actuelle et on va vers la playerCam
                 startPos = lookCam.transform.position;
                 startRot = lookCam.transform.rotation;
                 targetPos = playerCam.transform.position;
@@ -219,21 +216,11 @@ public class RadioInteraction : MonoBehaviour
             lookCam.transform.position = targetPos;
             lookCam.transform.rotation = targetRot;
 
-            // Fin de la transition de sortie : remet la lookCam à sa position d'origine et la désactive
             if (!active)
             {
                 lookCam.transform.position = lookCamOriginalPos;
                 lookCam.transform.rotation = lookCamOriginalRot;
-
-                // On désactive la lookCam ICI (après la transition) pour ne pas couper le AudioListener trop tôt
                 lookCam.gameObject.SetActive(false);
-
-                // Réactive le AudioListener du joueur maintenant que la transition est terminée
-                //if (playerCam != null)
-                //{
-                //    AudioListener playerListener = playerCam.GetComponent<AudioListener>();
-                //    if (playerListener != null) playerListener.enabled = true;
-                //}
             }
         }
 
@@ -263,7 +250,6 @@ public class RadioInteraction : MonoBehaviour
     {
         if (keySystem == null || graphicRaycaster == null) return;
 
-        // 1. Clic initial unitaire (Tu peux cliquer à l'infini)
         if (keySystem.ClickInteract)
         {
             if (!dejaCliqueCeCoupCi && !isHoldingButton)
@@ -288,7 +274,6 @@ public class RadioInteraction : MonoBehaviour
             }
         }
 
-        // 2. Gestion du maintien (Appui long pour avancer vite)
         if (isHoldingButton && keySystem.ClickInteract)
         {
             holdTimer += Time.deltaTime;
@@ -304,7 +289,6 @@ public class RadioInteraction : MonoBehaviour
             }
         }
 
-        // 3. Relâchement de la souris
         if (!keySystem.ClickInteract)
         {
             isHoldingButton = false;
@@ -333,7 +317,6 @@ public class RadioInteraction : MonoBehaviour
 
     private void ForceExitRadioMode()
     {
-        // Stoppe toute transition en cours pour éviter qu'elle interfère après la sortie forcée
         if (transitionCoroutine != null)
         {
             StopCoroutine(transitionCoroutine);
@@ -350,7 +333,6 @@ public class RadioInteraction : MonoBehaviour
         if (boxRadio != null) boxRadio.enabled = true;
         if (keySystem != null) keySystem.LockGamePlayForCodeLock(false);
 
-        // Remet la lookCam à sa position d'origine et la désactive
         if (lookCam != null)
         {
             lookCam.transform.position = lookCamOriginalPos;
@@ -358,7 +340,6 @@ public class RadioInteraction : MonoBehaviour
             lookCam.gameObject.SetActive(false);
         }
 
-        // Forcer la coupure audio immédiate ici en cas de sortie brutale (ex: le joueur recule)
         if (gestionFrequence != null)
         {
             gestionFrequence.SetAudioActive(false);
