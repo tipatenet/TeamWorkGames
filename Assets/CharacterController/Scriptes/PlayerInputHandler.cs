@@ -14,6 +14,8 @@ public class PlayerInputHandler : MonoBehaviour
     public Vector2 ScrollInventory { get; private set; }
     public Vector2 RotateItemInspact { get; private set; }
 
+    public Vector2 ZoomInput { get; private set; }
+
     //Stock dans une bool :
     public bool JumpPressed { get; private set; }
 
@@ -59,6 +61,10 @@ public class PlayerInputHandler : MonoBehaviour
 
         inputActions.Player.RotateItem.performed += ctx => RotateItemInspact = ctx.ReadValue<Vector2>();
         inputActions.Player.RotateItem.canceled += ctx => RotateItemInspact = Vector2.zero;
+
+        // dans OnEnable :
+        inputActions.Player.Zoom.performed += ctx => ZoomInput = ctx.ReadValue<Vector2>();
+        inputActions.Player.Zoom.canceled += ctx => ZoomInput = Vector2.zero;
 
         //Définie les valeurs des bool (Pour savoir si la touche est appuyer)
 
@@ -106,6 +112,7 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.DropItem.Disable();
             inputActions.Player.RotateItem.Enable();
             inputActions.Player.Book.Disable();
+            inputActions.Player.Zoom.Disable();
         }
         else
         {
@@ -117,6 +124,7 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.DropItem.Enable();
             inputActions.Player.RotateItem.Disable();
             inputActions.Player.Book.Enable();
+            inputActions.Player.Zoom.Disable();
         }
     }
     public void LockGameplayInputsForPose(bool locked)
@@ -131,6 +139,7 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.DropItem.Disable();
             inputActions.Player.RotateItem.Disable();
             inputActions.Player.Book.Disable();
+            inputActions.Player.Zoom.Disable();
         }
         else
         {
@@ -142,6 +151,7 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.DropItem.Enable();
             inputActions.Player.RotateItem.Enable();
             inputActions.Player.Book.Enable();
+            inputActions.Player.Zoom.Disable();
         }
     }
     public void LockGamePlayForCodeLock(bool locked)
@@ -157,6 +167,7 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.RotateItem.Disable();
             inputActions.Player.Pose.Disable();
             inputActions.Player.Book.Disable();
+            inputActions.Player.Zoom.Disable();
         }
         else
         {
@@ -169,7 +180,7 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.RotateItem.Enable();
             inputActions.Player.Pose.Enable();
             inputActions.Player.Book.Enable();
-
+            inputActions.Player.Zoom.Disable();
         }
     }
 
@@ -187,6 +198,7 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.Pose.Disable();
             inputActions.Player.Book.Enable();
             inputActions.Player.Click.Enable();
+            inputActions.Player.Zoom.Enable();
         }
         else
         {
@@ -200,6 +212,7 @@ public class PlayerInputHandler : MonoBehaviour
             inputActions.Player.Pose.Enable();
             inputActions.Player.Book.Enable();
             inputActions.Player.Click.Enable();
+            inputActions.Player.Zoom.Disable();
 
         }
     }

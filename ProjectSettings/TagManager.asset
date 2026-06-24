@@ -21,6 +21,7 @@ TagManager:
   - SpawnPoint
   - boxL
   - boxR
+  - pageLivre
   layers:
   - Default
   - TransparentFX

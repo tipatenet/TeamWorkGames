@@ -8,7 +8,6 @@ public class BookSystem : MonoBehaviour
     public PlayerInputHandler handler;
     public int nbPages = 0;
     public List<GameObject> pages = new List<GameObject>();
-    public GameObject pagePrefab;
     public GameObject pagePos;
     public int selectedIndex = 0;
     public float cooldownTimeTransition = 1f;
@@ -25,6 +24,13 @@ public class BookSystem : MonoBehaviour
     public AudioSource audioSource;
     public List<AudioClip> pageSounds;
 
+    // Zoom
+    public float zoomSpeed = 5f;
+    public float zoomMin = 20f;
+    public float zoomMax = 80f;
+    private float targetFOV;
+    private float addY = 0.01f;
+
     void Awake()
     {
         cameraModeActive = false;
@@ -33,6 +39,7 @@ public class BookSystem : MonoBehaviour
         {
             bookCam.gameObject.SetActive(false);
             bookCam.GetComponent<AudioListener>().enabled = false;
+            targetFOV = bookCam.fieldOfView;
         }
 
         if (playerCam != null)
@@ -44,9 +51,6 @@ public class BookSystem : MonoBehaviour
 
     void Update()
     {
-        if (handler.InteractPressed)
-            AddPage();
-
         if (handler.BookInteraction && canSwitch)
             HandleInteraction();
 
@@ -60,8 +64,13 @@ public class BookSystem : MonoBehaviour
             }
         }
 
-        if (cameraModeActive && cursorPoint != null)
-            UpdateCursor();
+        if (cameraModeActive)
+        {
+            if (cursorPoint != null)
+                UpdateCursor();
+
+            UpdateZoom();
+        }
     }
 
     bool TurnDirection()
@@ -74,13 +83,13 @@ public class BookSystem : MonoBehaviour
 
         if (hit.collider.CompareTag("boxR"))
         {
-            if (selectedIndex < pages.Count - 1)
+            if (selectedIndex < nbPages)
             {
                 PageTurner pt = pages[selectedIndex].GetComponent<PageTurner>();
-                selectedIndex++;
                 pt.startRotation.x = 90f;
                 pt.endRotation.x = -90f;
                 pt.TurnPage();
+                selectedIndex++;
                 return true;
             }
         }
@@ -100,14 +109,28 @@ public class BookSystem : MonoBehaviour
         return false;
     }
 
-    public void AddPage()
+    private void UpdateZoom()
     {
-        if (pagePrefab == null)
+        float scroll = handler.ZoomInput.y;
+        if (scroll != 0f)
+            targetFOV = Mathf.Clamp(targetFOV - scroll * zoomSpeed, zoomMin, zoomMax);
+
+        bookCam.fieldOfView = Mathf.Lerp(bookCam.fieldOfView, targetFOV, Time.deltaTime * 10f);
+    }
+
+    public void AddPage(GameObject prefab)
+    {
+        if (prefab == null)
         {
             Debug.LogError("pagePrefab n'est pas assigné !");
             return;
         }
-        GameObject newPage = Instantiate(pagePrefab, pagePos.transform.position, pagePos.transform.rotation);
+        GameObject newPage = Instantiate(prefab, pagePos.transform.position, pagePos.transform.rotation);
+        newPage.transform.localScale = new Vector3(0.91f, 0.65f, 0.65f);
+        Vector3 temp = newPage.transform.localPosition;
+        addY -= 0.001f;
+        temp.y += addY;
+        newPage.transform.localPosition = temp;
         pages.Add(newPage);
         nbPages++;
     }
@@ -115,11 +138,7 @@ public class BookSystem : MonoBehaviour
     private void RandomSound()
     {
         if (pageSounds.Count == 0) return;
-        if (selectedIndex < 0 || selectedIndex >= pages.Count) return;
-        if (pages[selectedIndex] == null) return;
-
-        int intNb = Random.Range(0, pageSounds.Count);
-        audioSource.PlayOneShot(pageSounds[intNb]);
+        audioSource.PlayOneShot(pageSounds[Random.Range(0, pageSounds.Count)]);
     }
 
     private void HandleInteraction()
@@ -127,6 +146,10 @@ public class BookSystem : MonoBehaviour
         cameraModeActive = !cameraModeActive;
         ToggleCameraMode(cameraModeActive);
         SwitchCameraPosition(cameraModeActive);
+
+        // Reset zoom quand on ferme le livre
+        if (!cameraModeActive)
+            targetFOV = bookCam.fieldOfView;
     }
 
     private void ToggleCameraMode(bool active)

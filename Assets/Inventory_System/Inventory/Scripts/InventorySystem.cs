@@ -15,6 +15,8 @@ public class InventorySystem : MonoBehaviour
     public AudioClip PickUpSound;
     [SerializeField] private HandAnimation handAnimation;
     public Text textNameZone;
+    public BookSystem bookSystem;
+    public AudioClip pickPageSound;
 
     //Variables Privées :
     private float targetX;
@@ -97,6 +99,15 @@ public class InventorySystem : MonoBehaviour
                 handAnimation.PlayPickAnim();
                 handAnimation.HoldAnimation();
             }
+        }
+        //--------------------------------------
+        //Gestion Page
+        //--------------------------------------
+        else if (hit.collider != null && hit.collider.tag == "pageLivre")
+        {
+            bookSystem.AddPage(hit.collider.gameObject);
+            source.PlayOneShot(pickPageSound);
+            Destroy(hit.collider.gameObject);
         }
     }
 
