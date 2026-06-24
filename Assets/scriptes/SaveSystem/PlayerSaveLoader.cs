@@ -32,15 +32,12 @@ public class PlayerSaveLoader : MonoBehaviour
 
         Vector3 targetPosition;
 
-        bool useSpawnPoint = data.isEmpty || data.sceneName != currentSceneName;
-
-        Debug.Log($"[SPAWN] useSpawnPoint = {useSpawnPoint}");
+        bool useSpawnPoint = data.isEmpty || GameManager.Instance.isSceneTransition;
 
         if (useSpawnPoint)
         {
             targetPosition = GetSpawnPointPosition();
-            Debug.Log($"[SPAWN] Position du SpawnPoint utilisée : {targetPosition}");
-
+            GameManager.Instance.isSceneTransition = false; // reset après usage
             data.isEmpty = false;
 
             if (GameManager.Instance.currentSlot >= 0)
@@ -51,8 +48,10 @@ public class PlayerSaveLoader : MonoBehaviour
         else
         {
             targetPosition = new Vector3(data.posX, data.posY, data.posZ);
-            Debug.Log($"[SPAWN] Position sauvegardée utilisée : {targetPosition}");
         }
+
+        Debug.Log($"[SPAWN] useSpawnPoint = {useSpawnPoint}");
+
 
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb != null)
